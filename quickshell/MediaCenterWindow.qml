@@ -290,7 +290,7 @@ PanelWindow {
 
     // CLOSE PANEL
     HyprlandFocusGrab {
-        windows: [myContent, myContent.btPopup]
+        windows: [myContent]
         active: myContent.visible
 
         onCleared: {
