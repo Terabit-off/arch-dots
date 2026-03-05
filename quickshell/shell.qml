@@ -195,7 +195,7 @@ PanelWindow {
                                             anchor {
                                                 window: rootPanel
                                                 margins {
-                                                    left: 1200
+                                                    left: 1050
                                                     top: 25
                                                 }
                                             }

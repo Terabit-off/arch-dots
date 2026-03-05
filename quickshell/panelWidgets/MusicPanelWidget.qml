@@ -86,7 +86,6 @@ RowLayout {
                 font.bold: true
                 MouseArea {
                     anchors.fill: parent
-                    hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     
                     onClicked: {
@@ -129,6 +128,7 @@ RowLayout {
 
                     MouseArea {
                         anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             if (MusicSingleton.active && MusicSingleton.active.canGoPrevious) {
                                 MusicSingleton.active.previous()
@@ -149,6 +149,7 @@ RowLayout {
 
                     MouseArea {
                         anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             if (MusicSingleton.active) {
                                 MusicSingleton.active.togglePlaying()
@@ -168,6 +169,7 @@ RowLayout {
 
                     MouseArea {
                         anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             if (MusicSingleton.active && MusicSingleton.active.canGoNext) {
                                 MusicSingleton.active.next()
