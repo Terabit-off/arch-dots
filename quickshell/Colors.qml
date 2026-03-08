@@ -5,9 +5,9 @@ import QtQuick
 QtObject {
 
     // Right side
-    readonly property color barBackground: '#bd202020'//'#cf595959'
+    readonly property color barBackground: '#00202020'//'#cf595959'
     readonly property color foreground: '#c9c9c9'
-    readonly property color barBorderColor: '#bd939393'
+    readonly property color barBorderColor: '#00939393'
     readonly property real trayIconColor: 0.5415 
     readonly property real trayIconSaturation: 0
 

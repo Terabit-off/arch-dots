@@ -7,6 +7,7 @@ import QtQuick.Controls
 import Quickshell.Hyprland
 
 import "./panelWidgets"
+import "./barModules"
 
 // PANEL
 PanelWindow {
@@ -194,6 +195,7 @@ PanelWindow {
                                 font.pixelSize: 18
                                 text: ""
                                 color: colors.buttonOffTextColor
+                                font.family: "JetBrainsMono Nerd Font"
                             }
                             MouseArea {
                                 anchors.fill: parent

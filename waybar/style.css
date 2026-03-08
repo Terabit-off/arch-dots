@@ -1,7 +1,7 @@
 * {
   font-family: "JetBrainsMono Nerd Font", monospace;
-  font-size: 11px;
-  color:#242424;
+  font-size: 13px;
+  color:#c2c2c2;
   font-weight: bold;
 
 }
@@ -14,23 +14,21 @@ window#waybar {
 #workspaces button {
   font-size: 14px;
   padding: 0 2px 0 2px;
-  color:#4a4a4a;
+  color:#2d2d2d;
   margin-right: 3px;
   border-radius: 35px;
-  background-color: #87A9B2;
+  background: transparent;
 }
 
 #workspaces button.active {
   border-radius: 5px;
-  background-color: rgb(56, 125, 140);
+  background-color: rgb(86, 86, 86);
   transition: all 0.3s ease-in-out;
 }
 
 #workspaces button.urgent {
-  color:#4a4a4a;
-  background-color: rgb(56, 125, 140);
-  box-shadow: inset 0 -4px 0 #aa3e3e;
-
+  color:#bebebe;
+  background-color: rgb(209, 153, 153);
 }
 
 #battery.critical:not(.charging) {
@@ -38,14 +36,14 @@ window#waybar {
 }
 
 #language {
-  background-color: #87A9B2;
+  background: transparent;
   border-radius: 15px;
   padding: 0px 7px;
   min-width: 30px;
   margin-left: 8px;
 }
 #custom-bluetooth{
-    background-color: #87A9B2;
+    background: transparent;
     font-size: 15px;
     border-radius: 15px;
     padding-left: 6px;
@@ -61,7 +59,7 @@ window#waybar {
 #temperature,
 #backlight,
 #battery {
-  background-color: #87A9B2;
+  background: transparent;
   border-radius: 15px;
   padding-left: 6px;
   padding-right: 6px;
@@ -76,7 +74,8 @@ window#waybar {
 } */
 
 #clock {
-  background-color: #87A9B2;
+  background: transparent;
+  font-weight: bold;
   border-radius: 15px;
   padding-left: 6px;
   padding-right: 6px;

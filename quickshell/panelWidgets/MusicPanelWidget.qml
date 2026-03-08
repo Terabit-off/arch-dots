@@ -4,6 +4,7 @@ import Quickshell
 import Qt5Compat.GraphicalEffects
 
 import ".."
+import "../barModules"
 
 RowLayout {
     spacing: 0

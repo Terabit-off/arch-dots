@@ -12,16 +12,23 @@
 ],
 "modules-right": [
     "hyprland/language",
-    "pulseaudio",
+    "custom/separator",
     "network",
     "cpu",
     "memory",
     "temperature",
+    "custom/separator",
+    "pulseaudio",
     "backlight",
     "battery",
+    "custom/separator",
     "tray",
     "clock",
 ],
+
+"custom/separator": {
+    "format":" | "
+},
 
 
 "hyprland/language": {
@@ -46,7 +53,7 @@
 // wifi/lan
 "network": {
     "tooltip": false,
-    "format-wifi": "{essid} {signalStrength}%",
+    "format-wifi": "󰖩 {essid}",
     //"format-ethernet": " {ifname}",
     "format-disconnected": "󰖪 ",
     "on-click": "~/scripts/wifi-menu.sh",
@@ -54,14 +61,14 @@
 
 // CPU
 "cpu": {
-    "format": "CPU {usage}%",
+    "format": " {usage}%",
     "interval": 2
 },
 
 // RAM
 "memory": {
     "tooltip": false,
-    "format": "RAM {used:0.1f}G",
+    "format": " {used:0.1f}G",
     "interval": 5
 },
 
@@ -69,7 +76,7 @@
 "temperature": {
     "tooltip": false,
     "critical-threshold": 80,
-    "format": "{temperatureC}°C"
+    "format": "{temperatureC}"
 },
 
 // яркость (работает с backlight/wlroots)
