@@ -1,6 +1,6 @@
 pragma Singleton
 import QtQuick
-import Quickshell // Убедитесь, что Mpris доступен здесь
+import Quickshell
 import Quickshell.Services.Mpris
 
 

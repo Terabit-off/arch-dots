@@ -308,23 +308,18 @@ PanelWindow {
         triggeredOnStart: true
 
         onTriggered: {
-            // 1. Выполняем обновление погоды
             whetherPanelModule.weatherProcesss.running = true;
 
-            // 2. Рассчитываем время до следующего часа
             var now = new Date();
             var nextHour = new Date(
                 now.getFullYear(),
                 now.getMonth(),
                 now.getDate(),
-                now.getHours() + 1, // Следующий час
-                0, 0, 0             // 00 минут, 00 секунд
+                now.getHours() + 1,
+                0, 0, 0
             );
 
             var msToNextHour = nextHour.getTime() - now.getTime();
-            
-            // 3. Устанавливаем новый интервал
-            // Добавляем небольшой запас (например, 1 сек), чтобы не попасть в 59:59
             interval = msToNextHour + 1000;
         }
     }

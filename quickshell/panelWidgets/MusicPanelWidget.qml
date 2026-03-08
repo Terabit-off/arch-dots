@@ -115,7 +115,6 @@ RowLayout {
             //Controls
             RowLayout {
                 Layout.alignment: Qt.AlignHCenter
-                //Layout.maximumHeight: 15
                 spacing: 10
                 Text {
                     Layout.alignment: Qt.AlignHCenter
