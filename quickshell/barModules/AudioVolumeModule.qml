@@ -28,6 +28,7 @@ Rectangle {
     }
     MouseArea {
         anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
         scrollGestureEnabled: true
         onClicked: {
             if (parent.sink) {

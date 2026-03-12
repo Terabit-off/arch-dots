@@ -9,6 +9,7 @@ import Quickshell.Services.SystemTray
 import QtQuick.Controls
 
 import "./barModules" as Modules
+import "./musicCenter"
 
 
 PanelWindow {
@@ -26,28 +27,26 @@ PanelWindow {
     implicitHeight: 30
     color: 'transparent'
 
+    // INIT PROCESS
     
     
     //Colors.qml
     Colors {
         id: colors
     }
-    MediaCenterWindow {
-        id: mediaCenter
+    ControlCenterWindow {
+        id: controlCenter
     }
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            mediaCenter.visible = true
-        }
-    }
+
+
 
     Rectangle {
         anchors.fill: parent
         color: colors.barBackground
         border.color: colors.barBorderColor
         radius: 25
+
         RowLayout {
             anchors.fill: parent
             anchors {
@@ -78,8 +77,8 @@ PanelWindow {
                 height: 24
                 
                 Modules.MusicModule { }
+                
             }
-
             //RIGHT
             Rectangle {
                 color: 'transparent'
@@ -88,6 +87,12 @@ PanelWindow {
                 Layout.preferredWidth: 50
                 Layout.maximumWidth: 700
                 height: 24
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        controlCenter.visible = true
+                    }
+                }
 
                 RowLayout {
                     anchors {
@@ -111,6 +116,7 @@ PanelWindow {
                         Layout.minimumWidth: 25
                         Layout.maximumWidth: 50
                         height: 24
+                        
                         Text {
                             id: bluetoothText
                             anchors.centerIn: parent
@@ -161,9 +167,30 @@ PanelWindow {
                         running: true
                         repeat: true
                         onTriggered: {
-                            timeText.text = Qt.formatDateTime(new Date(), "HH:mm");
-                            mediaCenter.updateTimeDate()
                             Modules.wifiProcess.running = true
+                            
+                        }
+                    }
+                    Timer {
+                        running: true
+                        repeat: true
+                        triggeredOnStart: true
+
+                        onTriggered: {
+                            timeText.text = Qt.formatDateTime(new Date(), "HH:mm");
+                            controlCenter.updateTimeDate()
+
+                            var now = new Date();
+                            var nextMinute = new Date(
+                                now.getFullYear(),
+                                now.getMonth(),
+                                now.getDate(),
+                                now.getHours(),
+                                now.getMinutes() + 1,
+                                0, 0, 0
+                            );
+
+                            interval = nextMinute.getTime() - now.getTime() + 500;
                         }
                     }
                 }

@@ -2,27 +2,48 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 
+import "../musicCenter"
+
 Rectangle {
     id: root
     color: 'transparent'
-    Layout.fillWidth: true
-    Layout.minimumWidth: 10
-    Layout.preferredWidth: 50
-    Layout.maximumWidth: 300
-    height: 24
+    anchors.fill: parent
     radius: 12
     anchors.centerIn: parent
+    visible: MusicSingleton.active !== null
+
+    MusicCenterWindow {
+        id: musicCenterWindow
+    }
+
+    MouseArea {
+        cursorShape: Qt.PointingHandCursor
+        anchors.fill: parent
+        onClicked: {
+            musicCenterWindow.visible = true
+        }
+    }
+
+    //Separator
+    Rectangle {
+        color: colors.moduleSeparatorColor
+        height: 15
+        width: 1
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+    }
 
     RowLayout {
         spacing: 5
         anchors.centerIn: parent
+
 
         Text {
             id: musicIcon
             text: "󰎆"
             font.pixelSize: 16
             color: colors.foreground
-            visible: MusicSingleton.active !== null
+            
             
             transformOrigin: Item.Center
 
@@ -47,5 +68,13 @@ Rectangle {
             font.bold: true
             font.pixelSize: 14
         }
+    }
+    //Separator
+    Rectangle {
+        color: colors.moduleSeparatorColor
+        height: 15
+        width: 1
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
     }
 }

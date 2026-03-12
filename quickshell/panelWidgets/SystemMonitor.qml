@@ -7,8 +7,9 @@ import ".."
 
 RowLayout {
     id: root
-    anchors.fill: parent
-    anchors.centerIn: parent
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
     spacing: 4
 
     property real cpuLoad: 0
@@ -18,7 +19,7 @@ RowLayout {
     // CPU
     ColumnLayout {
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        Layout.maximumWidth: 50
+        Layout.maximumWidth: 100
 
         Text { text: "CPU"; color: "#aaa"; font.pixelSize: 14; Layout.alignment: Qt.AlignHCenter }
         Text {
@@ -40,7 +41,7 @@ RowLayout {
     }
     // RAM
     ColumnLayout {
-        Layout.maximumWidth: 50
+        Layout.maximumWidth: 100
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         
         Text { text: "RAM"; color: "#aaa"; font.pixelSize: 14; Layout.alignment: Qt.AlignHCenter }
@@ -64,7 +65,7 @@ RowLayout {
     }
     // TEMP
     ColumnLayout {
-        Layout.maximumWidth: 50
+        Layout.maximumWidth: 100
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
         Text { text: "TEMP"; color: "#aaa"; font.pixelSize: 14; Layout.alignment: Qt.AlignHCenter }

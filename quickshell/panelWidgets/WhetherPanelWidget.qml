@@ -10,7 +10,7 @@ Rectangle {
     id: weatherRect
     Layout.fillWidth: true
     Layout.fillHeight: true
-    Layout.maximumHeight: 150
+    Layout.maximumHeight: 160
     color: colors.moduleBackgroundColor
     border.color: colors.moduleBorderColor
     radius: colors.moduleBorderRadius
@@ -25,6 +25,17 @@ Rectangle {
         "80": "󰖖", "81": "󰖖", "82": "󰖖",
         "95": "󰖓", "96": "󰖓", "99": "󰖓"
     }
+
+    //current
+    property var maxTemp
+    property var minTemp
+    property var curTemp
+    property var humidity
+    property var apparentTemp
+    property var currentWhetherCode
+    property var windSpeed
+
+    //hourly
     property var temps
     property var codes
     property var currentHour: 12
@@ -32,7 +43,8 @@ Rectangle {
     property alias weatherProcesss: whetherProcess
     Process {
         id: whetherProcess
-        command: ["curl", "-s", "https://api.open-meteo.com/v1/forecast?latitude=44.2233&longitude=42.0578&hourly=temperature_2m,weather_code&forecast_days=2"]
+        //https://api.open-meteo.com/v1/forecast?latitude=44.2233&longitude=42.0578&hourly=temperature_2m,weather_code&forecast_days=2
+        command: ["curl", "-s", "https://api.open-meteo.com/v1/forecast?latitude=44.2233&longitude=42.0578&daily=temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=Europe%2FMoscow&forecast_days=2"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: {
@@ -40,29 +52,40 @@ Rectangle {
                     let response = JSON.parse(this.text)
                     //console.log(response)
                     let now = new Date();
+
+                    weatherRect.minTemp = response.daily.temperature_2m_min[0]
+                    weatherRect.maxTemp = response.daily.temperature_2m_max[0]
+                    weatherRect.humidity = response.current.relative_humidity_2m
+                    weatherRect.apparentTemp = response.current.apparent_temperature
+                    weatherRect.currentWhetherCode = response.current.weather_code
+                    weatherRect.windSpeed = response.current.wind_speed_10m
+                    weatherRect.curTemp = response.current.temperature_2m
+
                     weatherRect.temps = response.hourly.temperature_2m
                     weatherRect.codes = response.hourly.weather_code
                     weatherRect.currentHour = now.getHours()
                     weatherRect.fillWhether()
 
+                    refreshAnimation.running = false
+
                 } catch(e){
-                    console.log("error: " + e)
+                    console.log("ERROR (whether 71): " + e)
                     weatherRect.errorWether()
                 }
             }
         }
     }
-
     ColumnLayout {
         anchors.fill: parent
-        anchors.topMargin: 20
-        spacing: 5
+        anchors.topMargin: 5
+        spacing: 0
 
         // CURRENT
         RowLayout {
-            Layout.alignment: Qt.AlignHCenter
-            Layout.maximumHeight: 30
-            anchors.bottomMargin: 10
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.maximumHeight: 60
+            //anchors.bottomMargin: 10
+            spacing: 0
 
             // WHETHER ICON
             Text {
@@ -75,46 +98,187 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 color: colors.foreground
-                font.pixelSize: 66
+                font.pixelSize: 55
                 font.bold: true
             }
-
             // WHETHER TEMP
-            Text {
-                id: currentWhetherTemp
+            ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.maximumWidth: 80
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                text: "-- \n --:--"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                color: colors.foreground
-                font.pixelSize: 18
-                font.bold: true
+                Layout.maximumHeight: 40
+                spacing: 1
+                Text {
+                    id: currentWhetherTemp
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.maximumWidth: 80
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    text: "--"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    color: colors.foreground
+                    font.pixelSize: 18
+                    font.bold: true
+                }
+                Text {
+                    id: currentHourText
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.maximumWidth: 10
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    text: "--:--"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    color: colors.foreground
+                    font.pixelSize: 13
+                    font.bold: true
+                }
+
             }
-            Text {
-                id: whetherUpdate
+            //SEPARATOR
+            Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.maximumWidth: 80
+                Layout.maximumHeight: 40
+                Layout.maximumWidth: 1
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                text: "RELOAD"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                color: '#ffd3d3'
-                font.pixelSize: 18
-                font.bold: true
-                visible: false
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        whetherProcess.running = true
-                        whetherUpdate.visible = false
-                        console.log("whether reload")
+                Layout.topMargin: 10
+                color: colors.moduleSeparatorColor
+            }
+            //CURRENT INFO
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                //Layout.maximumWidth: 180
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                color: 'transparent'
+                RowLayout {
+                    anchors {
+                        centerIn: parent
+                        fill: parent
+                        margins: {
+                            left: 15
+                        }
+                    }
+                    // FEELS LIKE
+                    Text {
+                        id: feelsLike
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumWidth: 10
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        text: "feels\n--°"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: colors.foreground
+                        font.pixelSize: 11
+                        font.bold: true
+                    }
+                    //SEPARATOR
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumHeight: 20
+                        Layout.maximumWidth: 1
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        color: colors.moduleSeparatorColor
+                    }
+                    // min/max temp
+                    Text {
+                        id: minMaxTempText
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumWidth: 10
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        text: "--°\n--°"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: colors.foreground
+                        font.pixelSize: 11
+                        font.bold: true
+                    }
+                    
+                    //SEPARATOR
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumHeight: 20
+                        Layout.maximumWidth: 1
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        color: colors.moduleSeparatorColor
+                    }
+                    // WIND AND HUMIDITY
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumWidth: 10
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Text {
+                            id: windSpeedText
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            Layout.maximumWidth: 80
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            text: "--"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: colors.foreground
+                            font.pixelSize: 11
+                            font.bold: true
+                        }
+                        Text {
+                            id: humidityText
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            Layout.maximumWidth: 80
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            text: "--"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: colors.foreground
+                            font.pixelSize: 11
+                            font.bold: true
+                        }
+                    }
+
+                    // UPDATE BUTTON
+                    Text {
+                        id: refreshButton
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumWidth: 5
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        text: ""
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: colors.foreground
+                        font.pixelSize: 16
+                        font.bold: true
+
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                whetherProcess.running = true
+                                refreshAnimation.running = true
+
+                            }
+                        }
+                        transformOrigin: Item.Center
+
+                        RotationAnimator {
+                            id: refreshAnimation
+                            target: refreshButton
+                            from: 0
+                            to: 360
+                            duration: 15000
+                            loops: Animation.Infinite
+                        }
                     }
                 }
             }
+            
         }
         //SEPARATOR
         Rectangle {
@@ -123,13 +287,13 @@ Rectangle {
             Layout.maximumHeight: 1
             Layout.maximumWidth: 150
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.topMargin: 10
+            //Layout.topMargin: 10
             color: colors.moduleSeparatorColor
         }
         // FUTURE WHETHER
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
-            Layout.maximumHeight: 50
+            Layout.maximumHeight: 40
 
             Rectangle {
                 Layout.fillWidth: true
@@ -144,7 +308,7 @@ Rectangle {
                         Layout.maximumWidth: 60
 
                         Text {
-                            id: currentWhetherIcon1
+                            id: whetherIcon1
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -157,7 +321,7 @@ Rectangle {
                         }
                         // WHETHER TEMP
                         Text {
-                            id: currentWhetherTemp1
+                            id: whetherTemp1
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -170,7 +334,7 @@ Rectangle {
                         }
                     }
                     Text {
-                        id: currentWhetherTime1
+                        id: whetherTime1
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -205,7 +369,7 @@ Rectangle {
                         Layout.maximumWidth: 60
 
                         Text {
-                            id: currentWhetherIcon2
+                            id: whetherIcon2
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -218,7 +382,7 @@ Rectangle {
                         }
                         // WHETHER TEMP
                         Text {
-                            id: currentWhetherTemp2
+                            id: whetherTemp2
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -231,7 +395,7 @@ Rectangle {
                         }
                     }
                     Text {
-                        id: currentWhetherTime2
+                        id: whetherTime2
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -266,7 +430,7 @@ Rectangle {
                         Layout.maximumWidth: 60
 
                         Text {
-                            id: currentWhetherIcon3
+                            id: whetherIcon3
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -279,7 +443,7 @@ Rectangle {
                         }
                         // WHETHER TEMP
                         Text {
-                            id: currentWhetherTemp3
+                            id: whetherTemp3
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -292,7 +456,7 @@ Rectangle {
                         }
                     }
                     Text {
-                        id: currentWhetherTime3
+                        id: whetherTime3
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -327,7 +491,7 @@ Rectangle {
                         Layout.maximumWidth: 60
 
                         Text {
-                            id: currentWhetherIcon4
+                            id: whetherIcon4
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -340,7 +504,7 @@ Rectangle {
                         }
                         // WHETHER TEMP
                         Text {
-                            id: currentWhetherTemp4
+                            id: whetherTemp4
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -353,7 +517,7 @@ Rectangle {
                         }
                     }
                     Text {
-                        id: currentWhetherTime4
+                        id: whetherTime4
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -369,49 +533,38 @@ Rectangle {
         }
     }
     function errorWether(){
-        currentWhetherIcon.text = "󰖨"
-        currentWhetherTemp.text = "-- \n error"
-
-        currentWhetherIcon1.text = "󰖨"
-        currentWhetherIcon2.text = "󰖨"
-        currentWhetherIcon3.text = "󰖨"
-        currentWhetherIcon4.text = "󰖨"
-
-        currentWhetherTemp1.text = "--"
-        currentWhetherTemp2.text = "--"
-        currentWhetherTemp3.text = "--"
-        currentWhetherTemp4.text = "--"
-
-        currentWhetherTime1.text = "--:--"
-        currentWhetherTime2.text = "--:--"
-        currentWhetherTime3.text = "--:--"
-        currentWhetherTime4.text = "--:--"
-
-        whetherUpdate.visible = true
+        currentWhetherTemp.text = "ERROR"
     }
-
     function fillWhether(){
-        currentWhetherIcon.text = weatherRect.weatherIcons[weatherRect.codes[weatherRect.currentHour]] + ""
-        currentWhetherTemp.text = weatherRect.temps[weatherRect.currentHour] + "° \n" + weatherRect.currentHour + ":00"
+        currentWhetherIcon.text = weatherRect.weatherIcons[currentWhetherCode] + ""
+        currentWhetherTemp.text = weatherRect.curTemp + "°"
+        currentHourText.text = weatherRect.currentHour + ":00"
+        minMaxTempText.text = maxTemp + "°\n" + minTemp + "°"
+        windSpeedText.text = "  " + (windSpeed / 3.6, 2).toFixed(1)
+        humidityText.text = "  " + humidity
+        feelsLike.text = "feels\n" + apparentTemp + "°"
 
-        currentWhetherIcon1.text = weatherRect.weatherIcons[weatherRect.codes[weatherRect.currentHour + 1]] + ""
-        currentWhetherIcon2.text = weatherRect.weatherIcons[weatherRect.codes[weatherRect.currentHour + 2]] + ""
-        currentWhetherIcon3.text = weatherRect.weatherIcons[weatherRect.codes[weatherRect.currentHour + 3]] + ""
-        currentWhetherIcon4.text = weatherRect.weatherIcons[weatherRect.codes[weatherRect.currentHour + 4]] + ""
 
-        currentWhetherTemp1.text = weatherRect.temps[weatherRect.currentHour + 1] + "°"
-        currentWhetherTemp2.text = weatherRect.temps[weatherRect.currentHour + 2] + "°"
-        currentWhetherTemp3.text = weatherRect.temps[weatherRect.currentHour + 3] + "°"
-        currentWhetherTemp4.text = weatherRect.temps[weatherRect.currentHour + 4] + "°"
 
-        currentWhetherTime1.text = is24(weatherRect.currentHour + 1) + ":00"
-        currentWhetherTime2.text = is24(weatherRect.currentHour + 2) + ":00"
-        currentWhetherTime3.text = is24(weatherRect.currentHour + 3) + ":00"
-        currentWhetherTime4.text = is24(weatherRect.currentHour + 4) + ":00"
 
-        whetherUpdate.visible = false
+
+        whetherIcon1.text = weatherRect.weatherIcons[weatherRect.codes[weatherRect.currentHour + 1]]
+        whetherIcon2.text = weatherRect.weatherIcons[weatherRect.codes[weatherRect.currentHour + 2]]
+        whetherIcon3.text = weatherRect.weatherIcons[weatherRect.codes[weatherRect.currentHour + 3]]
+        whetherIcon4.text = weatherRect.weatherIcons[weatherRect.codes[weatherRect.currentHour + 4]]
+
+        whetherTemp1.text = weatherRect.temps[weatherRect.currentHour + 1] + "°"
+        whetherTemp2.text = weatherRect.temps[weatherRect.currentHour + 2] + "°"
+        whetherTemp3.text = weatherRect.temps[weatherRect.currentHour + 3] + "°"
+        whetherTemp4.text = weatherRect.temps[weatherRect.currentHour + 4] + "°"
+
+        whetherTime1.text = is24(weatherRect.currentHour + 1) + ":00"
+        whetherTime2.text = is24(weatherRect.currentHour + 2) + ":00"
+        whetherTime3.text = is24(weatherRect.currentHour + 3) + ":00"
+        whetherTime4.text = is24(weatherRect.currentHour + 4) + ":00"
+
+        //whetherUpdate.visible = false
     }
-
     function is24(n){
         if(n >= 24) return n - 24
         return n
