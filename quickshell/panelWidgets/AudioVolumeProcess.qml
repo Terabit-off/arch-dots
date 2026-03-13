@@ -4,7 +4,7 @@ import QtQuick
 import Quickshell
 import QtQuick.Layouts
 
-import ".."
+import "../Singletons" as Singletons
 
 
 RowLayout {
@@ -15,7 +15,7 @@ RowLayout {
 
     Text {
         text: "󰕾"
-        color: colors.foreground
+        color: Singletons.Colors.foreground
         Layout.fillWidth: true
         font.pixelSize: 14
         Layout.alignment: Qt.AlignHCenter
@@ -25,7 +25,7 @@ RowLayout {
         id: volumeSlider
         from: 0
         to: 100
-        value: 2
+        value: Math.round(Singletons.AudioState.sink.audio.volume * 100)
         Layout.fillWidth: true
         Layout.maximumWidth: 200
 
@@ -37,12 +37,12 @@ RowLayout {
             width: parent.availableWidth
             height: implicitHeight
             radius: 2
-            color: colors.sliderBackgroundColor
+            color: Singletons.Colors.sliderBackgroundColor
 
             Rectangle {
                 width: parent.parent.visualPosition * parent.width
                 height: parent.height
-                color: colors.sliderBackgroundFillColor
+                color: Singletons.Colors.sliderBackgroundFillColor
                 radius: 2
             }
         }
@@ -53,9 +53,9 @@ RowLayout {
             y: parent.topPadding + parent.availableHeight / 2 - height / 2
             implicitWidth: 5
             implicitHeight: 13
-            radius: colors.sliderHandlerBorderRadius
-            color: colors.sliderHandlerColor
-            border.color: colors.sliderHandlerBorderColor
+            radius: Singletons.Colors.sliderHandlerBorderRadius
+            color: Singletons.Colors.sliderHandlerColor
+            border.color: Singletons.Colors.sliderHandlerBorderColor
         }
         
         onMoved: {
@@ -64,7 +64,7 @@ RowLayout {
     }
     Text {
         text: Math.round(volumeSlider.value) + "%"
-        color: colors.foreground
+        color: Singletons.Colors.foreground
         font.bold: true
         Layout.fillWidth: true
         font.pixelSize: 14
@@ -78,18 +78,6 @@ RowLayout {
         command: ["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", volumeSlider.value/100]
         stdout: StdioCollector {
             onStreamFinished: {
-                //brightnessUpdateProcess.running = true
-            }
-        }
-    }
-    Process {
-        id: volumeLoad
-        running: true
-        command: ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                let vol = parseFloat(this.text.trim().replace(/[^\d,.]/g, "").replace(",", "."))
-                volumeSlider.value = vol * 100
             }
         }
     }

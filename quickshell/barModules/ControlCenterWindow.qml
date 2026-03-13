@@ -6,8 +6,9 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Controls
 import Quickshell.Hyprland
 
-import "./panelWidgets"
-import "./barModules"
+
+import "../panelWidgets" as Widgets
+import "../Singletons" as Singletons
 
 // PANEL
 PanelWindow {
@@ -16,9 +17,7 @@ PanelWindow {
     visible: false
     exclusiveZone: 0
     implicitWidth: 400
-    Colors {
-        id: colors
-    }
+
 
     anchors {
         right: true
@@ -41,8 +40,8 @@ PanelWindow {
         //anchors.fill: parent
         width: 400
         height: parent.height
-        color: colors.panelBackground
-        radius: colors.panelBorderRadius
+        color: Singletons.Colors.panelBackground
+        radius: Singletons.Colors.panelBorderRadius
 
         NumberAnimation on x {
             duration: 150
@@ -57,7 +56,7 @@ PanelWindow {
             spacing: 5
 
             // CALENDAR
-            TimeDateWidget {
+            Widgets.TimeDateWidget {
                 id: timeDateWidget
             }
             // SEPARATOR
@@ -67,11 +66,11 @@ PanelWindow {
                 Layout.maximumHeight: 1
                 Layout.maximumWidth: 300
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                color: colors.separatorColor
+                color: Singletons.Colors.separatorColor
             }
             
             // WEATHER
-            WhetherPanelWidget {
+            Widgets.WhetherPanelWidget {
                 id: whetherPanelModule
             }
             // SEPARATOR
@@ -81,7 +80,7 @@ PanelWindow {
                 Layout.maximumHeight: 1
                 Layout.maximumWidth: 300
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                color: colors.separatorColor
+                color: Singletons.Colors.separatorColor
             }
             // SYSTEM MONITORING
             Rectangle {
@@ -91,9 +90,9 @@ PanelWindow {
                 Layout.maximumHeight: 160
                 //Layout.maximumWidth: 250
                 Layout.alignment: Qt.AlignHCenter
-                color: colors.moduleBackgroundColor
-                border.color: colors.moduleBorderColor
-                radius: colors.moduleBorderRadius
+                color: Singletons.Colors.moduleBackgroundColor
+                border.color: Singletons.Colors.moduleBorderColor
+                radius: Singletons.Colors.moduleBorderRadius
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -102,7 +101,7 @@ PanelWindow {
                     anchors.topMargin: 5
                     spacing: 5
 
-                    SystemMonitor { }
+                    Widgets.SystemMonitor { }
                     ColumnLayout {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
@@ -111,7 +110,7 @@ PanelWindow {
                         // anchors.topMargin: 5
                         spacing: 5
 
-                        BrightnessProcess { }
+                        Widgets.BrightnessProcess { }
                         // SEPARATOR
                         Rectangle {
                             Layout.fillWidth: true
@@ -119,9 +118,9 @@ PanelWindow {
                             Layout.maximumHeight: 1
                             Layout.maximumWidth: 150
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            color: colors.moduleSeparatorColor
+                            color: Singletons.Colors.moduleSeparatorColor
                         }
-                        AudioVolumeProcess { id: audioVolumeSlider }
+                        Widgets.AudioVolumeProcess { id: audioVolumeSlider }
                     }
                 }
             }
@@ -132,19 +131,20 @@ PanelWindow {
                 Layout.maximumHeight: 1
                 Layout.maximumWidth: 300
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                color: colors.separatorColor
+                color: Singletons.Colors.separatorColor
             }
 
-            // NOTIFICATIONS ---- IN FUTURE
-            Rectangle {
-                id: notificationsModule
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.alignment: Qt.AlignHCenter
-                color: 'transparent'
-                //border.color: colors.moduleBorderColor
-                radius: colors.moduleBorderRadius
-            }
+            // NOTIFICATIONS //TODO: notification
+            Widgets.NotificationWidget { }
+            // Rectangle {
+            //     id: notificationsModule
+            //     Layout.fillWidth: true
+            //     Layout.fillHeight: true
+            //     Layout.alignment: Qt.AlignHCenter
+            //     color: 'transparent'
+            //     //border.color: Singletons.Colors.moduleBorderColor
+            //     radius: Singletons.Colors.moduleBorderRadius
+            // }
         }
     }
 

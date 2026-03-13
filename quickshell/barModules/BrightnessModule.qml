@@ -3,7 +3,7 @@ import Quickshell
 import QtQuick.Layouts
 import Quickshell.Io
 
-
+import "../Singletons" as Singletons
 
 Rectangle {
     id: brightness
@@ -48,7 +48,7 @@ Rectangle {
         text: "󰃠  " + Math.round(brightness.currentBrightness / 64507 * 100)
         font.bold: true
         font.pixelSize: 14
-        color: colors.foreground
+        color: Singletons.Colors.foreground
     }
 
     MouseArea {

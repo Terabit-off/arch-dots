@@ -3,7 +3,7 @@ import QtQuick
 import Quickshell
 import QtQuick.Layouts
 
-import ".."
+import "../Singletons" as Singletons
 
 
 Rectangle {
@@ -11,9 +11,9 @@ Rectangle {
     Layout.fillWidth: true
     Layout.fillHeight: true
     Layout.maximumHeight: 160
-    color: colors.moduleBackgroundColor
-    border.color: colors.moduleBorderColor
-    radius: colors.moduleBorderRadius
+    color: Singletons.Colors.moduleBackgroundColor
+    border.color: Singletons.Colors.moduleBorderColor
+    radius: Singletons.Colors.moduleBorderRadius
 
     property var weatherIcons: {
         "0": "󰖨",
@@ -97,7 +97,7 @@ Rectangle {
                 text: "󰖨"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                color: colors.foreground
+                color: Singletons.Colors.foreground
                 font.pixelSize: 55
                 font.bold: true
             }
@@ -116,7 +116,7 @@ Rectangle {
                     text: "--"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    color: colors.foreground
+                    color: Singletons.Colors.foreground
                     font.pixelSize: 18
                     font.bold: true
                 }
@@ -129,7 +129,7 @@ Rectangle {
                     text: "--:--"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    color: colors.foreground
+                    color: Singletons.Colors.foreground
                     font.pixelSize: 13
                     font.bold: true
                 }
@@ -139,11 +139,11 @@ Rectangle {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.maximumHeight: 40
+                Layout.maximumHeight: 20
                 Layout.maximumWidth: 1
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Layout.topMargin: 10
-                color: colors.moduleSeparatorColor
+                color: Singletons.Colors.moduleSeparatorColor
             }
             //CURRENT INFO
             Rectangle {
@@ -170,7 +170,7 @@ Rectangle {
                         text: "feels\n--°"
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: colors.foreground
+                        color: Singletons.Colors.foreground
                         font.pixelSize: 11
                         font.bold: true
                     }
@@ -181,7 +181,7 @@ Rectangle {
                         Layout.maximumHeight: 20
                         Layout.maximumWidth: 1
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        color: colors.moduleSeparatorColor
+                        color: Singletons.Colors.moduleSeparatorColor
                     }
                     // min/max temp
                     Text {
@@ -193,7 +193,7 @@ Rectangle {
                         text: "--°\n--°"
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: colors.foreground
+                        color: Singletons.Colors.foreground
                         font.pixelSize: 11
                         font.bold: true
                     }
@@ -205,7 +205,7 @@ Rectangle {
                         Layout.maximumHeight: 20
                         Layout.maximumWidth: 1
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        color: colors.moduleSeparatorColor
+                        color: Singletons.Colors.moduleSeparatorColor
                     }
                     // WIND AND HUMIDITY
                     ColumnLayout {
@@ -222,7 +222,7 @@ Rectangle {
                             text: "--"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             font.pixelSize: 11
                             font.bold: true
                         }
@@ -235,7 +235,7 @@ Rectangle {
                             text: "--"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             font.pixelSize: 11
                             font.bold: true
                         }
@@ -251,7 +251,7 @@ Rectangle {
                         text: ""
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: colors.foreground
+                        color: Singletons.Colors.foreground
                         font.pixelSize: 16
                         font.bold: true
 
@@ -272,7 +272,7 @@ Rectangle {
                             target: refreshButton
                             from: 0
                             to: 360
-                            duration: 15000
+                            duration: 1000
                             loops: Animation.Infinite
                         }
                     }
@@ -288,7 +288,7 @@ Rectangle {
             Layout.maximumWidth: 150
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             //Layout.topMargin: 10
-            color: colors.moduleSeparatorColor
+            color: Singletons.Colors.moduleSeparatorColor
         }
         // FUTURE WHETHER
         RowLayout {
@@ -315,7 +315,7 @@ Rectangle {
                             text: "󰖨"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             font.pixelSize: 20
                             font.bold: true
                         }
@@ -328,7 +328,7 @@ Rectangle {
                             text: "--"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             font.pixelSize: 14
                             font.bold: true
                         }
@@ -341,7 +341,7 @@ Rectangle {
                         text: '--:--'
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: colors.foreground
+                        color: Singletons.Colors.foreground
                         font.pixelSize: 12
                         font.bold: true
                     }
@@ -354,7 +354,7 @@ Rectangle {
                 Layout.maximumHeight: 20
                 Layout.maximumWidth: 1
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                color: colors.moduleSeparatorColor
+                color: Singletons.Colors.moduleSeparatorColor
             }
             Rectangle {
                 Layout.fillWidth: true
@@ -376,7 +376,7 @@ Rectangle {
                             text: "󰖨"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             font.pixelSize: 20
                             font.bold: true
                         }
@@ -389,7 +389,7 @@ Rectangle {
                             text: "--"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             font.pixelSize: 14
                             font.bold: true
                         }
@@ -402,7 +402,7 @@ Rectangle {
                         text: '--:--'
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: colors.foreground
+                        color: Singletons.Colors.foreground
                         font.pixelSize: 12
                         font.bold: true
                     }
@@ -415,7 +415,7 @@ Rectangle {
                 Layout.maximumHeight: 20
                 Layout.maximumWidth: 1
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                color: colors.moduleSeparatorColor
+                color: Singletons.Colors.moduleSeparatorColor
             }
             Rectangle {
                 Layout.fillWidth: true
@@ -437,7 +437,7 @@ Rectangle {
                             text: "󰖨"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             font.pixelSize: 20
                             font.bold: true
                         }
@@ -450,7 +450,7 @@ Rectangle {
                             text: "--"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             font.pixelSize: 14
                             font.bold: true
                         }
@@ -463,7 +463,7 @@ Rectangle {
                         text: '--:--'
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: colors.foreground
+                        color: Singletons.Colors.foreground
                         font.pixelSize: 12
                         font.bold: true
                     }
@@ -476,7 +476,7 @@ Rectangle {
                 Layout.maximumHeight: 20
                 Layout.maximumWidth: 1
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                color: colors.moduleSeparatorColor
+                color: Singletons.Colors.moduleSeparatorColor
             }
             Rectangle {
                 Layout.fillWidth: true
@@ -498,7 +498,7 @@ Rectangle {
                             text: "󰖨"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             font.pixelSize: 20
                             font.bold: true
                         }
@@ -511,7 +511,7 @@ Rectangle {
                             text: "--"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             font.pixelSize: 14
                             font.bold: true
                         }
@@ -524,7 +524,7 @@ Rectangle {
                         text: '--:--'
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: colors.foreground
+                        color: Singletons.Colors.foreground
                         font.pixelSize: 12
                         font.bold: true
                     }

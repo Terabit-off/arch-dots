@@ -4,14 +4,16 @@ import QtQuick.Layouts
 import Quickshell.Io
 
 
+import "../Singletons" as Singletons
+
 Rectangle {
     id: timeDateModule
     Layout.fillWidth: true
     Layout.fillHeight: true
     Layout.maximumHeight: 40
-    border.color: colors.moduleBorderColor
-    color: colors.moduleBackgroundColor
-    radius: colors.moduleBorderRadius
+    border.color: Singletons.Colors.moduleBorderColor
+    color: Singletons.Colors.moduleBackgroundColor
+    radius: Singletons.Colors.moduleBorderRadius
 
     function upd(){
         time.text = Qt.formatDateTime(new Date(), "HH:mm");
@@ -35,7 +37,7 @@ Rectangle {
                 text: Qt.formatDateTime(new Date(), "HH:mm");
                 anchors.centerIn: parent
                 font.pixelSize: 22
-                color: colors.foreground
+                color: Singletons.Colors.foreground
                 font.bold: true
             }
             // SEPARATOR
@@ -51,7 +53,7 @@ Rectangle {
                 
                 height: 20
                 width: 1
-                color: colors.moduleSeparatorColor
+                color: Singletons.Colors.moduleSeparatorColor
             }
         }
         Rectangle {
@@ -68,7 +70,7 @@ Rectangle {
                 text: Qt.formatDateTime(new Date(), "dd-MM-yyyy");
                 anchors.centerIn: parent
                 font.pixelSize: 22
-                color: colors.foreground
+                color: Singletons.Colors.foreground
                 font.bold: true
             }
         }
@@ -84,7 +86,7 @@ Rectangle {
                 text: Qt.formatDateTime(new Date(), "ddd");
                 anchors.centerIn: parent
                 font.pixelSize: 22
-                color: colors.foreground
+                color: Singletons.Colors.foreground
                 font.bold: true
             }
             // SEPARATOR
@@ -99,7 +101,7 @@ Rectangle {
                 }
                 height: 20
                 width: 1
-                color: colors.moduleSeparatorColor
+                color: Singletons.Colors.moduleSeparatorColor
             }
         }
     }         

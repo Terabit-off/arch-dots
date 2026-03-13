@@ -3,7 +3,7 @@ import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
 
-import ".."
+import "../Singletons" as Singletons
 
 RowLayout {
     id: root
@@ -25,7 +25,7 @@ RowLayout {
         Text {
             id: cpuText
             font.pixelSize: 14; font.bold: true
-            color: cpuLoad > 80 ? "#ff4444" : cpuLoad > 60 ? "#ffaa00" : colors.foreground
+            color: cpuLoad > 80 ? "#ff4444" : cpuLoad > 60 ? "#ffaa00" : Singletons.Colors.foreground
             text: cpuLoad + "%"
             Layout.alignment: Qt.AlignHCenter
         }
@@ -37,7 +37,7 @@ RowLayout {
         Layout.maximumHeight: 20
         Layout.maximumWidth: 1
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        color: colors.moduleSeparatorColor
+        color: Singletons.Colors.moduleSeparatorColor
     }
     // RAM
     ColumnLayout {
@@ -50,7 +50,7 @@ RowLayout {
             Layout.alignment: Qt.AlignHCenter
             font.pixelSize: 14; font.bold: true
             text: ramUsed + "/" + ramTotal + "GB"
-            color: colors.foreground
+            color: Singletons.Colors.foreground
         }
     }
 
@@ -61,7 +61,7 @@ RowLayout {
         Layout.maximumHeight: 20
         Layout.maximumWidth: 1
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        color: colors.moduleSeparatorColor
+        color: Singletons.Colors.moduleSeparatorColor
     }
     // TEMP
     ColumnLayout {
@@ -73,7 +73,7 @@ RowLayout {
             id: tempText
             Layout.alignment: Qt.AlignHCenter
             font.pixelSize: 14; font.bold: true
-            color: temp > 80 ? "#ff4444" : temp > 70 ? "#ffaa00" : colors.foreground
+            color: temp > 80 ? "#ff4444" : temp > 70 ? "#ffaa00" : Singletons.Colors.foreground
             text: temp + "°"
         }
     }

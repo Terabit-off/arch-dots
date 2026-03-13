@@ -3,6 +3,8 @@ import Quickshell.Services.UPower
 import QtQuick.Layouts
 import QtQuick
 
+import "../Singletons" as Singletons
+
 Rectangle {
     color: 'transparent'
     Layout.fillWidth: true
@@ -23,7 +25,7 @@ Rectangle {
             if (parent.battery.percentage * 100 >= 20) return "󰁼";
             return "󰂃";
         }
-        color: colors.foreground
+        color: Singletons.Colors.foreground
         text: parent.battery ? icon + " " + Math.round(parent.battery.percentage * 100) + "%" : "--%"
         font.bold: true
         font.pixelSize: 14

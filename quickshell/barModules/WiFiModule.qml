@@ -3,6 +3,8 @@ import QtQuick
 import Quickshell
 import QtQuick.Layouts
 
+import "../Singletons" as Singletons
+
 Rectangle {
     color: 'transparent'
     Layout.fillWidth: true
@@ -32,6 +34,6 @@ Rectangle {
         anchors.centerIn: parent
         text: "󰖪"//"󰖩"
         font.pixelSize: 15
-        color: colors.foreground
+        color: Singletons.Colors.foreground
     }
 }

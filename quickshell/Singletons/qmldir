@@ -1,0 +1,3 @@
+module Singletons
+singleton Colors 1.0 Colors.qml
+singleton AudioState 1.0 AudioState.qml

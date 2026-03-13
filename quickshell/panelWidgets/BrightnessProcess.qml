@@ -4,7 +4,7 @@ import QtQuick
 import Quickshell
 import QtQuick.Layouts
 
-import ".."
+import "../Singletons" as Singletons
 
 
 RowLayout {
@@ -16,7 +16,7 @@ RowLayout {
     Text {
         text: "󰃠"
         Layout.maximumWidth: 30
-        color: colors.foreground
+        color: Singletons.Colors.foreground
         font.pixelSize: 14
         Layout.fillWidth: true
     }
@@ -36,12 +36,12 @@ RowLayout {
             width: parent.availableWidth
             height: implicitHeight
             radius: 2
-            color: colors.sliderBackgroundColor
+            color: Singletons.Colors.sliderBackgroundColor
 
             Rectangle {
                 width: parent.parent.visualPosition * parent.width
                 height: parent.height
-                color: colors.sliderBackgroundFillColor
+                color: Singletons.Colors.sliderBackgroundFillColor
                 radius: 2
             }
         }
@@ -51,9 +51,9 @@ RowLayout {
             y: parent.topPadding + parent.availableHeight / 2 - height / 2
             implicitWidth: 5
             implicitHeight: 13
-            radius: colors.sliderHandlerBorderRadius
-            color: colors.sliderHandlerColor
-            border.color: colors.sliderHandlerBorderColor
+            radius: Singletons.Colors.sliderHandlerBorderRadius
+            color: Singletons.Colors.sliderHandlerColor
+            border.color: Singletons.Colors.sliderHandlerBorderColor
         }
         
         onMoved: {
@@ -62,7 +62,7 @@ RowLayout {
     }
     Text {
         text: Math.round(brightnessSlider.value) + "%"
-        color: colors.foreground
+        color: Singletons.Colors.foreground
         font.bold: true
         Layout.fillWidth: true
         font.pixelSize: 14

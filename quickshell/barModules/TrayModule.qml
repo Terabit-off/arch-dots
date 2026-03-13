@@ -4,6 +4,9 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
+
+import "../Singletons" as Singletons
+
 Rectangle {
     color: 'transparent'
     Layout.fillWidth: true
@@ -40,8 +43,8 @@ Rectangle {
                 Colorize {
                     anchors.fill: iconImage
                     source: iconImage
-                    hue: colors.trayIconColor
-                    saturation: colors.trayIconSaturation
+                    hue: Singletons.Colors.trayIconColor
+                    saturation: Singletons.Colors.trayIconSaturation
                     lightness: -0.2
 
                     QsMenuAnchor {

@@ -8,6 +8,8 @@ import QtQuick.Layouts
 import Quickshell.Services.SystemTray
 import QtQuick.Controls
 
+import "./Singletons" as Singletons
+
 import "./barModules" as Modules
 import "./musicCenter"
 
@@ -29,22 +31,16 @@ PanelWindow {
 
     // INIT PROCESS
     
-    
-    //Colors.qml
-    Colors {
-        id: colors
-    }
-    ControlCenterWindow {
+    Modules.ControlCenterWindow {
         id: controlCenter
     }
 
 
 
-
     Rectangle {
         anchors.fill: parent
-        color: colors.barBackground
-        border.color: colors.barBorderColor
+        color: Singletons.Colors.barBackground
+        border.color: Singletons.Colors.barBorderColor
         radius: 25
 
         RowLayout {
@@ -100,11 +96,12 @@ PanelWindow {
                     }
                     spacing: 5
 
+                    // TODO: Wi-Fi interface
                     Modules.TrayModule { }
 
                     //Separator
                     Rectangle {
-                        color: colors.moduleSeparatorColor
+                        color: Singletons.Colors.moduleSeparatorColor
                         height: 15
                         width: 1
                     }
@@ -122,25 +119,25 @@ PanelWindow {
                             anchors.centerIn: parent
                             text: "󰂯" // 󰂲
                             font.pixelSize: 17
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                         }
                     }
                     Modules.WiFiModule { id: wifiModule }
 
                     //Separator
                     Rectangle {
-                        color: colors.moduleSeparatorColor
+                        color: Singletons.Colors.moduleSeparatorColor
                         height: 15
                         width: 1
                     }
 
                     Modules.BrightnessModule { }
-                    Modules.AudioVolumeModule { }
+                    Modules.AudioVolumeModule { id: audioVolumeModuleBar}
                     Modules.BatteryModule { }
 
                     //Separator
                     Rectangle {
-                        color: colors.moduleSeparatorColor
+                        color: Singletons.Colors.moduleSeparatorColor
                         height: 15
                         width: 1
                     }
@@ -156,7 +153,7 @@ PanelWindow {
                             id: timeText
                             anchors.centerIn: parent
                             text: Qt.formatDateTime(new Date(), "hh:mm")
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             font.bold: true
                             font.pixelSize: 16
                         }

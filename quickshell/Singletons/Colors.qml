@@ -1,4 +1,4 @@
-//#pragma Singleton
+pragma Singleton
 
 import QtQuick
 
@@ -49,6 +49,9 @@ QtObject {
 
     readonly property color buttonOnTextColor: '#2c2c2c'
     readonly property color buttonOffTextColor: '#c9c9c9'
+
+    // Notification
+    readonly property color notifyCardBackground: '#161616'
 }
 
 

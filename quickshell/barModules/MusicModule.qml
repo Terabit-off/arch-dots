@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 
 import "../musicCenter"
+import "../Singletons" as Singletons
 
 Rectangle {
     id: root
@@ -26,7 +27,7 @@ Rectangle {
 
     //Separator
     Rectangle {
-        color: colors.moduleSeparatorColor
+        color: Singletons.Colors.moduleSeparatorColor
         height: 15
         width: 1
         anchors.left: parent.left
@@ -42,7 +43,7 @@ Rectangle {
             id: musicIcon
             text: "󰎆"
             font.pixelSize: 16
-            color: colors.foreground
+            color: Singletons.Colors.foreground
             
             
             transformOrigin: Item.Center
@@ -64,14 +65,14 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
             text: MusicSingleton.active ? MusicSingleton.active.metadata["xesam:title"] : ""
-            color: colors.foreground
+            color: Singletons.Colors.foreground
             font.bold: true
             font.pixelSize: 14
         }
     }
     //Separator
     Rectangle {
-        color: colors.moduleSeparatorColor
+        color: Singletons.Colors.moduleSeparatorColor
         height: 15
         width: 1
         anchors.right: parent.right

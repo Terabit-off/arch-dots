@@ -4,7 +4,7 @@ import Quickshell
 import Qt5Compat.GraphicalEffects
 import Quickshell.Hyprland
 
-import ".."
+import "../Singletons" as Singletons
 import "../barModules"
 
 PanelWindow {
@@ -14,9 +14,6 @@ PanelWindow {
     exclusiveZone: 0
     implicitHeight: 150
     implicitWidth: 400
-    Colors {
-        id: colors
-    }
     anchors {
         top: true
     }
@@ -33,9 +30,9 @@ PanelWindow {
         //anchors.fill: parent
         width: 400
         height: 150
-        color: colors.moduleBackgroundColor
-        radius: colors.panelBorderRadius
-        border.color: colors.moduleBorderColor
+        color: Singletons.Colors.moduleBackgroundColor
+        radius: Singletons.Colors.panelBorderRadius
+        border.color: Singletons.Colors.moduleBorderColor
 
         NumberAnimation on y {
             duration: 150
@@ -102,7 +99,7 @@ PanelWindow {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         text: MusicSingleton.active ? MusicSingleton.active.metadata["xesam:title"] : "Unknown"
                         horizontalAlignment: Text.AlignHCenter
-                        color: colors.foreground
+                        color: Singletons.Colors.foreground
                         font.pixelSize: 16
                         elide: Text.ElideRight
                         font.bold: true
@@ -117,7 +114,7 @@ PanelWindow {
                                 }
                             }
                             onEntered: parent.color = '#ffffff'
-                            onExited: parent.color = colors.foreground
+                            onExited: parent.color = Singletons.Colors.foreground
                         }
                     }
                     //ARTIST
@@ -130,7 +127,7 @@ PanelWindow {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         text: MusicSingleton.active ? MusicSingleton.active.trackArtist : "Unknown"
                         horizontalAlignment: Text.AlignHCenter
-                        color: colors.foreground
+                        color: Singletons.Colors.foreground
                         font.pixelSize: 10
                         elide: Text.ElideRight
                         font.bold: true
@@ -146,7 +143,7 @@ PanelWindow {
                             Layout.maximumWidth: 35
                             horizontalAlignment: Text.AlignHCenter
                             height: 30
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             text: "󰒮"
                             font.pixelSize: 30
 
@@ -160,7 +157,7 @@ PanelWindow {
                                     }
                                 }
                                 onEntered: parent.color = '#ffffff'
-                                onExited: parent.color = colors.foreground
+                                onExited: parent.color = Singletons.Colors.foreground
                             }
                         }
                         //PAUSE
@@ -170,7 +167,7 @@ PanelWindow {
                             Layout.maximumWidth: 35
                             horizontalAlignment: Text.AlignHCenter
                             height: 30
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             text: MusicSingleton.isPlaying ? "󰏤" : "󰐊"
                             font.pixelSize: 30
 
@@ -184,7 +181,7 @@ PanelWindow {
                                     }
                                 }
                                 onEntered: parent.color = '#ffffff'
-                                onExited: parent.color = colors.foreground
+                                onExited: parent.color = Singletons.Colors.foreground
                             }
                         }
                         Text {
@@ -193,7 +190,7 @@ PanelWindow {
                             Layout.maximumWidth: 35
                             horizontalAlignment: Text.AlignHCenter
                             height: 30
-                            color: colors.foreground
+                            color: Singletons.Colors.foreground
                             text: "󰒭"
                             font.pixelSize: 30
 
@@ -207,7 +204,7 @@ PanelWindow {
                                     }
                                 }
                                 onEntered: parent.color = '#ffffff'
-                                onExited: parent.color = colors.foreground
+                                onExited: parent.color = Singletons.Colors.foreground
                             }
                         }
                     }
@@ -227,7 +224,7 @@ PanelWindow {
                             return parts[0]
                         } 
                         horizontalAlignment: Text.AlignHCenter
-                        color: colors.foreground
+                        color: Singletons.Colors.foreground
                         font.pixelSize: 8
                         elide: Text.ElideRight
                         font.bold: true
