@@ -1,6 +1,7 @@
 //@ pragma UseQApplication
 
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.UPower
 import Quickshell.Services.Pipewire
 import QtQuick
@@ -35,6 +36,9 @@ PanelWindow {
         id: controlCenter
     }
 
+    Process {
+        id: startApp
+    }
 
 
     Rectangle {
@@ -121,6 +125,13 @@ PanelWindow {
                             font.pixelSize: 17
                             color: Singletons.Colors.foreground
                         }
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                startApp.command = ["overskride"]
+                                startApp.running = true
+                            }
+                        }
                     }
                     Modules.WiFiModule { id: wifiModule }
 
@@ -132,7 +143,7 @@ PanelWindow {
                     }
 
                     Modules.BrightnessModule { }
-                    Modules.AudioVolumeModule { id: audioVolumeModuleBar}
+                    Modules.AudioVolumeModule { }
                     Modules.BatteryModule { }
 
                     //Separator
