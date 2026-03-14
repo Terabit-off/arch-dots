@@ -53,7 +53,6 @@ Rectangle {
 
     MouseArea {
         anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
         onWheel: (wheel) => {
             if (wheel.angleDelta.y > 0) {
                 brightnessUp.running = true
