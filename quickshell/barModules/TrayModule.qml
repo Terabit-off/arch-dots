@@ -40,37 +40,30 @@ Rectangle {
                     fillMode: Image.PreserveAspectFit
                     visible: false
                 }
-                Colorize {
-                    anchors.fill: iconImage
-                    source: iconImage
-                    hue: Singletons.Colors.trayIconColor
-                    saturation: Singletons.Colors.trayIconSaturation
-                    lightness: -0.2
 
-                    QsMenuAnchor {
-                        id: contextMenu
-                        menu: item.menu
-                        anchor {
-                            window: rootPanel
-                            margins {
-                                left: 1050
-                                top: 25
-                            }
+                QsMenuAnchor {
+                    id: contextMenu
+                    menu: item.menu
+                    anchor {
+                        window: rootPanel
+                        margins {
+                            left: 1050
+                            top: 25
                         }
                     }
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        acceptedButtons: Qt.LeftButton | Qt.RightButton
-                        onClicked: (mouse) => {
-                            if (mouse.button === Qt.LeftButton) {
-                                item.activate();
-                            } else if(mouse.button === Qt.RightButton){
-                                contextMenu.open()
-                            }
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    onClicked: (mouse) => {
+                        if (mouse.button === Qt.LeftButton) {
+                            item.activate();
+                        } else if(mouse.button === Qt.RightButton){
+                            contextMenu.open()
                         }
-                    
                     }
+                
                 }
             }
         }

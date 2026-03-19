@@ -9,27 +9,23 @@ RowLayout {
     id: root
     Layout.fillWidth: true
     Layout.fillHeight: true
+    Layout.maximumHeight: 5
     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-    spacing: 4
+    spacing: 25
 
     property real cpuLoad: 0
     property real ramUsed: 0
     property real ramTotal: 0
     property real temp: 0
     // CPU
-    ColumnLayout {
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        Layout.maximumWidth: 100
-
-        Text { text: "CPU"; color: "#aaa"; font.pixelSize: 14; Layout.alignment: Qt.AlignHCenter }
-        Text {
-            id: cpuText
-            font.pixelSize: 14; font.bold: true
-            color: cpuLoad > 80 ? "#ff4444" : cpuLoad > 60 ? "#ffaa00" : Singletons.Colors.foreground
-            text: cpuLoad + "%"
-            Layout.alignment: Qt.AlignHCenter
-        }
+    Text {
+        id: cpuText
+        font.pixelSize: 14; font.bold: true
+        color: cpuLoad > 80 ? "#ff4444" : cpuLoad > 60 ? "#ffaa00" : Singletons.Colors.foreground
+        text: "   " + cpuLoad + "%"
+        Layout.alignment: Qt.AlignHCenter
     }
+    
     // SEPARATOR
     Rectangle {
         Layout.fillWidth: true
@@ -40,20 +36,13 @@ RowLayout {
         color: Singletons.Colors.moduleSeparatorColor
     }
     // RAM
-    ColumnLayout {
-        Layout.maximumWidth: 100
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        
-        Text { text: "RAM"; color: "#aaa"; font.pixelSize: 14; Layout.alignment: Qt.AlignHCenter }
-        Text {
-            id: ramText
-            Layout.alignment: Qt.AlignHCenter
-            font.pixelSize: 14; font.bold: true
-            text: ramUsed + "/" + ramTotal + "GB"
-            color: Singletons.Colors.foreground
-        }
-    }
-
+    Text {
+        id: ramText
+        Layout.alignment: Qt.AlignHCenter
+        font.pixelSize: 14; font.bold: true
+        text: "   " + ramUsed + "GB"
+        color: Singletons.Colors.foreground
+    } 
     //SEPARATOR
     Rectangle {
         Layout.fillWidth: true
@@ -64,18 +53,12 @@ RowLayout {
         color: Singletons.Colors.moduleSeparatorColor
     }
     // TEMP
-    ColumnLayout {
-        Layout.maximumWidth: 100
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-        Text { text: "TEMP"; color: "#aaa"; font.pixelSize: 14; Layout.alignment: Qt.AlignHCenter }
-        Text {
-            id: tempText
-            Layout.alignment: Qt.AlignHCenter
-            font.pixelSize: 14; font.bold: true
-            color: temp > 80 ? "#ff4444" : temp > 70 ? "#ffaa00" : Singletons.Colors.foreground
-            text: temp + "°"
-        }
+    Text {
+        id: tempText
+        Layout.alignment: Qt.AlignHCenter
+        font.pixelSize: 14; font.bold: true
+        color: temp > 80 ? "#ff4444" : temp > 70 ? "#ffaa00" : Singletons.Colors.foreground
+        text: " " +temp + "°"
     }
 
     Process {

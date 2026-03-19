@@ -87,7 +87,7 @@ PanelWindow {
                 id: systemMonitoringModule
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.maximumHeight: 160
+                Layout.maximumHeight: 50
                 //Layout.maximumWidth: 250
                 Layout.alignment: Qt.AlignHCenter
                 color: Singletons.Colors.moduleBackgroundColor
@@ -97,8 +97,7 @@ PanelWindow {
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.centerIn: parent
-                    anchors.bottomMargin: 5
-                    anchors.topMargin: 5
+                    anchors.topMargin: 15
                     spacing: 5
 
                     Widgets.SystemMonitor { }
@@ -109,18 +108,6 @@ PanelWindow {
                         // anchors.bottomMargin: 5
                         // anchors.topMargin: 5
                         spacing: 5
-
-                        Widgets.BrightnessProcess { }
-                        // SEPARATOR
-                        Rectangle {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            Layout.maximumHeight: 1
-                            Layout.maximumWidth: 150
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            color: Singletons.Colors.moduleSeparatorColor
-                        }
-                        Widgets.AudioVolumeProcess { id: audioVolumeSlider }
                     }
                 }
             }
@@ -136,15 +123,6 @@ PanelWindow {
 
             // NOTIFICATIONS //TODO: notification
             Widgets.NotificationWidget { }
-            // Rectangle {
-            //     id: notificationsModule
-            //     Layout.fillWidth: true
-            //     Layout.fillHeight: true
-            //     Layout.alignment: Qt.AlignHCenter
-            //     color: 'transparent'
-            //     //border.color: Singletons.Colors.moduleBorderColor
-            //     radius: Singletons.Colors.moduleBorderRadius
-            // }
         }
     }
 

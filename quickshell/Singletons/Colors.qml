@@ -35,9 +35,9 @@ QtObject {
     readonly property real panelBorderRadius: 15
 
     // sliders
-    readonly property color sliderBackgroundColor: '#525252'
-    readonly property color sliderBackgroundFillColor: '#c9c9c9'
-    readonly property color sliderHandlerColor: '#f0f0f0'
+    readonly property color sliderBackgroundColor: '#494949'
+    readonly property color sliderBackgroundFillColor: '#e9e9e9'
+    readonly property color sliderHandlerColor: 'transparent'//'#f0f0f0'
     readonly property color sliderHandlerBorderColor: '#bd939393'
     readonly property real sliderHandlerBorderRadius: 2
 

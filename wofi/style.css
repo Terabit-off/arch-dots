@@ -11,7 +11,7 @@ window {
 #input {
     margin: 5px;
     border: none;
-    color: #ede2d7;
+    color: #505050;
     background-color: rgba(69, 69, 69, 0.9);
     border-radius: 10px;
     padding: 10px;
@@ -45,12 +45,12 @@ window {
 #text {
     margin: 5px;
     border: none;
-    color: #cdd6f4;
+    color: #bbbbbb;
 }
 
 /* Выбранный (активный) элемент */
 #entry:selected {
-    background-color: #ede2d7; /* Акцентный цвет (фиолетовый) */
+    background-color: #707070; /* Акцентный цвет (фиолетовый) */
     border-radius: 5px;
     outline: none;
 }
