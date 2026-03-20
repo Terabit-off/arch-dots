@@ -220,10 +220,10 @@ ShellRoot {
                             repeat: true
                             triggeredOnStart: true
                             onTriggered: {
-                                var t = new Date()
-                                timeText.text = Qt.formatDateTime(t, "HH:mm  ddd,MM");
+                                timeText.text = Qt.formatDateTime(new Date(), "HH:mm  ddd,MM");
                                 controlCenter.updateTimeDate()
-                                var nextMinute = t(
+                                var now = new Date();
+                                var nextMinute = new Date(
                                     now.getFullYear(),
                                     now.getMonth(),
                                     now.getDate(),
@@ -231,7 +231,8 @@ ShellRoot {
                                     now.getMinutes() + 1,
                                     0, 0, 0
                                 );
-                                interval = nextMinute.getTime() - t.getTime() + 500;
+
+                                interval = nextMinute.getTime() - now.getTime() + 500;
                             }
                         }
                     }
