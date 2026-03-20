@@ -13,6 +13,7 @@ import "./Singletons" as Singletons
 
 import "./barModules" as Modules
 import "./musicCenter"
+import "./menus" as Menus
 
 ShellRoot {
     id: root
@@ -38,8 +39,11 @@ ShellRoot {
             id: controlCenter
         }
 
-        Process {
-            id: startApp
+        
+
+        Menus.BluetoothMenu {
+            id: bluetoothMenu
+            panel: bluetoothText    
         }
 
 
@@ -148,7 +152,6 @@ ShellRoot {
                             width: 1
                         }
 
-                        //TODO: do bluetooth
                         Rectangle {
                             color: 'transparent'
                             Layout.fillWidth: true
@@ -165,9 +168,10 @@ ShellRoot {
                             }
                             MouseArea {
                                 anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
                                 onClicked: {
-                                    startApp.command = ["overskride"]
-                                    startApp.running = true
+                                    bluetoothMenu.visible = true
+                                    bluetoothMenu.activeFocus = true
                                 }
                             }
                         }
