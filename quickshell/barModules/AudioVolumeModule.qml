@@ -20,7 +20,7 @@ Rectangle {
         }
         text: Singletons.AudioState.sink.audio.muted ? "󰝟  0" :  "󰕾  "+ Math.round(Singletons.AudioState.sink.audio.volume * 100)
         color:Singletons.Colors.foreground
-        font.pixelSize: 14
+        font.pixelSize: 13
         font.bold: true
     }
     MouseArea {

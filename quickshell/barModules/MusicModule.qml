@@ -9,7 +9,6 @@ Rectangle {
     id: root
     color: 'transparent'
     anchors.fill: parent
-    radius: 12
     anchors.centerIn: parent
     visible: MusicSingleton.active !== null
 
@@ -38,26 +37,6 @@ Rectangle {
         spacing: 5
         anchors.centerIn: parent
 
-
-        Text {
-            id: musicIcon
-            text: "󰎆"
-            font.pixelSize: 16
-            color: Singletons.Colors.foreground
-            
-            
-            transformOrigin: Item.Center
-
-            RotationAnimator {
-                target: musicIcon
-                from: 0
-                to: 360
-                duration: 3000
-                loops: Animation.Infinite
-                running: MusicSingleton.isPlaying
-            }
-        }
-
         Text {
             id: titleText
             Layout.maximumWidth: 250 
@@ -67,7 +46,7 @@ Rectangle {
             text: MusicSingleton.active ? MusicSingleton.active.metadata["xesam:title"] : ""
             color: Singletons.Colors.foreground
             font.bold: true
-            font.pixelSize: 14
+            font.pixelSize: 13
         }
     }
     //Separator

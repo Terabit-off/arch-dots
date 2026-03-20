@@ -44,10 +44,10 @@ PanelWindow {
         radius: Singletons.Colors.panelBorderRadius
 
         NumberAnimation on x {
-            duration: 150
+            duration: 250
             running: visible
             from: 1000; to: 0
-            easing.type: Easing.OutCubic
+            easing.type: Easing.OutExpo
         }
 
 

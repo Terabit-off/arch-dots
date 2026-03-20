@@ -28,7 +28,7 @@ Rectangle {
         color: Singletons.Colors.foreground
         text: parent.battery ? icon + " " + Math.round(parent.battery.percentage * 100) + "%" : "--%"
         font.bold: true
-        font.pixelSize: 14
+        font.pixelSize: 13
     }
 
 }

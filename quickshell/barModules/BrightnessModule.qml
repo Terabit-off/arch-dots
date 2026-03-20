@@ -47,7 +47,7 @@ Rectangle {
         anchors.centerIn: parent
         text: "󰃠  " + Math.round(brightness.currentBrightness / 64507 * 100)
         font.bold: true
-        font.pixelSize: 14
+        font.pixelSize: 13
         color: Singletons.Colors.foreground
     }
 

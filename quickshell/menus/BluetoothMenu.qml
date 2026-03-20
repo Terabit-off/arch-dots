@@ -28,10 +28,18 @@ PopupWindow {
     } 
 
     Rectangle {
-        anchors.fill: parent
+        height: 300
+        width: 200
         radius: 14
         color: Singletons.Colors.moduleBackgroundColor
         border.color: Singletons.Colors.moduleBorderColor
+
+        NumberAnimation on y {
+            duration: 350
+            running: visible
+            from: -300; to: 0
+            easing.type: Easing.OutCubic
+        }
 
         ColumnLayout {
             anchors.fill: parent

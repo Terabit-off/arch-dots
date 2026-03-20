@@ -29,8 +29,8 @@ Rectangle {
             }
             delegate: Item {
                 id: itemParent
-                width: 14
-                height: 14
+                width: 13
+                height: 13
                 readonly property var item: modelData
                 
                 Image {
@@ -38,7 +38,7 @@ Rectangle {
                     anchors.fill: parent
                     source: itemParent.item.icon
                     fillMode: Image.PreserveAspectFit
-                    visible: false
+                    visible: true
                 }
 
                 QsMenuAnchor {

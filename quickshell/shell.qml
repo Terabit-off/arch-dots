@@ -28,24 +28,18 @@ ShellRoot {
         margins {
             left: 25
             right: 25
-            top: 5
+            top: 3
         }
-        implicitHeight: 30
+        implicitHeight: 24
         color: 'transparent'
 
-        // INIT PROCESS
-        
         Modules.ControlCenterWindow {
             id: controlCenter
         }
-
-        
-
         Menus.BluetoothMenu {
             id: bluetoothMenu
             panel: bluetoothText    
         }
-
 
         Rectangle {
             anchors.fill: parent
@@ -78,6 +72,7 @@ ShellRoot {
 
 
                         Rectangle {
+                            id: overviewButton
                             Layout.fillWidth: true
                             Layout.fillHeight: true
 
@@ -88,7 +83,7 @@ ShellRoot {
                                 anchors.centerIn: parent
                                 anchors.fill: parent
                                 text: "󰣇"
-                                font.pixelSize: 18
+                                font.pixelSize: 16
                                 color: Singletons.Colors.foreground
                             }
                         }
@@ -143,6 +138,7 @@ ShellRoot {
                         spacing: 5
 
                         // TODO: Wi-Fi interface
+                        
                         Modules.TrayModule { }
 
                         //Separator
@@ -198,17 +194,15 @@ ShellRoot {
                         Rectangle {
                             color: 'transparent'
                             Layout.fillWidth: true
-                            Layout.minimumWidth: 70
-                            Layout.maximumWidth: 70
+                            Layout.minimumWidth: 140
                             height: 24
 
                             Text {
                                 id: timeText
                                 anchors.centerIn: parent
-                                text: Qt.formatDateTime(new Date(), "hh:mm")
                                 color: Singletons.Colors.foreground
                                 font.bold: true
-                                font.pixelSize: 16
+                                font.pixelSize: 14
                             }
                         }
 
@@ -225,13 +219,11 @@ ShellRoot {
                             running: true
                             repeat: true
                             triggeredOnStart: true
-
                             onTriggered: {
-                                timeText.text = Qt.formatDateTime(new Date(), "HH:mm");
+                                var t = new Date()
+                                timeText.text = Qt.formatDateTime(t, "HH:mm  ddd,MM");
                                 controlCenter.updateTimeDate()
-
-                                var now = new Date();
-                                var nextMinute = new Date(
+                                var nextMinute = t(
                                     now.getFullYear(),
                                     now.getMonth(),
                                     now.getDate(),
@@ -239,8 +231,7 @@ ShellRoot {
                                     now.getMinutes() + 1,
                                     0, 0, 0
                                 );
-
-                                interval = nextMinute.getTime() - now.getTime() + 500;
+                                interval = nextMinute.getTime() - t.getTime() + 500;
                             }
                         }
                     }

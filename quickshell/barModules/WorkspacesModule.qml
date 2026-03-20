@@ -13,7 +13,7 @@ Row {
 
         delegate: Rectangle {
             width: modelData.focused ? 30 : 25
-            height: 20
+            height: 17
             radius: modelData.focused ? 8 : modelData.urgent ? 8 : 0
 
             Behavior on color {
@@ -36,7 +36,7 @@ Row {
                     ? Singletons.Colors.wsFocusForeground
                     : Singletons.Colors.wsNotFocusForeground
                 font.bold: true
-                font.pixelSize: 14
+                font.pixelSize: 13
             }
 
             MouseArea {
