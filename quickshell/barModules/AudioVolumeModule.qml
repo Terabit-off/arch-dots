@@ -27,12 +27,7 @@ Rectangle {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         scrollGestureEnabled: true
-        onClicked: {
-            if (Singletons.AudioState.sink) {
-                Singletons.AudioState.sink.audio.muted = !Singletons.AudioState.sink.audio.muted;
-            }
-        }
-
+        
         onWheel: (wheel) => {
             if (Singletons.AudioState.sink) {
                 let step = 0.05;  

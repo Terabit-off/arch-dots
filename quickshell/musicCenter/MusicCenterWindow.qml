@@ -176,7 +176,7 @@ PanelWindow {
                             implicitWidth: 8
                             implicitHeight: 8
                             radius: 4
-                            color: Singletons.Colors.sliderHandlerColor
+                            color: 'transparent'
                         }
 
 

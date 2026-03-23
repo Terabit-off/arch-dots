@@ -12,6 +12,7 @@ Rectangle {
     Layout.maximumWidth: 50
     height: 24
 
+     property alias wifiUpdateProcess: wifiProcess
 
     Process {
         id: wifiProcess

@@ -40,6 +40,11 @@ ShellRoot {
             id: bluetoothMenu
             panel: bluetoothText    
         }
+        Menus.VolumesControlMenu {
+            id: volumesControlMenu
+            panel: volumesPanel
+            brightnessModule: brightnessBarModule
+        }
 
         Rectangle {
             anchors.fill: parent
@@ -180,9 +185,29 @@ ShellRoot {
                             width: 1
                         }
 
-                        Modules.BrightnessModule { }
-                        Modules.AudioVolumeModule { }
-                        Modules.BatteryModule { }
+
+                        Rectangle {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            Layout.minimumWidth: 160
+                            color: 'transparent'
+                            RowLayout {
+                                id: volumesPanel
+                                anchors.fill: parent
+                                anchors.centerIn: parent
+                                Modules.BrightnessModule { id: brightnessBarModule }
+                                Modules.AudioVolumeModule { }
+                                Modules.BatteryModule { }
+                            }
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    volumesControlMenu.visible = true
+                                    volumesControlMenu.activeFocus = true
+                                }
+                            }
+                        }
 
                         //Separator
                         Rectangle {
@@ -211,8 +236,7 @@ ShellRoot {
                             running: true
                             repeat: true
                             onTriggered: {
-                                Modules.wifiProcess.running = true
-                                
+                                wifiModule.wifiUpdateProcess.running = true              
                             }
                         }
                         Timer {

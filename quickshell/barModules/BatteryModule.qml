@@ -12,7 +12,7 @@ Rectangle {
     Layout.maximumWidth: 50
     height: 24
 
-    readonly property var battery: UPower.displayDevice
+    readonly property var battery: Singletons.BatteryState.battery
 
     Text {
         id: batteryText

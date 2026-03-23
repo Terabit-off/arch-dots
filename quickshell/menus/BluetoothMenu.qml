@@ -21,7 +21,7 @@ PopupWindow {
     anchor.item: panel
     anchor.edges: Qt.BottomEdge
     anchor.rect.x: panel.width - width / 2
-    anchor.rect.y: panel.height + 15
+    anchor.rect.y: panel.height + 5
 
     Process {
         id: startApp
@@ -35,7 +35,7 @@ PopupWindow {
         border.color: Singletons.Colors.moduleBorderColor
 
         NumberAnimation on y {
-            duration: 350
+            duration: 250
             running: visible
             from: -300; to: 0
             easing.type: Easing.OutCubic
@@ -108,7 +108,7 @@ PopupWindow {
                     
                     height: 42
                     radius: 10
-                    color: Singletons.Colors.moduleBackgroundColor
+                    color: modelData.connected ? '#81393939' : Singletons.Colors.moduleBackgroundColor
                     border.color: Singletons.Colors.buttonBorderColor
 
                     RowLayout {
