@@ -109,7 +109,7 @@ PopupWindow {
                         x: parent.leftPadding + parent.visualPosition * (parent.availableWidth - width)
                         y: parent.topPadding + parent.availableHeight / 2 - height / 2
                         implicitWidth: 5
-                        implicitHeight: 13
+                        implicitHeight: 10
                         radius: 4
                         color: Singletons.Colors.sliderHandlerColor
                     }
@@ -180,7 +180,7 @@ PopupWindow {
                         x: parent.leftPadding + parent.visualPosition * (parent.availableWidth - width)
                         y: parent.topPadding + parent.availableHeight / 2 - height / 2
                         implicitWidth: 5
-                        implicitHeight: 13
+                        implicitHeight: 10
                         radius: 4
                         color: Singletons.Colors.sliderHandlerColor
                     }
@@ -209,7 +209,7 @@ PopupWindow {
                     if (Singletons.BatteryState.battery.state === UPowerDevice.FullyCharged)
                         return "Full"
                     else if (Singletons.BatteryState.battery.state === UPowerDevice.Charging) 
-                        return "Charging. " + formatTime(Singletons.BatteryState.battery.timeToFull) + " left to full"
+                        return "Charging. " + formatTime(Singletons.BatteryState.battery.timeToFull) + " to full"
                     else 
                         return "Until discharge: " + formatTime(Singletons.BatteryState.battery.timeToEmpty)
                 }

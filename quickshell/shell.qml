@@ -1,16 +1,10 @@
 //@ pragma UseQApplication
 
 import Quickshell
-import Quickshell.Io
-import Quickshell.Services.UPower
-import Quickshell.Services.Pipewire
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Services.SystemTray
-import QtQuick.Controls
 
 import "./Singletons" as Singletons
-
 import "./barModules" as Modules
 import "./musicCenter"
 import "./menus" as Menus
@@ -244,7 +238,7 @@ ShellRoot {
                             repeat: true
                             triggeredOnStart: true
                             onTriggered: {
-                                timeText.text = Qt.formatDateTime(new Date(), "HH:mm  ddd,MM");
+                                timeText.text = Qt.formatDateTime(new Date(), "HH:mm  ddd,dd");
                                 controlCenter.updateTimeDate()
                                 var now = new Date();
                                 var nextMinute = new Date(

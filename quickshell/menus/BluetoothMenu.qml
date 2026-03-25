@@ -55,14 +55,7 @@ PopupWindow {
                     color: Singletons.Colors.foreground
                     font.pixelSize: 12
                     font.bold: true
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            startApp.command = ["overskride"]
-                            startApp.running = true
-                        }
-                    }
+                    
                 }
 
                 Item { Layout.fillWidth: true }
@@ -157,23 +150,60 @@ PopupWindow {
                 height: 25
                 radius: 8
                 color: 'transparent'
-                //visible: !Bluetooth.defaultAdapter.discovering
 
-                Text {
-                    id: scanButtonText
-                    anchors.centerIn: parent
-                    text: Bluetooth.defaultAdapter.discovering ? "Scanning" : "Scan"
-                    color: "white"
-                }
-
-
-                MouseArea {
+                RowLayout {
                     anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        if (Bluetooth.defaultAdapter){
-                            Bluetooth.defaultAdapter.discovering = true
-                            scanTimer.running = true
+
+                    Text {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumWidth: 75
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: Singletons.Colors.foreground
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        text: "More"
+
+                        MouseArea {
+                        anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                startApp.command = ["overskride"]
+                                startApp.running = true
+                            }
+                        }
+                    }
+
+                    //Separator
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumWidth: 1
+                        Layout.maximumHeight: 15
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        color: Singletons.Colors.moduleSeparatorColor
+                    }
+
+
+                    Text {
+                        id: scanButtonText
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumWidth: 75
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        text: Bluetooth.defaultAdapter.discovering ? "Scanning" : "Scan"
+                        color: Singletons.Colors.foreground
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (Bluetooth.defaultAdapter){
+                                    Bluetooth.defaultAdapter.discovering = true
+                                    scanTimer.running = true
+                                }
+                            }
                         }
                     }
                 }

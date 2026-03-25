@@ -123,6 +123,8 @@ PanelWindow {
 
             // NOTIFICATIONS //TODO: notification
             Widgets.NotificationWidget { }
+
+            Widgets.PowerMenu { }
         }
     }
 
