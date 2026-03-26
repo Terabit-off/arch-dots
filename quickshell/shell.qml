@@ -73,7 +73,7 @@ ShellRoot {
                             centerIn: parent
                         }
 
-
+                        //ARCH icon
                         Rectangle {
                             id: overviewButton
                             Layout.fillWidth: true
@@ -90,6 +90,7 @@ ShellRoot {
                                 color: Singletons.Colors.foreground
                             }
                         }
+                        //Separator
                         Rectangle {
                             color: Singletons.Colors.moduleSeparatorColor
                             height: 15
