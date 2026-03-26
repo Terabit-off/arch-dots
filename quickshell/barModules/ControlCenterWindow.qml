@@ -121,6 +121,27 @@ PanelWindow {
                 color: Singletons.Colors.separatorColor
             }
 
+            // SHORT CUTS
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.maximumHeight: 80
+                Layout.alignment: Qt.AlignHCenter
+                color: Singletons.Colors.moduleBackgroundColor
+                border.color: Singletons.Colors.moduleBorderColor
+                radius: Singletons.Colors.moduleBorderRadius
+                Widgets.ShortCutsWidget { }
+            }
+
+            // SEPARATOR
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.maximumHeight: 1
+                Layout.maximumWidth: 300
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                color: Singletons.Colors.separatorColor
+            }
             // NOTIFICATIONS //TODO: notification
             Widgets.NotificationWidget { }
         }
