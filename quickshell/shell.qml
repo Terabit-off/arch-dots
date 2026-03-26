@@ -3,6 +3,7 @@
 import Quickshell
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 import "./Singletons" as Singletons
 import "./barModules" as Modules
@@ -228,7 +229,7 @@ ShellRoot {
                         Rectangle {
                             color: 'transparent'
                             Layout.fillWidth: true
-                            Layout.minimumWidth: 140
+                            Layout.minimumWidth: 120
                             radius: 15
                             height: 24
 
@@ -244,6 +245,7 @@ ShellRoot {
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
                                     controlCenter.visible = true
+                                    Singletons.Colors.notificationIsRead = true
                                 }
                                 hoverEnabled: true
                                 onEntered: parent.color = Singletons.Colors.buttonOffHoverColor
@@ -253,6 +255,36 @@ ShellRoot {
                                 ColorAnimation { duration: 200; easing.type: Easing.InQuad }
                             }
                         }
+
+                        // Notification indicator
+                        Item {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            Layout.preferredWidth: 15
+                            visible: !Singletons.Colors.notificationIsRead
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Text {
+                                anchors.fill: parent
+                                color: Singletons.Colors.foreground
+                                font.bold: true
+                                text: Singletons.Colors.notificationCount
+                                font.pixelSize: 13
+                            }
+                            Rectangle {
+                                anchors {
+                                    right: parent.right
+                                } 
+                                width: 5
+                                height: 5
+                                radius: 13
+                                color: '#bf3c3c'
+                                visible: !Singletons.Colors.notificationIsRead
+
+                            }
+                        }
+
+
+
                         //Separator
                         Rectangle {
                             color: Singletons.Colors.moduleSeparatorColor

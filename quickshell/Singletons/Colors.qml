@@ -54,6 +54,10 @@ QtObject {
 
     // Notification
     readonly property color notifyCardBackground: '#161616'
+
+
+    property bool notificationIsRead: true
+    property int notificationCount: 0
 }
 
 

@@ -199,7 +199,7 @@ PopupWindow {
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
-                                    actionCommand = ""
+                                    rootColumn.actionCommand = ""
                                     powerMenu.implicitHeight = 50
                                     confirmPanel.visible = false
                                 }       

@@ -20,6 +20,8 @@ Rectangle {
         onNotification: (n) => {
             n.tracked = true
             let last = notifications.trackedNotifications.values.length - 1
+            Singletons.Colors.notificationIsRead = false
+            Singletons.Colors.notificationCount = notifications.trackedNotifications.values.length + 1
             if (last >= 0){
                 Qt.callLater(() => {
                     listView.positionViewAtEnd()
