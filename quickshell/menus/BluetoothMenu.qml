@@ -97,7 +97,7 @@ PopupWindow {
                 model: Bluetooth.devices
 
                 delegate: Rectangle {
-                    width: parent.width
+                    width: 176
                     
                     height: 42
                     radius: 10

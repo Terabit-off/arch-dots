@@ -45,6 +45,8 @@ QtObject {
     readonly property color buttonOffBackground: 'transparent'
     readonly property color buttonOnBackground: '#ffffff'
     readonly property color buttonBorderColor: '#bd939393'
+    readonly property color buttonOffHoverColor: '#373737'
+    readonly property color buttonOnHoverColor: '#707070'
     readonly property real buttonBorderWidth: 2
 
     readonly property color buttonOnTextColor: '#2c2c2c'

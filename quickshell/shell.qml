@@ -39,6 +39,10 @@ ShellRoot {
             panel: volumesPanel
             brightnessModule: brightnessBarModule
         }
+        Menus.PowerMenu {
+            id: powerMenu
+            panel: powerMenuButton
+        }
 
         Rectangle {
             anchors.fill: parent
@@ -123,12 +127,7 @@ ShellRoot {
                     Layout.preferredWidth: 50
                     Layout.maximumWidth: 700
                     height: 24
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            controlCenter.visible = true
-                        }
-                    }
+                    
 
                     RowLayout {
                         anchors {
@@ -152,6 +151,7 @@ ShellRoot {
                             Layout.fillWidth: true
                             Layout.minimumWidth: 25
                             Layout.maximumWidth: 50
+                            radius: 15
                             height: 24
                             
                             Text {
@@ -168,6 +168,12 @@ ShellRoot {
                                     bluetoothMenu.visible = true
                                     bluetoothMenu.activeFocus = true
                                 }
+                                hoverEnabled: true
+                                onEntered: parent.color = Singletons.Colors.buttonOffHoverColor
+                                onExited: parent.color = 'transparent'
+                            }
+                            Behavior on color {
+                                ColorAnimation { duration: 200; easing.type: Easing.InQuad }
                             }
                         }
                         Modules.WiFiModule { id: wifiModule }
@@ -180,10 +186,12 @@ ShellRoot {
                         }
 
 
+                        // BRIGHTNESS, VOLUME, BATTERY
                         Rectangle {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.minimumWidth: 160
+                            radius: 15
                             color: 'transparent'
                             RowLayout {
                                 id: volumesPanel
@@ -200,6 +208,12 @@ ShellRoot {
                                     volumesControlMenu.visible = true
                                     volumesControlMenu.activeFocus = true
                                 }
+                                hoverEnabled: true
+                                onEntered: parent.color = Singletons.Colors.buttonOffHoverColor
+                                onExited: parent.color = 'transparent'
+                            }
+                            Behavior on color {
+                                ColorAnimation { duration: 200; easing.type: Easing.InQuad }
                             }
                         }
 
@@ -214,6 +228,7 @@ ShellRoot {
                             color: 'transparent'
                             Layout.fillWidth: true
                             Layout.minimumWidth: 140
+                            radius: 15
                             height: 24
 
                             Text {
@@ -222,6 +237,57 @@ ShellRoot {
                                 color: Singletons.Colors.foreground
                                 font.bold: true
                                 font.pixelSize: 14
+                            }
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    controlCenter.visible = true
+                                }
+                                hoverEnabled: true
+                                onEntered: parent.color = Singletons.Colors.buttonOffHoverColor
+                                onExited: parent.color = 'transparent'
+                            }
+                            Behavior on color {
+                                ColorAnimation { duration: 200; easing.type: Easing.InQuad }
+                            }
+                        }
+                        //Separator
+                        Rectangle {
+                            color: Singletons.Colors.moduleSeparatorColor
+                            height: 15
+                            width: 1
+                        }
+                        //Power menu
+                        Rectangle {
+                            color: 'transparent'
+                            Layout.fillWidth: true
+                            Layout.minimumWidth: 24
+                            radius: 15
+                            height: 24
+                            Text {
+                                id: powerMenuButton
+
+                                anchors.centerIn: parent
+                                color: Singletons.Colors.foreground
+                                font.bold: true
+                                font.pixelSize: 17
+                                text: '⏻'
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    powerMenu.visible = true
+                                    powerMenu.activeFocus = true
+                                }
+                                hoverEnabled: true
+                                onEntered: parent.color = Singletons.Colors.buttonOffHoverColor
+                                onExited: parent.color = 'transparent'
+                            }
+                            Behavior on color {
+                                ColorAnimation { duration: 200; easing.type: Easing.InQuad }
                             }
                         }
 

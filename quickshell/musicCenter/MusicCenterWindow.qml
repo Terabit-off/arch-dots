@@ -57,12 +57,11 @@ PanelWindow {
                     anchors.fill: parent
                     anchors.centerIn: parent
                     anchors.margins: 5
-                    // width: 130
-                    // height: 130
+
                     fillMode: Image.PreserveAspectFit //PreserveAspectCrop
                     source: {
-                        if(MusicSingleton.active && MusicSingleton.active.metadata["mpris:artUrl"]) {
-                            return MusicSingleton.active.metadata["mpris:artUrl"]
+                        if(MusicSingleton.active && MusicSingleton.active.trackArtUrl !== "") {
+                            return MusicSingleton.active.trackArtUrl
                         }
                         else {
                             return "bongo-cat.gif"
@@ -112,7 +111,7 @@ PanelWindow {
                             hoverEnabled: true
                             
                             onClicked: {
-                                if (MusicSingleton.active && MusicSingleton.active.metadata["xesam:title"]) {
+                                if (MusicSingleton.active) {
                                     Qt.openUrlExternally(MusicSingleton.active.metadata["xesam:url"])
                                 }
                             }
@@ -146,8 +145,8 @@ PanelWindow {
                         Layout.maximumWidth: 200
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         from: 0
-                        to: MusicSingleton.active.length
-                        value: MusicSingleton.active.position
+                        to: MusicSingleton.active ? MusicSingleton.active.length : 100
+                        value: MusicSingleton.active ? MusicSingleton.active.position : 0
 
                         HoverHandler {
                             target: null
@@ -187,7 +186,9 @@ PanelWindow {
                     }
                     FrameAnimation {
                         running: MusicSingleton.isPlaying
-                        onTriggered: MusicSingleton.active.positionChanged()
+                        onTriggered: {
+                            MusicSingleton.active.positionChanged()
+                        }
                     }
                     
                     //Controls
