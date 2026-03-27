@@ -7,8 +7,8 @@ import QtQuick.Controls
 import Quickshell.Hyprland
 
 
-import "../panelWidgets" as Widgets
-import "../Singletons" as Singletons
+import "../../panelWidgets" as Widgets
+import "../../Singletons" as Singletons
 
 // PANEL
 PanelWindow {

@@ -5,8 +5,7 @@ import Qt5Compat.GraphicalEffects
 import Quickshell.Hyprland
 import QtQuick.Controls
 
-import "../Singletons" as Singletons
-import "../barModules"
+import "../../Singletons" as Singletons
 
 PanelWindow {
     id: musicRoot
@@ -50,8 +49,8 @@ PanelWindow {
             anchors.margins: 5
             fillMode: Image.PreserveAspectCrop
             source: {
-                if(MusicSingleton.active && MusicSingleton.active.trackArtUrl !== "") {
-                    return MusicSingleton.active.trackArtUrl
+                if(Singletons.MusicSingleton.active && Singletons.MusicSingleton.active.trackArtUrl !== "") {
+                    return Singletons.MusicSingleton.active.trackArtUrl
                 }
                 else {
                     return "bongo-cat.gif"
@@ -94,7 +93,7 @@ PanelWindow {
                     Layout.minimumHeight: 20
                     Layout.maximumHeight: 20
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    text: MusicSingleton.active ? MusicSingleton.active.metadata["xesam:title"]: "Unknown"
+                    text: Singletons.MusicSingleton.active ? Singletons.MusicSingleton.active.metadata["xesam:title"]: "Unknown"
                     horizontalAlignment: Text.AlignHCenter
                     color: Singletons.Colors.foreground
                     font.pixelSize: 16
@@ -106,8 +105,8 @@ PanelWindow {
                         hoverEnabled: true
                         
                         onClicked: {
-                            if (MusicSingleton.active) {
-                                Qt.openUrlExternally(MusicSingleton.active.metadata["xesam:url"])
+                            if (Singletons.MusicSingleton.active) {
+                                Qt.openUrlExternally(Singletons.MusicSingleton.active.metadata["xesam:url"])
                             }
                         }
                         onEntered: parent.color = '#ffffff'
@@ -122,7 +121,7 @@ PanelWindow {
                     Layout.minimumHeight: 20
                     Layout.maximumHeight: 20
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    text: MusicSingleton.active ? MusicSingleton.active.trackArtist : "Unknown"
+                    text: Singletons.MusicSingleton.active ? Singletons.MusicSingleton.active.trackArtist : "Unknown"
                     horizontalAlignment: Text.AlignHCenter
                     color: Singletons.Colors.foreground
                     font.pixelSize: 10
@@ -140,8 +139,8 @@ PanelWindow {
                     Layout.rightMargin: 20
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     from: 0
-                    to: MusicSingleton.active ? MusicSingleton.active.length : 100
-                    value: MusicSingleton.active ? MusicSingleton.active.position : 0
+                    to: Singletons.MusicSingleton.active ? Singletons.MusicSingleton.active.length : 100
+                    value: Singletons.MusicSingleton.active ? Singletons.MusicSingleton.active.position : 0
 
                     HoverHandler {
                         target: null
@@ -175,8 +174,8 @@ PanelWindow {
 
 
                     onMoved: {
-                        if (MusicSingleton.active)
-                            MusicSingleton.active.position = value
+                        if (Singletons.MusicSingleton.active)
+                            Singletons.MusicSingleton.active.position = value
                     }
                 }
                 Rectangle {
@@ -191,18 +190,18 @@ PanelWindow {
                     Text {
                         anchors.left: parent.left
                         color: Singletons.Colors.foreground
-                        text: formatTime(MusicSingleton.active.position)
+                        text: formatTime(Singletons.MusicSingleton.active.position)
                     }
                     Text {
                         anchors.right: parent.right
                         color: Singletons.Colors.foreground
-                        text: formatTime(MusicSingleton.active.length)
+                        text: formatTime(Singletons.MusicSingleton.active.length)
                     }
                 }
                 FrameAnimation {
-                    running: MusicSingleton.isPlaying
+                    running: Singletons.MusicSingleton.isPlaying
                     onTriggered: {
-                        MusicSingleton.active.positionChanged()
+                        Singletons.MusicSingleton.active.positionChanged()
                     }
                 }
                 
@@ -229,8 +228,8 @@ PanelWindow {
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
                             onClicked: {
-                                if (MusicSingleton.active && MusicSingleton.active.canGoPrevious) {
-                                    MusicSingleton.active.previous()
+                                if (Singletons.MusicSingleton.active && Singletons.MusicSingleton.active.canGoPrevious) {
+                                    Singletons.MusicSingleton.active.previous()
                                 }
                             }
                             onEntered: parent.color = '#ffffff'
@@ -244,7 +243,7 @@ PanelWindow {
                         Layout.maximumWidth: 25
                         horizontalAlignment: Text.AlignHCenter
                         color: Singletons.Colors.foreground
-                        text: MusicSingleton.isPlaying ? "󰏤" : "󰐊"
+                        text: Singletons.MusicSingleton.isPlaying ? "󰏤" : "󰐊"
                         font.pixelSize: 30
 
                         MouseArea {
@@ -252,8 +251,8 @@ PanelWindow {
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
                             onClicked: {
-                                if (MusicSingleton.active) {
-                                    MusicSingleton.active.togglePlaying()
+                                if (Singletons.MusicSingleton.active) {
+                                    Singletons.MusicSingleton.active.togglePlaying()
                                 }
                             }
                             onEntered: parent.color = '#ffffff'
@@ -274,8 +273,8 @@ PanelWindow {
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
                             onClicked: {
-                                if (MusicSingleton.active && MusicSingleton.active.canGoNext) {
-                                    MusicSingleton.active.next()
+                                if (Singletons.MusicSingleton.active && Singletons.MusicSingleton.active.canGoNext) {
+                                    Singletons.MusicSingleton.active.next()
                                 }
                             }
                             onEntered: parent.color = '#ffffff'

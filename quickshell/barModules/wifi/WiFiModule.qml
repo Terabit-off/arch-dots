@@ -3,7 +3,7 @@ import QtQuick
 import Quickshell
 import QtQuick.Layouts
 
-import "../Singletons" as Singletons
+import "../../Singletons" as Singletons
 
 Rectangle {
     color: 'transparent'
@@ -36,5 +36,15 @@ Rectangle {
         text: "󰖪"//"󰖩"
         font.pixelSize: 15
         color: Singletons.Colors.foreground
+    }
+
+
+    Timer {
+        interval: 10000  // every 10 sec
+        running: true
+        repeat: true
+        onTriggered: {
+            wifiUpdateProcess.running = true              
+        }
     }
 }

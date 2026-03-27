@@ -3,7 +3,7 @@ import Quickshell
 import QtQuick.Layouts
 import Quickshell.Io
 
-import "../Singletons" as Singletons
+import "../../Singletons" as Singletons
 
 Rectangle {
     id: brightness

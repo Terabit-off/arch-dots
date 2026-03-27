@@ -4,7 +4,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 
-import "../Singletons" as Singletons
+import "../../Singletons" as Singletons
 
 PopupWindow {
     id: powerMenu

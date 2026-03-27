@@ -3,7 +3,7 @@ import Quickshell.Services.UPower
 import QtQuick.Layouts
 import QtQuick
 
-import "../Singletons" as Singletons
+import "../../Singletons" as Singletons
 
 Rectangle {
     color: 'transparent'

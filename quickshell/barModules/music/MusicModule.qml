@@ -2,17 +2,20 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 
-import "../musicCenter"
-import "../Singletons" as Singletons
+import "../../Singletons" as Singletons
+import "." as Bar
 
 Rectangle {
     id: root
     color: 'transparent'
-    anchors.fill: parent
-    anchors.centerIn: parent
-    visible: MusicSingleton.active !== null
+    Layout.fillWidth: true
+    Layout.minimumWidth: 10
+    Layout.preferredWidth: 50
+    Layout.maximumWidth: 300
+    height: 24
+    visible: Singletons.MusicSingleton.active !== null
 
-    MusicCenterWindow {
+    Bar.MusicCenterWindow {
         id: musicCenterWindow
     }
 
@@ -43,7 +46,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-            text: MusicSingleton.active ? MusicSingleton.active.metadata["xesam:title"] : ""
+            text: Singletons.MusicSingleton.active ? Singletons.MusicSingleton.active.metadata["xesam:title"] : ""
             color: Singletons.Colors.foreground
             font.bold: true
             font.pixelSize: 13

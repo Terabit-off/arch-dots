@@ -5,7 +5,7 @@ import Quickshell.Io
 import Quickshell.Bluetooth
 import Quickshell.Hyprland
 
-import "../Singletons" as Singletons
+import "../../Singletons" as Singletons
 
 PopupWindow {
     id: bluetoothPopup

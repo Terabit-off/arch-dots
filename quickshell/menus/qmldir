@@ -1,0 +1,5 @@
+module Menus
+
+ControlCenterMenu 1.0 control_center/ControlCenterWindow.qml
+Volumes 1.0 volumes/VolumesControlMenu.qml
+PowerMenu 1.0 power/PowerMenu.qml

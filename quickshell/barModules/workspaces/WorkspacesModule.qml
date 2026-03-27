@@ -3,7 +3,7 @@ import Quickshell
 import QtQuick
 import Quickshell.Hyprland
 
-import "../Singletons" as Singletons
+import "../../Singletons" as Singletons
 
 Row {
     id: root

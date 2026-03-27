@@ -5,7 +5,7 @@ import QtQuick
 import QtQuick.Layouts
 
 
-import "../Singletons" as Singletons
+import "../../Singletons" as Singletons
 
 Rectangle {
     color: 'transparent'
