@@ -48,7 +48,6 @@ PanelWindow {
                 Layout.fillWidth: true
                 Layout.minimumWidth: 10
                 Layout.preferredWidth: 50
-                Layout.maximumWidth: 700
                 height: 24
 
 
@@ -101,7 +100,6 @@ PanelWindow {
                 Layout.fillWidth: true
                 Layout.minimumWidth: 10
                 Layout.preferredWidth: 50
-                Layout.maximumWidth: 700
                 height: 24
 
                 RowLayout {

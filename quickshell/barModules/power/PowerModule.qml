@@ -9,6 +9,7 @@ Rectangle {
     color: 'transparent'
     Layout.fillWidth: true
     Layout.minimumWidth: 24
+    Layout.maximumWidth: 24
     radius: 15
     height: 24
 
