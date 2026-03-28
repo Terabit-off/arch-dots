@@ -9,20 +9,24 @@ import "." as Bar
 Rectangle {
     color: 'transparent'
     Layout.fillWidth: true
-    Layout.minimumWidth: 25
+    Layout.minimumWidth: 30
     Layout.maximumWidth: 50
     radius: 15
     height: 24
+
 
     Bar.BluetoothMenu {
         id: bluetoothMenu
         panel: bluetoothText    
     }
+    Component.onCompleted: {
+        bluetoothMenu.loadIcon()
+    }
     
     Text {
         id: bluetoothText
         anchors.centerIn: parent
-        text: "󰂯" // 󰂲
+        text: Singletons.Properties.bluetoothIcon //"󰂯" "󰂲"
         font.pixelSize: 17
         color: Singletons.Colors.foreground
     }

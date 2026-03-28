@@ -25,7 +25,11 @@ PopupWindow {
 
     Process {
         id: startApp
-    } 
+    }
+
+    function loadIcon(){
+        Singletons.Properties.bluetoothIcon = Bluetooth.defaultAdapter.enabled ? "󰂯" : "󰂲"
+    }
 
     Rectangle {
         height: 300
@@ -82,6 +86,8 @@ PopupWindow {
                         onClicked: {
                             if (Bluetooth.defaultAdapter)
                                 Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter.enabled
+                            
+                            Singletons.Properties.bluetoothIcon = Bluetooth.defaultAdapter.enabled ? "󰂯" : "󰂲"
                         }
                     }
                 }
@@ -126,6 +132,21 @@ PopupWindow {
                                 color: "#aaa"
                                 font.pixelSize: 8
                             }
+                        }
+
+                        Item {
+                            Layout.fillWidth: true
+                        }
+                        //Device icon
+                        Text {
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                            Layout.rightMargin: 10
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: Singletons.Colors.foreground
+                            font.pixelSize: 16
+                            text: getDeviceIcon(modelData.icon)
                         }
                     }
                     MouseArea {
@@ -229,6 +250,15 @@ PopupWindow {
             return d.state
         return ""
     }
+    function getDeviceIcon(name) {
+        switch (name){
+            case "audio-card":
+            case "audio-headphones":
+            case "audio-headset": return ""
+            // ....
+            default: return ""
+        }
+    }
 
     HyprlandFocusGrab {
         id: focusGrab
@@ -241,3 +271,27 @@ PopupWindow {
         }
     }
 }
+
+
+
+
+// DEVICE ICONS CODES
+//not sure
+
+//"audio-card"              headphones or speakers
+//"audio-headphones"        headphones
+//"audio-headset"           headphones
+//"phone"                   phone
+//"tablet"                  tablet
+//"input-keyboard"          keyboard
+//"input-mouse"             mouse
+//"input-gaming"            ds4 or something like that
+//"camera-video"            web-camera
+//"printer"                 printer
+//"smartwatch"              watch
+//"input-touchpad"          touchpad
+//"computer"                laptop or other pc
+//"audio-speakers"          speakers
+//"bluetooth"               Generic device
+//"phone-apple-iphone"      iphone
+//"phone-samsung-galaxy"    samsung

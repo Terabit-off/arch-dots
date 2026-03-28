@@ -28,11 +28,22 @@ Rectangle {
         cursorShape: Qt.PointingHandCursor
         onClicked: {
             controlCenterMenu.visible = true
-            Singletons.Colors.notificationIsRead = true
+            Singletons.Properties.notificationIsRead = true
         }
         hoverEnabled: true
         onEntered: parent.color = Singletons.Colors.buttonOffHoverColor
         onExited: parent.color = 'transparent'
+    }
+
+    Rectangle {
+        anchors {
+            right: parent.right
+        }
+        height: 7
+        width: 7
+        radius: 5
+        color: '#c33c3c'
+        visible: !Singletons.Properties.notificationIsRead
     }
     Behavior on color {
         ColorAnimation { duration: 200; easing.type: Easing.InQuad }
