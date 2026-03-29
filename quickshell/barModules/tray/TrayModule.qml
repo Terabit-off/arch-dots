@@ -31,19 +31,18 @@ Rectangle {
                 id: itemParent
                 width: 13
                 height: 13
-                readonly property var item: modelData
                 
                 Image {
                     id: iconImage
                     anchors.fill: parent
-                    source: itemParent.item.icon
+                    source: modelData.icon
                     fillMode: Image.PreserveAspectFit
                     visible: true
                 }
 
                 QsMenuAnchor {
                     id: contextMenu
-                    menu: item.menu
+                    menu: modelData.menu
                     anchor {
                         window: rootPanel
                         margins {
@@ -58,7 +57,7 @@ Rectangle {
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     onClicked: (mouse) => {
                         if (mouse.button === Qt.LeftButton) {
-                            item.activate();
+                            modelData.activate();
                         } else if(mouse.button === Qt.RightButton){
                             contextMenu.open()
                         }

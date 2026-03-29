@@ -41,6 +41,7 @@ Rectangle {
             Layout.alignment: Qt.AlignHCenter
             Layout.topMargin: 10
             color: 'transparent'
+            visible: Singletons.Properties.notificationCount > 0
 
             Text {
                 text: "clear"
@@ -67,6 +68,8 @@ Rectangle {
                 left: 10
             }
             model: notifications.trackedNotifications
+            visible: Singletons.Properties.notificationCount > 0
+
 
             delegate: Rectangle {
                 id: itemRect
@@ -122,6 +125,7 @@ Rectangle {
                             }
                             Text {
                                 width: 280
+                                height:65
                                 color: Singletons.Colors.foreground
                                 font.bold: true
                                 elide: Text.ElideRight
@@ -175,6 +179,15 @@ Rectangle {
                 policy: ScrollBar.AlwaysOn
                 width: 6
             }
+        }
+        Text {
+            visible: !(Singletons.Properties.notificationCount > 0)
+            text: "no notification"
+            font.pixelSize: 15
+            color: Singletons.Colors.foreground
+            horizontalAlignment: Text.AlignHCenter
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            verticalAlignment: Text.AlignVCenter
         }
     }
 

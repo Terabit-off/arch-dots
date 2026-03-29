@@ -20,9 +20,9 @@ Rectangle {
 
         property var icon: {
             if (parent.battery.state === UPowerDevice.Charging) return "󰂄";
-            if (parent.battery.percentage * 100>= 90) return "󰁹";
-            if (parent.battery.percentage * 100>= 50) return "󰁾";
-            if (parent.battery.percentage * 100 >= 20) return "󰁼";
+            else if (parent.battery.percentage * 100>= 80) return "󰁹";
+            else if (parent.battery.percentage * 100>= 50) return "󰁾";
+            else if (parent.battery.percentage * 100 >= 20) return "󰁼";
             return "󰂃";
         }
         color: Singletons.Colors.foreground
