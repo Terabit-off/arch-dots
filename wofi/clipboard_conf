@@ -1,0 +1,8 @@
+prompt="Clipboard..."
+height=50%
+width=500
+location=center
+insensitive=true
+allow_markup=true
+gtk_dark=true
+style=~/.config/wofi/style.css

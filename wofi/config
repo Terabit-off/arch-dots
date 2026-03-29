@@ -1,5 +1,5 @@
 # ~/.config/wofi/config
-width=600
+width=350
 height=400
 location=center
 show=drun

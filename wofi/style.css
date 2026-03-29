@@ -1,7 +1,7 @@
 /* Основное окно */
 window {
     margin: 0px;
-    background-color: rgba(69, 69, 69, 0.9); /* Основной фон */
+    background-color: rgba(22, 22, 22, 0.9); /* Основной фон */
     border-radius: 15px;
     font-family: "JetBrainsMono Nerd Font", monospace;
     font-size: 14px;
@@ -11,8 +11,8 @@ window {
 #input {
     margin: 5px;
     border: none;
-    color: #505050;
-    background-color: rgba(69, 69, 69, 0.9);
+    color: #bbbbbb;
+    background-color: rgba(22, 22, 22, 0.9);
     border-radius: 10px;
     padding: 10px;
 }
@@ -50,13 +50,20 @@ window {
 
 /* Выбранный (активный) элемент */
 #entry:selected {
-    background-color: #707070; /* Акцентный цвет (фиолетовый) */
+    background-color: #2a2a2a; /* Акцентный цвет (фиолетовый) */
     border-radius: 5px;
     outline: none;
 }
 
 /* Текст выбранного элемента */
 #entry:selected #text {
-    color: #1e1e2e; /* Темный текст на светлом фоне */
+    color: #bbbbbb; /* Темный текст на светлом фоне */
     font-weight: bold;
+}
+
+#entry {
+    padding: 4px 8px;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
