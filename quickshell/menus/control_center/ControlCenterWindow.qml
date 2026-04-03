@@ -142,7 +142,6 @@ PanelWindow {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 color: Singletons.Colors.separatorColor
             }
-            // NOTIFICATIONS //TODO: notification
             Widgets.NotificationWidget { }
         }
     }

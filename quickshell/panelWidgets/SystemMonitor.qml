@@ -99,9 +99,8 @@ RowLayout {
             }
         }
     }
-
     Timer {
-        interval: 5000 //4 sec
+        interval: 5000 //5 sec
         running: true; repeat: true
         onTriggered: {
             memProc.running = true

@@ -5,6 +5,8 @@ import Qt5Compat.GraphicalEffects
 import Quickshell.Hyprland
 import QtQuick.Controls
 
+import Qt.labs.folderlistmodel
+
 import "../../Singletons" as Singletons
 
 PanelWindow {
@@ -21,10 +23,9 @@ PanelWindow {
         top: 5
     }
     color: 'transparent'
-
-    
-    
-
+    property int currentPlayerIndex: 0
+    readonly property var active: Singletons.MusicSingleton.list.length > 1 ? Singletons.MusicSingleton.list[currentPlayerIndex]
+         : Singletons.MusicSingleton.list[0]
 
     Rectangle {
         width: 400
@@ -39,7 +40,6 @@ PanelWindow {
             from: -100; to: 0
             easing.type: Easing.OutCubic
         }
-
         // COVER
         Image {
             id: musicCover
@@ -49,12 +49,8 @@ PanelWindow {
             anchors.margins: 5
             fillMode: Image.PreserveAspectCrop
             source: {
-                if(Singletons.MusicSingleton.active && Singletons.MusicSingleton.active.trackArtUrl !== "") {
-                    return Singletons.MusicSingleton.active.trackArtUrl
-                }
-                else {
-                    return "bongo-cat.gif"
-                }
+                return active.metadata["xesam:artUrl"] === "" ? "bongo-cat.gif" :
+                    active.trackArtUrl
             }
             layer.enabled: true
             layer.effect: OpacityMask {
@@ -93,7 +89,7 @@ PanelWindow {
                     Layout.minimumHeight: 20
                     Layout.maximumHeight: 20
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    text: Singletons.MusicSingleton.active ? Singletons.MusicSingleton.active.metadata["xesam:title"]: "Unknown"
+                    text: active ? active.metadata["xesam:title"]: "Unknown"
                     horizontalAlignment: Text.AlignHCenter
                     color: Singletons.Colors.foreground
                     font.pixelSize: 16
@@ -105,8 +101,8 @@ PanelWindow {
                         hoverEnabled: true
                         
                         onClicked: {
-                            if (Singletons.MusicSingleton.active) {
-                                Qt.openUrlExternally(Singletons.MusicSingleton.active.metadata["xesam:url"])
+                            if (active) {
+                                Qt.openUrlExternally(active.metadata["xesam:url"])
                             }
                         }
                         onEntered: parent.color = '#ffffff'
@@ -121,7 +117,7 @@ PanelWindow {
                     Layout.minimumHeight: 20
                     Layout.maximumHeight: 20
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    text: Singletons.MusicSingleton.active ? Singletons.MusicSingleton.active.trackArtist : "Unknown"
+                    text: active ? active.trackArtist : "Unknown"
                     horizontalAlignment: Text.AlignHCenter
                     color: Singletons.Colors.foreground
                     font.pixelSize: 10
@@ -139,8 +135,8 @@ PanelWindow {
                     Layout.rightMargin: 20
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     from: 0
-                    to: Singletons.MusicSingleton.active ? Singletons.MusicSingleton.active.length : 100
-                    value: Singletons.MusicSingleton.active ? Singletons.MusicSingleton.active.position : 0
+                    to: active ? active.length : 100
+                    value: active ? active.position : 0
 
                     HoverHandler {
                         target: null
@@ -174,8 +170,8 @@ PanelWindow {
 
 
                     onMoved: {
-                        if (Singletons.MusicSingleton.active)
-                            Singletons.MusicSingleton.active.position = value
+                        if (active)
+                            active.position = value
                     }
                 }
                 Rectangle {
@@ -190,18 +186,18 @@ PanelWindow {
                     Text {
                         anchors.left: parent.left
                         color: Singletons.Colors.foreground
-                        text: formatTime(Singletons.MusicSingleton.active.position)
+                        text: formatTime(active.position)
                     }
                     Text {
                         anchors.right: parent.right
                         color: Singletons.Colors.foreground
-                        text: formatTime(Singletons.MusicSingleton.active.length)
+                        text: formatTime(active.length)
                     }
                 }
                 FrameAnimation {
-                    running: Singletons.MusicSingleton.isPlaying
+                    running: active && active.isPlaying
                     onTriggered: {
-                        Singletons.MusicSingleton.active.positionChanged()
+                        active.positionChanged()
                     }
                 }
                 
@@ -228,8 +224,8 @@ PanelWindow {
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
                             onClicked: {
-                                if (Singletons.MusicSingleton.active && Singletons.MusicSingleton.active.canGoPrevious) {
-                                    Singletons.MusicSingleton.active.previous()
+                                if (active && active.canGoPrevious) {
+                                    active.previous()
                                 }
                             }
                             onEntered: parent.color = '#ffffff'
@@ -243,7 +239,7 @@ PanelWindow {
                         Layout.maximumWidth: 25
                         horizontalAlignment: Text.AlignHCenter
                         color: Singletons.Colors.foreground
-                        text: Singletons.MusicSingleton.isPlaying ? "󰏤" : "󰐊"
+                        text: active && active.isPlaying ? "󰏤" : "󰐊"
                         font.pixelSize: 30
 
                         MouseArea {
@@ -251,8 +247,8 @@ PanelWindow {
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
                             onClicked: {
-                                if (Singletons.MusicSingleton.active) {
-                                    Singletons.MusicSingleton.active.togglePlaying()
+                                if (active) {
+                                    active.togglePlaying()
                                 }
                             }
                             onEntered: parent.color = '#ffffff'
@@ -273,8 +269,8 @@ PanelWindow {
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
                             onClicked: {
-                                if (Singletons.MusicSingleton.active && Singletons.MusicSingleton.active.canGoNext) {
-                                    Singletons.MusicSingleton.active.next()
+                                if (active && active.canGoNext) {
+                                    active.next()
                                 }
                             }
                             onEntered: parent.color = '#ffffff'
@@ -282,6 +278,64 @@ PanelWindow {
                         }
                     }
                 }
+                // ACTIVE PLAYER SELECTOR
+                RowLayout {
+                    visible: Singletons.MusicSingleton.list.length > 1
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.maximumWidth: 160
+                    Layout.minimumHeight: 10
+                    Layout.maximumHeight: 10
+                    
+                    Text {
+                        text: ""
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        horizontalAlignment: Text.AlignHCenter
+                        color: Singletons.Colors.foreground
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (currentPlayerIndex > 0) {
+                                    currentPlayerIndex--
+                                } else currentPlayerIndex = Singletons.MusicSingleton.list.length - 1
+                            }
+                        }
+                    }
+                    Text {
+                        text: Singletons.MusicSingleton.list[currentPlayerIndex].identity
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        horizontalAlignment: Text.AlignHCenter 
+
+                        color: Singletons.Colors.foreground
+                    }
+                    Text {
+                        text: ""
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        horizontalAlignment: Text.AlignHCenter
+                        color: Singletons.Colors.foreground
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (currentPlayerIndex < Singletons.MusicSingleton.list.length - 1) {
+                                    currentPlayerIndex++
+                                } else currentPlayerIndex = 0
+                            }
+                        }
+                    }
+                }
+
+                
             }
         }
                             
