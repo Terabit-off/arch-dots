@@ -5,8 +5,6 @@ import Qt5Compat.GraphicalEffects
 import Quickshell.Hyprland
 import QtQuick.Controls
 
-import Qt.labs.folderlistmodel
-
 import "../../Singletons" as Singletons
 
 PanelWindow {
