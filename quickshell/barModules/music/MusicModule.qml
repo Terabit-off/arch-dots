@@ -46,7 +46,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-            text: Singletons.MusicSingleton.active ? Singletons.MusicSingleton.active.metadata["xesam:title"] : ""
+            text: musicCenterWindow.active? musicCenterWindow.active.metadata["xesam:title"]: "Unknown"
             color: Singletons.Colors.foreground
             font.bold: true
             font.pixelSize: 13
