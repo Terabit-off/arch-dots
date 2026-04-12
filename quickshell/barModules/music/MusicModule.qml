@@ -4,6 +4,7 @@ import Quickshell
 
 import "../../Singletons" as Singletons
 import "." as Bar
+import "./menus" as Menus
 
 Rectangle {
     id: root
@@ -28,13 +29,13 @@ Rectangle {
     }
 
     //Separator
-    Rectangle {
-        color: Singletons.Colors.moduleSeparatorColor
-        height: 15
-        width: 1
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-    }
+    // Rectangle {
+    //     color: Singletons.Colors.moduleSeparatorColor
+    //     height: 15
+    //     width: 1
+    //     anchors.left: parent.left
+    //     anchors.verticalCenter: parent.verticalCenter
+    // }
 
     RowLayout {
         spacing: 5
@@ -53,11 +54,11 @@ Rectangle {
         }
     }
     //Separator
-    Rectangle {
-        color: Singletons.Colors.moduleSeparatorColor
-        height: 15
-        width: 1
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-    }
+    // Rectangle {
+    //     color: Singletons.Colors.moduleSeparatorColor
+    //     height: 15
+    //     width: 1
+    //     anchors.right: parent.right
+    //     anchors.verticalCenter: parent.verticalCenter
+    // }
 }

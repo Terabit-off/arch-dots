@@ -8,38 +8,47 @@ import "../../Singletons" as Singletons
 Row {
     id: root
     spacing: 5
-    anchors.verticalCenter: parent.verticalCenter
+    //anchors.verticalCenter: parent.verticalCenter
+
 
     Repeater {
         model: Hyprland.workspaces
 
         delegate: Rectangle {
-            width: modelData.focused ? 30 : 25
-            height: 17
-            radius: modelData.focused ? 8 : modelData.urgent ? 8 : 4
+            width: 20
+            height: 15
+            // radius: 8
+            //anchors.bottom: parent.bottom
 
-            Behavior on color {
-                ColorAnimation { duration: 250 }
-            }
-            Behavior on radius {
-                NumberAnimation { duration: 250 }
-            }
-            Behavior on width {
-                NumberAnimation { duration: 250 }
-            }
+            // Behavior on border.color {
+            //     ColorAnimation { duration: 250 }
+            // }
+            color: 'transparent'
 
-            color: modelData.focused ? Singletons.Colors.wsFocusBackground : modelData.urgent ? 
-                Singletons.Colors.wsUrgentBackground : Singletons.Colors.wsNotFocusBackground
-
+            // border.color: modelData.focused ? Singletons.Colors.wsFocusBackground : modelData.urgent ? 
+            //     Singletons.Colors.wsUrgentBackground : Singletons.Colors.wsNotFocusBackground
             
             Text {
                 anchors.centerIn: parent
                 text: modelData.id
-                color: modelData.focused
-                    ? Singletons.Colors.wsFocusForeground
-                    : Singletons.Colors.wsNotFocusForeground
+                color: Singletons.Colors.wsNotFocusForeground
                 font.bold: true
-                font.pixelSize: 13
+                font.pixelSize: 15
+            }
+            Rectangle {
+                height: 2
+                radius: 2
+                width: parent.width
+                anchors {
+                    top: parent.top
+                    topMargin: -2
+                }
+
+                Behavior on color {
+                    ColorAnimation { duration: 250 }
+                }   
+                color: modelData.focused ? Singletons.Colors.wsFocusBackground : modelData.urgent ? 
+                    Singletons.Colors.wsUrgentBackground : Singletons.Colors.wsNotFocusBackground
             }
 
             MouseArea {
