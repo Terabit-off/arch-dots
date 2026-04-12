@@ -8,16 +8,22 @@ import "../../menus" as Menus
 Rectangle {
     color: 'transparent'
     Layout.fillWidth: true
+    Layout.fillHeight: true
     Layout.minimumWidth: 120
     radius: 15
-    height: 24
+    height: 20
+
+    Menus.Volumes {
+        id: volumesControlMenu
+        panel: parent
+    }
 
     Text {
         id: timeText
         anchors.centerIn: parent
         color: Singletons.Colors.foreground
         font.bold: true
-        font.pixelSize: 14
+        font.pixelSize: 15
     }
     Behavior on color {
         ColorAnimation { duration: 200; easing.type: Easing.InQuad }
@@ -40,6 +46,15 @@ Rectangle {
             );
 
             interval = nextMinute.getTime() - now.getTime() + 500;
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
+        onClicked: {
+            volumesControlMenu.visible = true
+            volumesControlMenu.activeFocus = true
         }
     }
 }

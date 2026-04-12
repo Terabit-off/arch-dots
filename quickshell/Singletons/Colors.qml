@@ -5,7 +5,7 @@ import QtQuick
 QtObject {
 
     // Right side
-    readonly property color barBackground: '#61434343'//'#cf595959'
+    readonly property color barBackground: 'transparent'//'#61434343'//'#cf595959'
     readonly property color foreground: '#c9c9c9'
     readonly property color barBorderColor: '#00939393'
     readonly property real trayIconColor: 0.5415 
@@ -30,8 +30,8 @@ QtObject {
     readonly property color separatorColor: 'transparent'//'#bd939393'
     readonly property color moduleSeparatorColor: '#bd939393'
     readonly property color moduleBorderColor: '#bde6e6e6'
-    readonly property color moduleBackgroundColor: '#202020'
-    readonly property real moduleBorderRadius: 15
+    readonly property color moduleBackgroundColor: '#d5202020'
+    readonly property real moduleBorderRadius: 5
     readonly property real panelBorderRadius: 15
 
     // sliders

@@ -1,229 +1,208 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
 import Quickshell.Bluetooth
 import Quickshell.Hyprland
 
+
 import "../../Singletons" as Singletons
 
-PopupWindow {
+Rectangle {
     id: bluetoothPopup
 
-    implicitWidth: 200
-    implicitHeight: 300
-    visible: false
-    color: 'transparent'
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+    Layout.maximumWidth: 200
+    Layout.minimumWidth: 200
+    Layout.maximumHeight: 300
+    Layout.minimumHeight: 300
+    radius: 5
+    color: Singletons.Colors.moduleBackgroundColor
+    border.color: Singletons.Colors.moduleBorderColor
 
-    property var panel
-    property bool activeFocus
-
-    anchor.item: panel
-    anchor.edges: Qt.BottomEdge
-    anchor.rect.x: panel.width - width / 2
-    anchor.rect.y: panel.height + 5
 
     Process {
         id: startApp
     }
 
-    function loadIcon(){
-        Singletons.Properties.bluetoothIcon = Bluetooth.defaultAdapter.enabled ? "󰂯" : "󰂲"
-    }
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 12
+        spacing: 10
 
-    Rectangle {
-        height: 300
-        width: 200
-        radius: 14
-        color: Singletons.Colors.moduleBackgroundColor
-        border.color: Singletons.Colors.moduleBorderColor
+        //HEADER
+        RowLayout {
+            Layout.fillWidth: true
 
-        NumberAnimation on y {
-            duration: 250
-            running: visible
-            from: -300; to: 0
-            easing.type: Easing.OutCubic
+            Text {
+                text: "Bluetooth"
+                color: Singletons.Colors.foreground
+                font.pixelSize: 12
+                font.bold: true
+                
+            }
+
+            Item { Layout.fillWidth: true }
+
+            // Toggle Bluetooth
+            Rectangle {
+                width: 21
+                height: 11
+                radius: 8
+                color: Bluetooth.defaultAdapter?.enabled ? Singletons.Colors.buttonOnBackground : Singletons.Colors.buttonOffBackground
+
+                Rectangle {
+                    width: 9
+                    height: 9
+                    radius: 9
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: Bluetooth.defaultAdapter?.enabled ? 11 : 0
+                    color: Bluetooth.defaultAdapter?.enabled ? '#000000' : '#cccccc'
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        if (Bluetooth.defaultAdapter)
+                            Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter.enabled
+                    }
+                }
+            }
         }
 
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 12
+        //DEVICES LIST
+        ListView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            clip: true
             spacing: 10
 
-            //HEADER
-            RowLayout {
-                Layout.fillWidth: true
+            model: Bluetooth.devices
 
-                Text {
-                    text: "Bluetooth"
-                    color: Singletons.Colors.foreground
-                    font.pixelSize: 12
-                    font.bold: true
-                    
-                }
-
-                Item { Layout.fillWidth: true }
-
-                // Toggle Bluetooth
-                Rectangle {
-                    width: 21
-                    height: 11
-                    radius: 8
-                    color: Bluetooth.defaultAdapter?.enabled ? Singletons.Colors.buttonOnBackground : Singletons.Colors.buttonOffBackground
-
-                    Rectangle {
-                        width: 9
-                        height: 9
-                        radius: 9
-                        anchors.verticalCenter: parent.verticalCenter
-                        x: Bluetooth.defaultAdapter?.enabled ? 11 : 0
-                        color: Bluetooth.defaultAdapter?.enabled ? '#000000' : '#cccccc'
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            if (Bluetooth.defaultAdapter)
-                                Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter.enabled
-                            
-                            Singletons.Properties.bluetoothIcon = Bluetooth.defaultAdapter.enabled ? "󰂯" : "󰂲"
-                        }
-                    }
-                }
-            }
-
-            //DEVICES LIST
-            ListView {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                clip: true
-                spacing: 10
-
-                model: Bluetooth.devices
-
-                delegate: Rectangle {
-                    width: 176
-                    
-                    height: 42
-                    radius: 10
-                    color: modelData.connected ? '#81393939' : Singletons.Colors.moduleBackgroundColor
-                    border.color: Singletons.Colors.buttonBorderColor
-
-                    RowLayout {
-                        anchors.fill: parent
-                        anchors.leftMargin: 10
-                        spacing: 10
-                        
-                        ColumnLayout {
-                            Layout.fillWidth: true
-                            Layout.minimumWidth: 120
-
-                            Text {
-                                text: modelData.name || modelData.deviceName || "Unknown device"
-                                color: Singletons.Colors.foreground
-                                elide: Text.ElideRight
-                                font.pixelSize: 11
-                            }
-
-                            Text {
-                                text: deviceStatus(modelData)
-                                visible: text !== ""
-                                color: "#aaa"
-                                font.pixelSize: 8
-                            }
-                        }
-
-                        Item {
-                            Layout.fillWidth: true
-                        }
-                        //Device icon
-                        Text {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            Layout.rightMargin: 10
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: Singletons.Colors.foreground
-                            font.pixelSize: 16
-                            text: getDeviceIcon(modelData.icon)
-                        }
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            if (modelData.connected) {
-                                modelData.disconnect()
-                            } else {
-                                modelData.connect()
-                            }
-                        }
-                    }
-                }
-            }
-
-            //SCAN BUTTON
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.maximumWidth: 150
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                height: 25
-                radius: 8
-                color: 'transparent'
+            delegate: Rectangle {
+                width: 176
+                
+                height: 42
+                radius: 10
+                color: modelData.connected ? '#81393939' : Singletons.Colors.moduleBackgroundColor
+                border.color: Singletons.Colors.buttonBorderColor
 
                 RowLayout {
                     anchors.fill: parent
-
-                    Text {
+                    anchors.leftMargin: 10
+                    spacing: 10
+                    
+                    ColumnLayout {
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.maximumWidth: 75
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        color: Singletons.Colors.foreground
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        text: "More"
+                        Layout.minimumWidth: 120
 
-                        MouseArea {
-                        anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                startApp.command = ["overskride"]
-                                startApp.running = true
-                            }
+                        Text {
+                            text: modelData.name || modelData.deviceName || "Unknown device"
+                            color: Singletons.Colors.foreground
+                            elide: Text.ElideRight
+                            font.pixelSize: 11
+                        }
+
+                        Text {
+                            text: deviceStatus(modelData)
+                            visible: text !== ""
+                            color: "#aaa"
+                            font.pixelSize: 8
                         }
                     }
 
-                    //Separator
-                    Rectangle {
+                    Item {
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.maximumWidth: 1
-                        Layout.maximumHeight: 15
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        color: Singletons.Colors.moduleSeparatorColor
                     }
-
-
+                    //Device icon
                     Text {
-                        id: scanButtonText
-                        Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.maximumWidth: 75
+                        Layout.fillWidth: true
+                        Layout.rightMargin: 10
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        text: Bluetooth.defaultAdapter.discovering ? "Scanning" : "Scan"
                         color: Singletons.Colors.foreground
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                if (Bluetooth.defaultAdapter){
-                                    Bluetooth.defaultAdapter.discovering = true
-                                    scanTimer.running = true
-                                }
+                        font.pixelSize: 16
+                        text: getDeviceIcon(modelData.icon)
+                    }
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        if (modelData.connected) {
+                            modelData.disconnect()
+                        } else {
+                            modelData.connect()
+                        }
+                    }
+                }
+            }
+        }
+
+        //SCAN BUTTON
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.maximumWidth: 150
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            height: 25
+            radius: 8
+            color: 'transparent'
+
+            RowLayout {
+                anchors.fill: parent
+
+                Text {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.maximumWidth: 75
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    color: Singletons.Colors.foreground
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    text: "More"
+
+                    MouseArea {
+                    anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            startApp.command = ["overskride"]
+                            startApp.running = true
+                        }
+                    }
+                }
+
+                //Separator
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.maximumWidth: 1
+                    Layout.maximumHeight: 15
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    color: Singletons.Colors.moduleSeparatorColor
+                }
+
+
+                Text {
+                    id: scanButtonText
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.maximumWidth: 75
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    text: Bluetooth.defaultAdapter.discovering ? "Scanning" : "Scan"
+                    color: Singletons.Colors.foreground
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            if (Bluetooth.defaultAdapter){
+                                Bluetooth.defaultAdapter.discovering = true
+                                scanTimer.running = true
                             }
                         }
                     }
@@ -231,6 +210,7 @@ PopupWindow {
             }
         }
     }
+
 
     // Timeout scan
     Timer {
@@ -257,17 +237,6 @@ PopupWindow {
             case "audio-headset": return ""
             // ....
             default: return ""
-        }
-    }
-
-    HyprlandFocusGrab {
-        id: focusGrab
-        windows: [bluetoothPopup]
-        active: activeFocus
-
-        onCleared: {
-            bluetoothPopup.visible = false
-            activeFocus = false
         }
     }
 }

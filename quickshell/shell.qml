@@ -19,15 +19,11 @@ PanelWindow {
     margins {
         left: 25
         right: 25
-        top: 3
+        top: 0
     }
-    implicitHeight: 24
+    implicitHeight: 20
     color: 'transparent'
-    Menus.Volumes {
-        id: volumesControlMenu
-        panel: volumesPanel
-        brightnessModule: brightnessBarModule
-    }
+    
 
     Rectangle {
         anchors.fill: parent
@@ -48,7 +44,9 @@ PanelWindow {
                 Layout.fillWidth: true
                 Layout.minimumWidth: 10
                 Layout.preferredWidth: 50
-                height: 24
+                height: 15
+                Modules.WorkspacesModule { }
+
 
 
                 RowLayout{
@@ -58,36 +56,28 @@ PanelWindow {
                     }
 
                     //ARCH icon
-                    Rectangle {
-                        id: overviewButton
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+                    // Rectangle {
+                    //     id: overviewButton
+                    //     Layout.fillWidth: true
+                    //     Layout.fillHeight: true
 
-                        Layout.minimumWidth: 25
-                        Layout.maximumWidth: 25
-                        color: 'transparent'
-                        Text {
-                            anchors.centerIn: parent
-                            anchors.fill: parent
-                            text: "󰣇"
-                            font.pixelSize: 16
-                            color: Singletons.Colors.foreground
-                        }
-                    }
+                    //     Layout.minimumWidth: 25
+                    //     Layout.maximumWidth: 25
+                    //     color: 'transparent'
+                    //     Text {
+                    //         anchors.centerIn: parent
+                    //         anchors.fill: parent
+                    //         text: "󰣇"
+                    //         font.pixelSize: 16
+                    //         color: Singletons.Colors.foreground
+                    //     }
+                    // }
                     //Separator
-                    Rectangle {
-                        color: Singletons.Colors.moduleSeparatorColor
-                        height: 15
-                        width: 1
-                    }
-
-                    //Workspaces
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        color: 'transparent'
-                        Modules.WorkspacesModule { }
-                    }
+                    // Rectangle {
+                    //     color: Singletons.Colors.moduleSeparatorColor
+                    //     height: 15
+                    //     width: 1
+                    // }
                 }
 
             }
@@ -107,67 +97,67 @@ PanelWindow {
                         right: parent.right
                     }
                     spacing: 5
-                    Modules.TrayModule { }
+                    //Modules.TrayModule { }
                     //Separator
-                    Rectangle {
-                        color: Singletons.Colors.moduleSeparatorColor
-                        height: 15
-                        width: 1
-                    }
+                    // Rectangle {
+                    //     color: Singletons.Colors.moduleSeparatorColor
+                    //     height: 15
+                    //     width: 1
+                    // }
                     //Bluetooth
-                    Modules.BluetoothModule { }
+                    //Modules.BluetoothModule { }
                     // TODO: Wi-Fi interface
-                    Modules.WiFiModule { id: wifiModule }
+                    //Modules.WiFiModule { id: wifiModule }
                     //Separator
-                    Rectangle {
-                        color: Singletons.Colors.moduleSeparatorColor
-                        height: 15
-                        width: 1
-                    }
+                    // Rectangle {
+                    //     color: Singletons.Colors.moduleSeparatorColor
+                    //     height: 15
+                    //     width: 1
+                    // }
                     // BRIGHTNESS, VOLUME, BATTERY
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.minimumWidth: 160
-                        radius: 15
-                        color: 'transparent'
-                        RowLayout {
-                            id: volumesPanel
-                            anchors.fill: parent
-                            anchors.centerIn: parent
-                            Modules.BrightnessModule { id: brightnessBarModule }
-                            Modules.AudioModule { }
-                            Modules.BatteryModule { }
-                        }
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                volumesControlMenu.visible = true
-                                volumesControlMenu.activeFocus = true
-                            }
-                            hoverEnabled: true
-                            onEntered: parent.color = Singletons.Colors.buttonOffHoverColor
-                            onExited: parent.color = 'transparent'
-                        }
-                        Behavior on color {
-                            ColorAnimation { duration: 200; easing.type: Easing.InQuad }
-                        }
-                    }
+                    // Rectangle {
+                    //     Layout.fillWidth: true
+                    //     Layout.fillHeight: true
+                    //     Layout.minimumWidth: 160
+                    //     radius: 15
+                    //     color: 'transparent'
+                    //     RowLayout {
+                    //         id: volumesPanel
+                    //         anchors.fill: parent
+                    //         anchors.centerIn: parent
+                    //         Modules.BrightnessModule { id: brightnessBarModule }
+                    //         Modules.AudioModule { }
+                    //         Modules.BatteryModule { }
+                    //     }
+                    //     MouseArea {
+                    //         anchors.fill: parent
+                    //         cursorShape: Qt.PointingHandCursor
+                    //         onClicked: {
+                    //             volumesControlMenu.visible = true
+                    //             volumesControlMenu.activeFocus = true
+                    //         }
+                    //         hoverEnabled: true
+                    //         onEntered: parent.color = Singletons.Colors.buttonOffHoverColor
+                    //         onExited: parent.color = 'transparent'
+                    //     }
+                    //     Behavior on color {
+                    //         ColorAnimation { duration: 200; easing.type: Easing.InQuad }
+                    //     }
+                    // }
+                    // //Separator
+                    // Rectangle {
+                    //     color: Singletons.Colors.moduleSeparatorColor
+                    //     height: 15
+                    //     width: 1
+                    // }
+                    Modules.TimeDateModule { id: timeModule }
                     //Separator
-                    Rectangle {
-                        color: Singletons.Colors.moduleSeparatorColor
-                        height: 15
-                        width: 1
-                    }
-                    Modules.TimeDateModule { }
-                    //Separator
-                    Rectangle {
-                        color: Singletons.Colors.moduleSeparatorColor
-                        height: 15
-                        width: 1
-                    }
-                    Modules.PowerModule { }
+                    // Rectangle {
+                    //     color: Singletons.Colors.moduleSeparatorColor
+                    //     height: 15
+                    //     width: 1
+                    // }
+                    //Modules.PowerModule { }
                 }
             }
         }
