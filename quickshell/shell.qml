@@ -56,7 +56,7 @@ PanelWindow {
                 Layout.fillWidth: true
                 Layout.minimumWidth: 10
                 height: 20
-
+ 
                 RowLayout {
                     anchors.fill: parent
                     anchors.left: parent.left

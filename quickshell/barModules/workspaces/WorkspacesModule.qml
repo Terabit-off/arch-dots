@@ -17,7 +17,12 @@ Row {
             height: 15
             color: 'transparent'
             Text {
-                anchors.centerIn: parent
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    bottomMargin: 0
+                }
+                horizontalAlignment: Text.AlignHCenter
                 text: modelData.id
                 color: Singletons.Colors.wsNotFocusForeground
                 font.bold: true
@@ -29,7 +34,7 @@ Row {
                 width: parent.width
                 anchors {
                     top: parent.top
-                    topMargin: -2
+                    topMargin: 0
                 }
 
                 Behavior on color {
