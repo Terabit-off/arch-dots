@@ -33,6 +33,7 @@ PopupWindow {
         anchors.centerIn: parent
 
 
+        // Calendar
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -331,9 +332,9 @@ PopupWindow {
                     horizontalAlignment: Text.AlignHCenter
                     text: {
                         if (Singletons.BatteryState.battery.state === UPowerDevice.FullyCharged)
-                            return Math.round(parent.battery.percentage * 100) + "% - Full"
+                            return Math.round(Singletons.BatteryState.battery.percentage * 100) + "% - Full"
                         else if (Singletons.BatteryState.battery.state === UPowerDevice.Charging) 
-                            return "󱐋 " +  Math.round(parent.battery.percentage * 100) + "% - " + formatTime(Singletons.BatteryState.battery.timeToFull) + " to full"
+                            return "󱐋 " +  Math.round(Singletons.BatteryState.battery.percentage * 100) + "% - " + formatTime(Singletons.BatteryState.battery.timeToFull) + " to full"
                         else 
                             return Math.round(Singletons.BatteryState.battery.percentage * 100) + "% - " + formatTime(Singletons.BatteryState.battery.timeToEmpty)
                     }
