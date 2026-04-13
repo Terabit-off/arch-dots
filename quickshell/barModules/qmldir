@@ -1,13 +1,9 @@
 module BarModules
 
-AudioModule 1.0 audio/AudioVolumeModule.qml
 MusicModule 1.0 music/MusicModule.qml
-PowerModule 1.0 power/PowerModule.qml
 TimeDateModule 1.0 time_date/TimeDateModule.qml
 TrayModule 1.0 tray/TrayModule.qml
-BatteryModule 1.0 battery/BatteryModule.qml
 BluetoothModule 1.0 bluetooth/BluetoothModule.qml
-BrightnessModule 1.0 brightness/BrightnessModule.qml
 WiFiModule 1.0 wifi/WiFiModule.qml
 WorkspacesModule 1.0 workspaces/WorkspacesModule.qml
 

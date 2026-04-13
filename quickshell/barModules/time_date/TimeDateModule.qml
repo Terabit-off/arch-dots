@@ -7,15 +7,14 @@ import "../../menus" as Menus
 
 Rectangle {
     color: 'transparent'
-    Layout.fillWidth: true
     Layout.fillHeight: true
-    Layout.minimumWidth: 120
+    Layout.fillWidth: true
+    Layout.maximumWidth: 120
     radius: 15
-    height: 20
 
     Menus.Volumes {
         id: volumesControlMenu
-        panel: parent
+        panel: timeText
     }
 
     Text {
@@ -55,6 +54,7 @@ Rectangle {
         onClicked: {
             volumesControlMenu.visible = true
             volumesControlMenu.activeFocus = true
+            volumesControlMenu.currentDate = new Date()
         }
     }
 }

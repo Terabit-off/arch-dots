@@ -14,8 +14,6 @@ Rectangle {
 
     Layout.fillWidth: true
     Layout.fillHeight: true
-    Layout.maximumWidth: 200
-    Layout.minimumWidth: 200
     Layout.maximumHeight: 300
     Layout.minimumHeight: 300
     radius: 5
@@ -83,11 +81,11 @@ Rectangle {
             model: Bluetooth.devices
 
             delegate: Rectangle {
-                width: 176
+                width: 226
                 
                 height: 42
                 radius: 10
-                color: modelData.connected ? '#81393939' : Singletons.Colors.moduleBackgroundColor
+                color: modelData.connected ? '#393939' : Singletons.Colors.moduleBackgroundColor
                 border.color: Singletons.Colors.buttonBorderColor
 
                 RowLayout {
@@ -143,7 +141,6 @@ Rectangle {
             }
         }
 
-        //SCAN BUTTON
         Rectangle {
             Layout.fillWidth: true
             Layout.maximumWidth: 150
@@ -201,8 +198,13 @@ Rectangle {
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             if (Bluetooth.defaultAdapter){
-                                Bluetooth.defaultAdapter.discovering = true
-                                scanTimer.running = true
+                                if (Bluetooth.defaultAdapter.discovering) {
+                                    Bluetooth.defaultAdapter.discovering = false
+                                }
+                                else {
+                                    Bluetooth.defaultAdapter.discovering = true
+                                    scanTimer.running = true
+                                }
                             }
                         }
                     }

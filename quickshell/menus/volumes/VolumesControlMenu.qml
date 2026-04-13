@@ -8,18 +8,20 @@ import Quickshell.Hyprland
 
 import "../../Singletons" as Singletons
 import "../../barModules" as Modules
+import "../../menus" as Menus
 
 PopupWindow {
     id: volumePopup
 
-    implicitWidth: 200
-    implicitHeight: 400
+    implicitWidth: 250
+    implicitHeight: 660
     visible: false
     color: 'transparent'
 
     property var panel
     property int currentBrightness: 0
     property bool activeFocus
+    property date currentDate: new Date()
 
     anchor.item: panel
     anchor.edges: Qt.BottomEdge
@@ -29,6 +31,125 @@ PopupWindow {
     ColumnLayout {
         anchors.fill: parent
         anchors.centerIn: parent
+
+
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.maximumHeight: 260
+            color: Singletons.Colors.moduleBackgroundColor
+            border.color: Singletons.Colors.moduleBorderColor
+            radius: 5
+
+
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 10
+                spacing: 4
+
+                RowLayout {
+                    spacing: 10
+                    Layout.fillWidth: true
+
+                    Text {
+                        text: "<"
+                        color: Singletons.Colors.foreground
+                        font.pixelSize: 18
+                        Layout.fillWidth: true
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
+                        }
+                    }
+
+                    Text {
+                        text: Qt.formatDate(currentDate, "MMMM yyyy")
+                        color: Singletons.Colors.foreground
+                        font.pixelSize: 18
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                    }
+
+                    Text {
+                        text: ">"
+                        color: Singletons.Colors.foreground
+                        font.pixelSize: 18
+                        Layout.fillWidth: true
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
+                        }
+                    }
+                }
+
+                RowLayout {
+                    spacing: 4
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 230
+                    Repeater {
+                        model: ["Mo","Tu","We","Th","Fr","Sa","Su"]
+                        delegate: Text {
+                            text: modelData
+                            color: Singletons.Colors.foreground
+                            width: 29
+                            horizontalAlignment: Text.AlignHCenter
+                        }
+                    }
+                }
+                
+
+                Grid {
+                    columns: 7
+                    spacing: 4
+
+                    Repeater {
+                        model: 42 // 6 weeks
+
+                        delegate: Rectangle {
+                            width: 29
+                            height: 26
+                            radius: 6
+                            visible: true
+
+                            property int day: {
+                                var firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
+                                var startOffset = (firstDay.getDay() + 6) % 7 // monday = 0
+                                return index - startOffset + 1
+                            }
+
+                            color: {
+                                var today = new Date()
+                                if (day === today.getDate() &&
+                                    currentDate.getMonth() === today.getMonth() &&
+                                    currentDate.getFullYear() === today.getFullYear()) {
+                                    return '#c1666666'
+                                }
+                                return "transparent"
+                            }
+
+                            border.color: "#444"
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: {
+                                    var txt = (day > 0 && day <= new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 0).getDate())
+                                        ? day : ""
+                                    if(txt === "") {
+                                        parent.border.color = 'transparent'
+                                        return ""
+                                    }
+                                    parent.border.color = '#444'
+                                    return txt
+                                }
+                                color: Singletons.Colors.foreground
+                            }
+                        }
+                    }
+                }
+                Item {Layout.fillHeight: true }
+            }
+            
+        }
         // volumes
         Rectangle {
             Layout.fillWidth: true
@@ -52,7 +173,7 @@ PopupWindow {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.maximumHeight: 10
-                    Layout.maximumWidth: 170
+                    Layout.maximumWidth: 220
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                     Text{
@@ -61,8 +182,8 @@ PopupWindow {
                         Layout.maximumWidth: 30
                         color: Singletons.Colors.foreground
                         font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter 
                         text: "󰕾"
                     }
 
@@ -114,7 +235,8 @@ PopupWindow {
                     Text {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.minimumWidth: 40
+                        Layout.minimumWidth: 30
+                        Layout.maximumWidth: 30
                         color: Singletons.Colors.foreground
                         font.bold: true
                         horizontalAlignment: Text.AlignRight
@@ -127,7 +249,7 @@ PopupWindow {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.maximumHeight: 10
-                    Layout.maximumWidth: 170
+                    Layout.maximumWidth: 220
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                     Text{
@@ -136,7 +258,7 @@ PopupWindow {
                         Layout.maximumWidth: 30
                         color: Singletons.Colors.foreground
                         font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter 
                         text: "󰃠 "
                     }
@@ -146,6 +268,7 @@ PopupWindow {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.minimumWidth: 100
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         from: 0
                         to: 100
                         value: Math.round(currentBrightness/ 64507 * 100)
@@ -189,11 +312,12 @@ PopupWindow {
                     Text {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.minimumWidth: 40
+                        Layout.minimumWidth: 30
+                        Layout.maximumWidth: 30
                         color: Singletons.Colors.foreground
                         font.bold: true
                         verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Text.AlignRight
                         text: Math.round(brightnessVolumeSlider.value) + "%"
                     }
                 }
@@ -204,6 +328,7 @@ PopupWindow {
                     Layout.maximumHeight: 10
                     Layout.maximumWidth: 170
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
                     text: {
                         if (Singletons.BatteryState.battery.state === UPowerDevice.FullyCharged)
                             return Math.round(parent.battery.percentage * 100) + "% - Full"

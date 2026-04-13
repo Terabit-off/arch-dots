@@ -43,43 +43,9 @@ PanelWindow {
                 color: 'transparent'
                 Layout.fillWidth: true
                 Layout.minimumWidth: 10
-                Layout.preferredWidth: 50
-                height: 15
+                height: 20
+
                 Modules.WorkspacesModule { }
-
-
-
-                RowLayout{
-                    anchors {
-                        fill: parent
-                        centerIn: parent
-                    }
-
-                    //ARCH icon
-                    // Rectangle {
-                    //     id: overviewButton
-                    //     Layout.fillWidth: true
-                    //     Layout.fillHeight: true
-
-                    //     Layout.minimumWidth: 25
-                    //     Layout.maximumWidth: 25
-                    //     color: 'transparent'
-                    //     Text {
-                    //         anchors.centerIn: parent
-                    //         anchors.fill: parent
-                    //         text: "󰣇"
-                    //         font.pixelSize: 16
-                    //         color: Singletons.Colors.foreground
-                    //     }
-                    // }
-                    //Separator
-                    // Rectangle {
-                    //     color: Singletons.Colors.moduleSeparatorColor
-                    //     height: 15
-                    //     width: 1
-                    // }
-                }
-
             }
             //CENTER
             Modules.MusicModule { }
@@ -89,75 +55,18 @@ PanelWindow {
                 color: 'transparent'
                 Layout.fillWidth: true
                 Layout.minimumWidth: 10
-                Layout.preferredWidth: 50
-                height: 24
+                height: 20
 
                 RowLayout {
-                    anchors {
-                        right: parent.right
+                    anchors.fill: parent
+                    anchors.left: parent.left
+
+                    Item {
+                        Layout.fillWidth: true
                     }
-                    spacing: 5
-                    //Modules.TrayModule { }
-                    //Separator
-                    // Rectangle {
-                    //     color: Singletons.Colors.moduleSeparatorColor
-                    //     height: 15
-                    //     width: 1
-                    // }
-                    //Bluetooth
-                    //Modules.BluetoothModule { }
-                    // TODO: Wi-Fi interface
-                    //Modules.WiFiModule { id: wifiModule }
-                    //Separator
-                    // Rectangle {
-                    //     color: Singletons.Colors.moduleSeparatorColor
-                    //     height: 15
-                    //     width: 1
-                    // }
-                    // BRIGHTNESS, VOLUME, BATTERY
-                    // Rectangle {
-                    //     Layout.fillWidth: true
-                    //     Layout.fillHeight: true
-                    //     Layout.minimumWidth: 160
-                    //     radius: 15
-                    //     color: 'transparent'
-                    //     RowLayout {
-                    //         id: volumesPanel
-                    //         anchors.fill: parent
-                    //         anchors.centerIn: parent
-                    //         Modules.BrightnessModule { id: brightnessBarModule }
-                    //         Modules.AudioModule { }
-                    //         Modules.BatteryModule { }
-                    //     }
-                    //     MouseArea {
-                    //         anchors.fill: parent
-                    //         cursorShape: Qt.PointingHandCursor
-                    //         onClicked: {
-                    //             volumesControlMenu.visible = true
-                    //             volumesControlMenu.activeFocus = true
-                    //         }
-                    //         hoverEnabled: true
-                    //         onEntered: parent.color = Singletons.Colors.buttonOffHoverColor
-                    //         onExited: parent.color = 'transparent'
-                    //     }
-                    //     Behavior on color {
-                    //         ColorAnimation { duration: 200; easing.type: Easing.InQuad }
-                    //     }
-                    // }
-                    // //Separator
-                    // Rectangle {
-                    //     color: Singletons.Colors.moduleSeparatorColor
-                    //     height: 15
-                    //     width: 1
-                    // }
+                    Modules.TrayModule { }
+
                     Modules.TimeDateModule { id: timeModule }
-                    //Separator
-                    // Rectangle {
-                    //     color: Singletons.Colors.moduleSeparatorColor
-                    //     height: 15
-                    //     width: 1
-                    // }
-                    //Modules.PowerModule { }
                 }
             }
         }

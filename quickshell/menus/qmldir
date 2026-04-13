@@ -1,4 +1,3 @@
 module Menus
 
 Volumes 1.0 volumes/VolumesControlMenu.qml
-PowerMenu 1.0 power/PowerMenu.qml
