@@ -338,7 +338,12 @@ PopupWindow {
                         else 
                             return Math.round(Singletons.BatteryState.battery.percentage * 100) + "% - " + formatTime(Singletons.BatteryState.battery.timeToEmpty)
                     }
-                    color: Singletons.Colors.foreground
+                    color: {
+                        if (Singletons.BatteryState.battery.percentage * 100 <= 20) {
+                            return '#e03030';
+                        }
+                        return Singletons.Colors.foreground
+                    } 
                 }
             }
         }
@@ -386,6 +391,5 @@ PopupWindow {
     }
     Process {
         id: brightnessSet
-
     }
 }
