@@ -10,7 +10,6 @@ Rectangle {
     Layout.fillHeight: true
     Layout.fillWidth: true
     Layout.maximumWidth: 120
-    radius: 15
 
     Menus.Volumes {
         id: volumesControlMenu
@@ -19,7 +18,11 @@ Rectangle {
 
     Text {
         id: timeText
-        anchors.centerIn: parent
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottomMargin: 0
+        }
         color: Singletons.Colors.foreground
         font.bold: true
         font.pixelSize: 15
