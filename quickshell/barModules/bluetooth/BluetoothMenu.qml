@@ -190,7 +190,7 @@ Rectangle {
                     Layout.maximumWidth: 75
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    text: Bluetooth.defaultAdapter.discovering ? "Scanning" : "Scan"
+                    text: Bluetooth.defaultAdapter ? Bluetooth.defaultAdapter.discovering ? "Scanning" : "Scan" : ""
                     color: Singletons.Colors.foreground
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     MouseArea {

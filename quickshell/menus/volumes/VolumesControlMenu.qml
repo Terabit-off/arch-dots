@@ -225,7 +225,7 @@ PopupWindow {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             from: 0
                             to: 100
-                            value:  Singletons.AudioState.sink.audio.volume * 100
+                            value: Singletons.AudioState.sink ? Singletons.AudioState.sink.audio.volume * 100 : 0
 
                             HoverHandler {
                                 target: null
@@ -235,9 +235,8 @@ PopupWindow {
                             background: Rectangle {
                                 x: parent.leftPadding
                                 y: parent.topPadding + parent.availableHeight / 2 - height / 2
-                                implicitHeight: 4
                                 width: parent.availableWidth
-                                height: implicitHeight
+                                height: 4
                                 radius: 2
                                 color: Singletons.Colors.sliderBackgroundColor
 
@@ -251,8 +250,8 @@ PopupWindow {
                             handle: Rectangle {
                                 x: parent.leftPadding + parent.visualPosition * (parent.availableWidth - width)
                                 y: parent.topPadding + parent.availableHeight / 2 - height / 2
-                                implicitWidth: 5
-                                implicitHeight: 10
+                                width: 5
+                                height: 10
                                 radius: 4
                                 color: Singletons.Colors.sliderHandlerColor
                             }
@@ -309,9 +308,8 @@ PopupWindow {
                             background: Rectangle {
                                 x: parent.leftPadding
                                 y: parent.topPadding + parent.availableHeight / 2 - height / 2
-                                implicitHeight: 4
+                                height: 4
                                 width: parent.availableWidth
-                                height: implicitHeight
                                 radius: 2
                                 color: Singletons.Colors.sliderBackgroundColor
 
@@ -325,8 +323,8 @@ PopupWindow {
                             handle: Rectangle {
                                 x: parent.leftPadding + parent.visualPosition * (parent.availableWidth - width)
                                 y: parent.topPadding + parent.availableHeight / 2 - height / 2
-                                implicitWidth: 5
-                                implicitHeight: 10
+                                width: 5
+                                height: 10
                                 radius: 4
                                 color: Singletons.Colors.sliderHandlerColor
                             }
