@@ -7,15 +7,14 @@ import Qt5Compat.GraphicalEffects
 
 import "./Singletons" as Singletons
 import "./barModules" as Modules
-import "./menus" as Menus
 
 PanelWindow {
     id: rootPanel
     anchors {
         top: true
-        left: true
+        left: true  
         right: true
-    }
+    } 
     margins {
         left: 25
         right: 25
@@ -33,16 +32,12 @@ PanelWindow {
 
         RowLayout {
             anchors.fill: parent
-            anchors {
-                leftMargin: 10
-            }
             spacing: 12
         
             //LEFT
             Rectangle { 
                 color: 'transparent'
                 Layout.fillWidth: true
-                Layout.minimumWidth: 10
                 height: 20
 
                 Modules.WorkspacesModule { }
@@ -54,7 +49,6 @@ PanelWindow {
             Rectangle {
                 color: 'transparent'
                 Layout.fillWidth: true
-                Layout.minimumWidth: 10
                 height: 20
  
                 RowLayout {
@@ -63,6 +57,25 @@ PanelWindow {
 
                     Item {
                         Layout.fillWidth: true
+                    }
+                    Rectangle {
+                        color: 'transparent'
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.minimumWidth: 50
+                        Layout.maximumWidth: 50
+                        visible: Singletons.BatteryState.battery.percentage * 100 <= 20
+
+                        Text {
+                            anchors.fill: parent
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font.bold: true
+                            font.pixelSize: 14
+                            color: '#e03030'
+
+                            text: "󰁻 " + Singletons.BatteryState.battery.percentage * 100 + "%"
+                        }
                     }
                     Modules.TrayModule { }
 
