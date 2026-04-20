@@ -7,20 +7,22 @@ import "../../menus" as Menus
 
 Rectangle {
     color: 'transparent'
-    Layout.fillWidth: true
     Layout.fillHeight: true
-    Layout.minimumWidth: 120
-    radius: 15
-    height: 20
+    Layout.fillWidth: true
+    Layout.maximumWidth: 120
 
-    Menus.Volumes {
-        id: volumesControlMenu
-        panel: parent
+    Menus.ControlCenter {
+        id: controlCenterMenu
+        panel: timeText
     }
 
     Text {
         id: timeText
-        anchors.centerIn: parent
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottomMargin: 0
+        }
         color: Singletons.Colors.foreground
         font.bold: true
         font.pixelSize: 15
@@ -53,8 +55,9 @@ Rectangle {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         onClicked: {
-            volumesControlMenu.visible = true
-            volumesControlMenu.activeFocus = true
+            controlCenterMenu.visible = true
+            controlCenterMenu.activeFocus = true
+            controlCenterMenu.currentDate = new Date()
         }
     }
 }
