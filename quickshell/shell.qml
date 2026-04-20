@@ -6,7 +6,7 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
 import "./Singletons" as Singletons
-import "./barModules" as Modules
+import "./barModules" as Modules 
 
 PanelWindow {
     id: rootPanel
@@ -84,4 +84,4 @@ PanelWindow {
             }
         }
     } 
-}  
+} 
