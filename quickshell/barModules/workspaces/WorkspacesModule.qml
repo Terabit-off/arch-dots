@@ -8,6 +8,8 @@ import "../../Singletons" as Singletons
 Row {
     id: root
     spacing: 5
+    //anchors.verticalCenter: parent.verticalCenter
+
 
     Repeater {
         model: Hyprland.workspaces
@@ -15,14 +17,19 @@ Row {
         delegate: Rectangle {
             width: 20
             height: 15
+            // radius: 8
+            //anchors.bottom: parent.bottom
+
+            // Behavior on border.color {
+            //     ColorAnimation { duration: 250 }
+            // }
             color: 'transparent'
+
+            // border.color: modelData.focused ? Singletons.Colors.wsFocusBackground : modelData.urgent ? 
+            //     Singletons.Colors.wsUrgentBackground : Singletons.Colors.wsNotFocusBackground
+            
             Text {
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    bottomMargin: 0
-                }
-                horizontalAlignment: Text.AlignHCenter
+                anchors.centerIn: parent
                 text: modelData.id
                 color: Singletons.Colors.wsNotFocusForeground
                 font.bold: true
@@ -34,7 +41,7 @@ Row {
                 width: parent.width
                 anchors {
                     top: parent.top
-                    topMargin: 0
+                    topMargin: -2
                 }
 
                 Behavior on color {

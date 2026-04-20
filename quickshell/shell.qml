@@ -7,14 +7,15 @@ import Qt5Compat.GraphicalEffects
 
 import "./Singletons" as Singletons
 import "./barModules" as Modules
+import "./menus" as Menus
 
 PanelWindow {
     id: rootPanel
     anchors {
         top: true
-        left: true  
+        left: true
         right: true
-    } 
+    }
     margins {
         left: 25
         right: 25
@@ -32,15 +33,53 @@ PanelWindow {
 
         RowLayout {
             anchors.fill: parent
+            anchors {
+                leftMargin: 10
+            }
             spacing: 12
         
             //LEFT
             Rectangle { 
                 color: 'transparent'
                 Layout.fillWidth: true
-                height: 20
-
+                Layout.minimumWidth: 10
+                Layout.preferredWidth: 50
+                height: 15
                 Modules.WorkspacesModule { }
+
+
+
+                RowLayout{
+                    anchors {
+                        fill: parent
+                        centerIn: parent
+                    }
+
+                    //ARCH icon
+                    // Rectangle {
+                    //     id: overviewButton
+                    //     Layout.fillWidth: true
+                    //     Layout.fillHeight: true
+
+                    //     Layout.minimumWidth: 25
+                    //     Layout.maximumWidth: 25
+                    //     color: 'transparent'
+                    //     Text {
+                    //         anchors.centerIn: parent
+                    //         anchors.fill: parent
+                    //         text: "󰣇"
+                    //         font.pixelSize: 16
+                    //         color: Singletons.Colors.foreground
+                    //     }
+                    // }
+                    //Separator
+                    // Rectangle {
+                    //     color: Singletons.Colors.moduleSeparatorColor
+                    //     height: 15
+                    //     width: 1
+                    // }
+                }
+
             }
             //CENTER
             Modules.MusicModule { }
@@ -49,37 +88,76 @@ PanelWindow {
             Rectangle {
                 color: 'transparent'
                 Layout.fillWidth: true
-                height: 20
- 
+                Layout.minimumWidth: 10
+                Layout.preferredWidth: 50
+                height: 24
+
                 RowLayout {
-                    anchors.fill: parent
-                    anchors.left: parent.left
-
-                    Item {
-                        Layout.fillWidth: true
+                    anchors {
+                        right: parent.right
                     }
-                    Rectangle {
-                        color: 'transparent'
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.minimumWidth: 50
-                        Layout.maximumWidth: 50
-                        visible: Singletons.BatteryState.battery.percentage * 100 <= 20
-
-                        Text {
-                            anchors.fill: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font.bold: true
-                            font.pixelSize: 14
-                            color: '#e03030'
-
-                            text: "󰁻 " + Singletons.BatteryState.battery.percentage * 100 + "%"
-                        }
-                    }
-                    Modules.TrayModule { }
-
+                    spacing: 5
+                    //Modules.TrayModule { }
+                    //Separator
+                    // Rectangle {
+                    //     color: Singletons.Colors.moduleSeparatorColor
+                    //     height: 15
+                    //     width: 1
+                    // }
+                    //Bluetooth
+                    //Modules.BluetoothModule { }
+                    // TODO: Wi-Fi interface
+                    //Modules.WiFiModule { id: wifiModule }
+                    //Separator
+                    // Rectangle {
+                    //     color: Singletons.Colors.moduleSeparatorColor
+                    //     height: 15
+                    //     width: 1
+                    // }
+                    // BRIGHTNESS, VOLUME, BATTERY
+                    // Rectangle {
+                    //     Layout.fillWidth: true
+                    //     Layout.fillHeight: true
+                    //     Layout.minimumWidth: 160
+                    //     radius: 15
+                    //     color: 'transparent'
+                    //     RowLayout {
+                    //         id: volumesPanel
+                    //         anchors.fill: parent
+                    //         anchors.centerIn: parent
+                    //         Modules.BrightnessModule { id: brightnessBarModule }
+                    //         Modules.AudioModule { }
+                    //         Modules.BatteryModule { }
+                    //     }
+                    //     MouseArea {
+                    //         anchors.fill: parent
+                    //         cursorShape: Qt.PointingHandCursor
+                    //         onClicked: {
+                    //             volumesControlMenu.visible = true
+                    //             volumesControlMenu.activeFocus = true
+                    //         }
+                    //         hoverEnabled: true
+                    //         onEntered: parent.color = Singletons.Colors.buttonOffHoverColor
+                    //         onExited: parent.color = 'transparent'
+                    //     }
+                    //     Behavior on color {
+                    //         ColorAnimation { duration: 200; easing.type: Easing.InQuad }
+                    //     }
+                    // }
+                    // //Separator
+                    // Rectangle {
+                    //     color: Singletons.Colors.moduleSeparatorColor
+                    //     height: 15
+                    //     width: 1
+                    // }
                     Modules.TimeDateModule { id: timeModule }
+                    //Separator
+                    // Rectangle {
+                    //     color: Singletons.Colors.moduleSeparatorColor
+                    //     height: 15
+                    //     width: 1
+                    // }
+                    //Modules.PowerModule { }
                 }
             }
         }
