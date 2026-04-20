@@ -1,3 +1,3 @@
 module Menus
 
-Volumes 1.0 volumes/VolumesControlMenu.qml
+ControlCenter 1.0 controlCenter/ControlCenterMenu.qml

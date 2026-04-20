@@ -3,10 +3,6 @@ module BarModules
 MusicModule 1.0 music/MusicModule.qml
 TimeDateModule 1.0 time_date/TimeDateModule.qml
 TrayModule 1.0 tray/TrayModule.qml
-BluetoothModule 1.0 bluetooth/BluetoothModule.qml
-WiFiModule 1.0 wifi/WiFiModule.qml
 WorkspacesModule 1.0 workspaces/WorkspacesModule.qml
 
 MusicCenterWindow 1.0 music/MusicCenterWindow.qml
-
-BluetoothMenu 1.0 bluetooth/BluetoothMenu.qml

@@ -7,14 +7,13 @@ import Quickshell.Io
 import Quickshell.Hyprland
 
 import "../../Singletons" as Singletons
-import "../../barModules" as Modules
-import "../../menus" as Menus
+import "../../centerMenuModules" as Modules
 
 PopupWindow {
     id: volumePopup
 
     implicitWidth: 250
-    implicitHeight: 660
+    implicitHeight: 960
     visible: false
     color: 'transparent'
 
@@ -56,128 +55,7 @@ PopupWindow {
         ColumnLayout {
             anchors.fill: parent
             anchors.centerIn: parent
-
-
-            // Calendar
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.maximumHeight: 260
-                color: Singletons.Colors.moduleBackgroundColor
-                border.color: Singletons.Colors.moduleBorderColor
-                radius: 5
-
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 4
-
-                    RowLayout {
-                        spacing: 10
-                        Layout.fillWidth: true
-
-                        Text {
-                            text: "<"
-                            color: Singletons.Colors.foreground
-                            font.pixelSize: 18
-                            Layout.fillWidth: true
-                            MouseArea {
-                                cursorShape: Qt.PointingHandCursor
-                                anchors.fill: parent
-                                onClicked: currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
-                            }
-                        }
-
-                        Text {
-                            text: Qt.formatDate(currentDate, "MMMM yyyy")
-                            color: Singletons.Colors.foreground
-                            font.pixelSize: 18
-                            horizontalAlignment: Text.AlignHCenter
-                            Layout.fillWidth: true
-                        }
-
-                        Text {
-                            text: ">"
-                            color: Singletons.Colors.foreground
-                            font.pixelSize: 18
-                            Layout.fillWidth: true
-                            MouseArea {
-                                cursorShape: Qt.PointingHandCursor
-                                anchors.fill: parent
-                                onClicked: currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
-                            }
-                        }
-                    }
-
-                    RowLayout {
-                        spacing: 4
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: 230
-                        Repeater {
-                            model: ["Mo","Tu","We","Th","Fr","Sa","Su"]
-                            delegate: Text {
-                                text: modelData
-                                color: Singletons.Colors.foreground
-                                width: 29
-                                horizontalAlignment: Text.AlignHCenter
-                            }
-                        }
-                    }
-                    
-
-                    Grid {
-                        columns: 7
-                        spacing: 4
-
-                        Repeater {
-                            model: 42 // 6 weeks
-
-                            delegate: Rectangle {
-                                width: 29
-                                height: 26
-                                radius: 6
-                                visible: true
-
-                                property int day: {
-                                    var firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
-                                    var startOffset = (firstDay.getDay() + 6) % 7 // monday = 0
-                                    return index - startOffset + 1
-                                }
-
-                                color: {
-                                    var today = new Date()
-                                    if (day === today.getDate() &&
-                                        currentDate.getMonth() === today.getMonth() &&
-                                        currentDate.getFullYear() === today.getFullYear()) {
-                                        return '#c1666666'
-                                    }
-                                    return "transparent"
-                                }
-
-                                border.color: "#444"
-
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: {
-                                        var txt = (day > 0 && day <= new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 0).getDate())
-                                            ? day : ""
-                                        if(txt === "") {
-                                            parent.border.color = 'transparent'
-                                            return ""
-                                        }
-                                        parent.border.color = '#444'
-                                        return txt
-                                    }
-                                    color: Singletons.Colors.foreground
-                                }
-                            }
-                        }
-                    }
-                    Item {Layout.fillHeight: true }
-                }
-                
-            }
+            Modules.CalendarModule { }
             // volumes
             Rectangle {
                 Layout.fillWidth: true
@@ -210,6 +88,7 @@ PopupWindow {
                             Layout.maximumWidth: 30
                             color: Singletons.Colors.foreground
                             font.bold: true
+                            font.pixelSize: 15
                             horizontalAlignment: Text.AlignRight
                             verticalAlignment: Text.AlignVCenter 
                             text: "󰕾"
@@ -285,6 +164,7 @@ PopupWindow {
                             Layout.maximumWidth: 30
                             color: Singletons.Colors.foreground
                             font.bold: true
+                            font.pixelSize: 15
                             horizontalAlignment: Text.AlignRight
                             verticalAlignment: Text.AlignVCenter 
                             text: "󰃠 "
@@ -375,8 +255,12 @@ PopupWindow {
             }
 
             // bluetooth
-            Modules.BluetoothMenu { }
+            Modules.BluetoothModule { }
+            Modules.VolumePlayback { }
 
+            Item {
+                Layout.fillHeight: true
+            }
         }
     }
 

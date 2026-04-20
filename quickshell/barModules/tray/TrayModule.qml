@@ -11,8 +11,8 @@ Rectangle {
     color: 'transparent'
     Layout.fillWidth: true
     Layout.fillHeight: true
-    Layout.minimumWidth: 50
-    Layout.maximumWidth: 50
+    Layout.minimumWidth: 21 * SystemTray.items.values.length
+    Layout.maximumWidth: 21 * SystemTray.items.values.length
     RowLayout {
         id: trayLayout
         layoutDirection: Qt.RightToLeft
@@ -29,7 +29,7 @@ Rectangle {
             }
             delegate: Item {
                 id: itemParent
-                width: 13
+                width: 15
                 height: 13
                 
                 Image {
@@ -61,7 +61,6 @@ Rectangle {
                             contextMenu.open()
                         }
                     }
-                
                 }
             }
         }

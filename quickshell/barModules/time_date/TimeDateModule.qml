@@ -11,8 +11,8 @@ Rectangle {
     Layout.fillWidth: true
     Layout.maximumWidth: 120
 
-    Menus.Volumes {
-        id: volumesControlMenu
+    Menus.ControlCenter {
+        id: controlCenterMenu
         panel: timeText
     }
 
@@ -55,9 +55,9 @@ Rectangle {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         onClicked: {
-            volumesControlMenu.visible = true
-            volumesControlMenu.activeFocus = true
-            volumesControlMenu.currentDate = new Date()
+            controlCenterMenu.visible = true
+            controlCenterMenu.activeFocus = true
+            controlCenterMenu.currentDate = new Date()
         }
     }
 }
