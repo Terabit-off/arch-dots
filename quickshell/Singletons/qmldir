@@ -5,4 +5,3 @@ singleton Colors 1.0 Colors.qml
 singleton AudioState 1.0 AudioState.qml
 singleton BatteryState 1.0 BatteryState.qml
 singleton MusicSingleton 1.0 MusicSingleton.qml
-singleton Properties 1.0 Properties.qml

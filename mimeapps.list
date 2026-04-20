@@ -1,5 +1,6 @@
 [Added Associations]
-video/mp4=firefox-2.desktop;
+application/vnd.openxmlformats-officedocument.wordprocessingml.document=firefox.desktop;
+video/mp4=firefox-6.desktop;firefox-5.desktop;firefox-2.desktop;
 
 [Default Applications]
-video/mp4=firefox-2.desktop;
+video/mp4=firefox-6.desktop;
