@@ -1,6 +1,0 @@
-module MenuModules
-
-BluetoothModule 1.0 bluetooth/BluetoothModule.qml
-WiFiModule 1.0 wifi/WiFiModule.qml
-CalendarModule 1.0 calendar/CalendarModule.qml
-VolumePlayback 1.0 volumePlayback/VolumePlayback.qml
