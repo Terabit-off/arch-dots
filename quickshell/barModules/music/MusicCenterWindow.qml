@@ -47,8 +47,8 @@ PanelWindow {
             anchors.margins: 5
             fillMode: Image.PreserveAspectCrop
             source: {
-                return active.metadata["xesam:artUrl"] === "" ? "bongo-cat.gif" :
-                    active.trackArtUrl
+                return active ? active.metadata["xesam:artUrl"] === "" ? "bongo-cat.gif" :
+                    active.trackArtUrl : ""
             }
             layer.enabled: true
             layer.effect: OpacityMask {
@@ -144,9 +144,8 @@ PanelWindow {
                     background: Rectangle {
                         x: parent.leftPadding
                         y: parent.topPadding + parent.availableHeight / 2 - height / 2
-                        implicitHeight: 4
                         width: parent.availableWidth
-                        height: implicitHeight
+                        height: 4
                         radius: 2
                         color: Singletons.Colors.sliderBackgroundColor
 
@@ -160,8 +159,8 @@ PanelWindow {
                     handle: Rectangle {
                         x: parent.leftPadding + parent.visualPosition * (parent.availableWidth - width)
                         y: parent.topPadding + parent.availableHeight / 2 - height / 2
-                        implicitWidth: 8
-                        implicitHeight: 8
+                        width: 8
+                        height: 8
                         radius: 4
                         color: 'transparent'
                     }
@@ -184,18 +183,18 @@ PanelWindow {
                     Text {
                         anchors.left: parent.left
                         color: Singletons.Colors.foreground
-                        text: formatTime(active.position)
+                        text: formatTime(active ? active.position : "")
                     }
                     Text {
                         anchors.right: parent.right
                         color: Singletons.Colors.foreground
-                        text: formatTime(active.length)
+                        text: formatTime(active ? active.length : "")
                     }
                 }
                 FrameAnimation {
-                    running: active && active.isPlaying
+                    running: active ? active.isPlaying : false
                     onTriggered: {
-                        active.positionChanged()
+                        active ? active.positionChanged() : 0
                     }
                 }
                 
@@ -305,7 +304,7 @@ PanelWindow {
                         }
                     }
                     Text {
-                        text: Singletons.MusicSingleton.list[currentPlayerIndex].identity
+                        text: Singletons.MusicSingleton.list[currentPlayerIndex] ? Singletons.MusicSingleton.list[currentPlayerIndex].identity : ""
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: true
                         Layout.fillHeight: true

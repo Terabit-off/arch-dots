@@ -10,9 +10,9 @@ import "../../Singletons" as Singletons
 Rectangle {
     color: 'transparent'
     Layout.fillWidth: true
-    Layout.minimumWidth: 50
-    Layout.maximumWidth: 50
-    height: 24
+    Layout.fillHeight: true
+    Layout.minimumWidth: 21 * SystemTray.items.values.length
+    Layout.maximumWidth: 21 * SystemTray.items.values.length
     RowLayout {
         id: trayLayout
         layoutDirection: Qt.RightToLeft
@@ -29,7 +29,7 @@ Rectangle {
             }
             delegate: Item {
                 id: itemParent
-                width: 13
+                width: 15
                 height: 13
                 
                 Image {
@@ -45,10 +45,9 @@ Rectangle {
                     menu: modelData.menu
                     anchor {
                         window: rootPanel
-                        margins {
-                            left: 1050
-                            top: 25
-                        }
+                        item: itemParent
+                        rect.x: itemParent.x
+                        rect.y: itemParent.y + itemParent.height
                     }
                 }
                 MouseArea {
@@ -62,7 +61,6 @@ Rectangle {
                             contextMenu.open()
                         }
                     }
-                
                 }
             }
         }

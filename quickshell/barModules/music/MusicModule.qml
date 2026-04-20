@@ -28,15 +28,6 @@ Rectangle {
         }
     }
 
-    //Separator
-    // Rectangle {
-    //     color: Singletons.Colors.moduleSeparatorColor
-    //     height: 15
-    //     width: 1
-    //     anchors.left: parent.left
-    //     anchors.verticalCenter: parent.verticalCenter
-    // }
-
     RowLayout {
         spacing: 5
         anchors.centerIn: parent
@@ -53,12 +44,4 @@ Rectangle {
             font.pixelSize: 13
         }
     }
-    //Separator
-    // Rectangle {
-    //     color: Singletons.Colors.moduleSeparatorColor
-    //     height: 15
-    //     width: 1
-    //     anchors.right: parent.right
-    //     anchors.verticalCenter: parent.verticalCenter
-    // }
 }
