@@ -14,7 +14,7 @@ Rectangle {
 
     Layout.fillWidth: true
     Layout.fillHeight: true
-    Layout.maximumHeight: 300
+    Layout.maximumHeight: 100 + Bluetooth.devices.values.length * 42
     Layout.minimumHeight: 300
     radius: 5
     color: Singletons.Colors.moduleBackgroundColor
