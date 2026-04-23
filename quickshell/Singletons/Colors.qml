@@ -33,7 +33,7 @@ QtObject {
     readonly property color moduleBorderColor: '#bde6e6e6'
     readonly property color moduleBackgroundColor: '#f4202020'
     readonly property real moduleBorderRadius: 5
-    readonly property real panelBorderRadius: 15
+    readonly property real panelBorderRadius: 5
 
     // sliders
     readonly property color sliderBackgroundColor: '#494949'

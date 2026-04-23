@@ -61,7 +61,7 @@ PopupWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.maximumHeight: 100
-                radius: 5
+                radius: Singletons.Colors.moduleBorderRadius
                 color: Singletons.Colors.moduleBackgroundColor
                 border.color: Singletons.Colors.moduleBorderColor
 

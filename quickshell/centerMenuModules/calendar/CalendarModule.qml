@@ -12,7 +12,7 @@ Rectangle {
     Layout.minimumHeight: 250
     color: Singletons.Colors.moduleBackgroundColor
     border.color: Singletons.Colors.moduleBorderColor
-    radius: 5
+    radius: Singletons.Colors.moduleBorderRadius
 
 
     ColumnLayout {

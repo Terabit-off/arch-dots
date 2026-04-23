@@ -12,17 +12,29 @@ import "../../Singletons" as Singletons
 Rectangle {
     id: bluetoothPopup
 
+    property bool opened: false
+
     Layout.fillWidth: true
     Layout.fillHeight: true
     Layout.maximumHeight: {
-        const s = 100 + Bluetooth.devices.values.length * 42;
-        if (300 < s) return 300;
-        return s;
+        if (opened){
+            const s = 100 + Bluetooth.devices.values.length * 42 + ((Bluetooth.devices.values.length - 1) * 5);
+            if (300 < s) return 300;
+            return s;
+        }
+        return 35;
     } 
-    radius: 5
+    clip: true
+    radius: Singletons.Colors.moduleBorderRadius
     color: Singletons.Colors.moduleBackgroundColor
     border.color: Singletons.Colors.moduleBorderColor
 
+    Behavior on Layout.maximumHeight {
+        NumberAnimation {
+            duration: 220
+            easing.type: Easing.InOutCubic
+        }
+    }
 
     Process {
         id: startApp
@@ -31,17 +43,28 @@ Rectangle {
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 12
-        spacing: 10
+        spacing: 20
 
         //HEADER
         RowLayout {
             Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.maximumHeight: 11
 
             Text {
-                text: "Bluetooth"
+                text: "Bluetooth "
                 color: Singletons.Colors.foreground
                 font.pixelSize: 12
                 font.bold: true
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        opened = !opened;
+                        parent.text = opened ? "Bluetooth " : "Bluetooth "
+                    }
+                }
                 
             }
 
@@ -79,7 +102,7 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            spacing: 10
+            spacing: 5
 
             model: Bluetooth.devices
 
@@ -141,9 +164,9 @@ Rectangle {
                         }
                     }
                 }
-            }
+            }    
         }
-
+        // FOOTER
         Rectangle {
             Layout.fillWidth: true
             Layout.maximumWidth: 150
@@ -214,6 +237,9 @@ Rectangle {
                 }
             }
         }
+
+        
+
     }
 
 

@@ -8,22 +8,36 @@ import "../../Singletons" as Singletons
 Rectangle {
     Layout.fillWidth: true
     Layout.fillHeight: true
+
+    property bool opened: false
+
     Layout.maximumHeight: {
-        const s = 50 + Singletons.AudioState.streamNodes.length * 50 + ((Singletons.AudioState.streamNodes.length - 1) * 5);
-        if (300 < s) {
-            return 300;
+        if (opened){
+            const s = 50 + Singletons.AudioState.streamNodes.length * 50 + ((Singletons.AudioState.streamNodes.length - 1) * 5);
+            if (300 < s) {
+                return 300;
+            }
+            return s;
         }
-        return s;
+        return 35;
     }
-    radius: 5
+    radius: Singletons.Colors.moduleBorderRadius
     color: Singletons.Colors.moduleBackgroundColor
     border.color: Singletons.Colors.moduleBorderColor
     visible: Singletons.AudioState.streamNodes.length > 0
+    clip: true
+
+    Behavior on Layout.maximumHeight {
+        NumberAnimation {
+            duration: 220
+            easing.type: Easing.InOutCubic
+        }
+    }
 
     ColumnLayout {
         anchors.fill: parent
         Text {
-            text: "Audio Mixer"
+            text: "Audio Mixer "
             color: Singletons.Colors.foreground
             font.pixelSize: 12
             font.bold: true
@@ -31,6 +45,15 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
             Layout.leftMargin: 10
             Layout.topMargin: 10
+            
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    opened = !opened;
+                    parent.text = opened ? "Audio Mixer " : "Audio Mixer "
+                }
+            }
         }
         ListView {
             Layout.fillHeight: true
