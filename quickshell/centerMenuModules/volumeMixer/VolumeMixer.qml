@@ -8,8 +8,13 @@ import "../../Singletons" as Singletons
 Rectangle {
     Layout.fillWidth: true
     Layout.fillHeight: true
-    Layout.maximumHeight: 50 + Singletons.AudioState.streamNodes.length * 50 + ((Singletons.AudioState.streamNodes.length - 1) * 5)
-    Layout.minimumHeight: 50 + Singletons.AudioState.streamNodes.length * 50 + ((Singletons.AudioState.streamNodes.length - 1) * 5)
+    Layout.maximumHeight: {
+        const s = 50 + Singletons.AudioState.streamNodes.length * 50 + ((Singletons.AudioState.streamNodes.length - 1) * 5);
+        if (300 < s) {
+            return 300;
+        }
+        return s;
+    }
     radius: 5
     color: Singletons.Colors.moduleBackgroundColor
     border.color: Singletons.Colors.moduleBorderColor

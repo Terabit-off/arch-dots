@@ -14,8 +14,11 @@ Rectangle {
 
     Layout.fillWidth: true
     Layout.fillHeight: true
-    Layout.maximumHeight: 100 + Bluetooth.devices.values.length * 42
-    Layout.minimumHeight: 300
+    Layout.maximumHeight: {
+        const s = 100 + Bluetooth.devices.values.length * 42;
+        if (300 < s) return 300;
+        return s;
+    } 
     radius: 5
     color: Singletons.Colors.moduleBackgroundColor
     border.color: Singletons.Colors.moduleBorderColor
