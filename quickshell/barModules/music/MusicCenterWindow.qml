@@ -32,7 +32,7 @@ PanelWindow {
         radius: Singletons.Colors.panelBorderRadius
         border.color: Singletons.Colors.moduleBorderColor
 
-        NumberAnimation on y { 
+        NumberAnimation on y {
             duration: 150
             running: visible
             from: -200; to: 0
@@ -83,10 +83,6 @@ PanelWindow {
             Rectangle {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                // Layout.margins: {
-                //     top: 15
-                //     bottom: 15
-                // }
                 color: 'transparent'
                 ColumnLayout {
                     spacing: 5
@@ -151,23 +147,7 @@ PanelWindow {
                         from: 0
                         to: active ? active.length : 100
                         value: active ? active.position : 0
-                    // TIME LINE
-                    Slider {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.minimumHeight: 5
-                        Layout.maximumHeight: 5
-                        Layout.leftMargin: 10
-                        Layout.rightMargin: 10
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        from: 0
-                        to: active ? active.length : 100
-                        value: active ? active.position : 0
 
-                        HoverHandler {
-                            target: null
-                            cursorShape: Qt.PointingHandCursor
-                        }
                         HoverHandler {
                             target: null
                             cursorShape: Qt.PointingHandCursor
@@ -180,29 +160,7 @@ PanelWindow {
                             height: 4
                             radius: 2
                             color: Singletons.Colors.sliderBackgroundColor
-                        background: Rectangle {
-                            x: parent.leftPadding
-                            y: parent.topPadding + parent.availableHeight / 2 - height / 2
-                            width: parent.availableWidth
-                            height: 4
-                            radius: 2
-                            color: Singletons.Colors.sliderBackgroundColor
 
-                            Rectangle {
-                                width: parent.parent.visualPosition * parent.width
-                                height: parent.height
-                                color: Singletons.Colors.sliderBackgroundFillColor
-                                radius: 2
-                            }
-                        }
-                        handle: Rectangle {
-                            x: parent.leftPadding + parent.visualPosition * (parent.availableWidth - width)
-                            y: parent.topPadding + parent.availableHeight / 2 - height / 2
-                            width: 8
-                            height: 8
-                            radius: 4
-                            color: 'transparent'
-                        }
                             Rectangle {
                                 width: parent.parent.visualPosition * parent.width
                                 height: parent.height
@@ -233,55 +191,7 @@ PanelWindow {
                         Layout.leftMargin: 10
                         Layout.rightMargin: 10
                         color: 'transparent'
-                        onMoved: {
-                            if (active)
-                                active.position = value
-                        }
-                    }
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.minimumHeight: 5
-                        Layout.maximumHeight: 5
-                        Layout.leftMargin: 10
-                        Layout.rightMargin: 10
-                        color: 'transparent'
 
-                        Text {
-                            anchors.left: parent.left
-                            color: Singletons.Colors.foreground
-                            text: formatTime(active ? active.position : "")
-                        }
-                        Text {
-                            anchors.right: parent.right
-                            color: Singletons.Colors.foreground
-                            text: formatTime(active ? active.length : "")
-                        }
-                    }
-                    FrameAnimation {
-                        running: active ? active.isPlaying : false
-                        onTriggered: {
-                            active ? active.positionChanged() : 0
-                        }
-                    }
-                    
-                    //Controls
-                    RowLayout {
-                        Layout.alignment: Qt.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.maximumWidth: 120
-                        Layout.minimumHeight: 25
-                        Layout.maximumHeight: 35
-                        spacing: 5
-                        Text {
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: true
-                            Layout.maximumWidth: 25
-                            horizontalAlignment: Text.AlignHCenter
-                            color: Singletons.Colors.foreground
-                            text: "󰒮"
-                            font.pixelSize: 30
                         Text {
                             anchors.left: parent.left
                             color: Singletons.Colors.foreground
@@ -340,50 +250,7 @@ PanelWindow {
                             color: Singletons.Colors.foreground
                             text: active && active.isPlaying ? "󰏤" : "󰐊"
                             font.pixelSize: 30
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                hoverEnabled: true
-                                onClicked: {
-                                    if (active && active.canGoPrevious) {
-                                        active.previous()
-                                    }
-                                }
-                                onEntered: parent.color = '#ffffff'
-                                onExited: parent.color = Singletons.Colors.foreground
-                            }
-                        }
-                        //PAUSE
-                        Text {
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: true
-                            Layout.maximumWidth: 25
-                            horizontalAlignment: Text.AlignHCenter
-                            color: Singletons.Colors.foreground
-                            text: active && active.isPlaying ? "󰏤" : "󰐊"
-                            font.pixelSize: 30
 
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                hoverEnabled: true
-                                onClicked: {
-                                    if (active) {
-                                        active.togglePlaying()
-                                    }
-                                }
-                                onEntered: parent.color = '#ffffff'
-                                onExited: parent.color = Singletons.Colors.foreground
-                            }
-                        }
-                        Text {
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: true
-                            Layout.maximumWidth: 25
-                            horizontalAlignment: Text.AlignHCenter
-                            color: Singletons.Colors.foreground
-                            text: "󰒭"
-                            font.pixelSize: 30
                             MouseArea {
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
@@ -437,54 +304,7 @@ PanelWindow {
                             Layout.fillHeight: true
                             horizontalAlignment: Text.AlignHCenter
                             color: Singletons.Colors.foreground
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                hoverEnabled: true
-                                onClicked: {
-                                    if (active && active.canGoNext) {
-                                        active.next()
-                                    }
-                                }
-                                onEntered: parent.color = '#ffffff'
-                                onExited: parent.color = Singletons.Colors.foreground
-                            }
-                        }
-                    }
-                    // ACTIVE PLAYER SELECTOR
-                    RowLayout {
-                        visible: Singletons.MusicSingleton.list.length > 1
-                        Layout.alignment: Qt.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.maximumWidth: 160
-                        Layout.minimumHeight: 10
-                        Layout.maximumHeight: 10
-                        
-                        Text {
-                            text: ""
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            horizontalAlignment: Text.AlignHCenter
-                            color: Singletons.Colors.foreground
 
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    if (currentPlayerIndex > 0) {
-                                        currentPlayerIndex--
-                                    } else currentPlayerIndex = Singletons.MusicSingleton.list.length - 1
-                                }
-                            }
-                        }
-                        Text {
-                            text: Singletons.MusicSingleton.list[currentPlayerIndex] ? Singletons.MusicSingleton.list[currentPlayerIndex].identity : ""
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            horizontalAlignment: Text.AlignHCenter 
                             MouseArea {
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
@@ -511,15 +331,6 @@ PanelWindow {
                             Layout.fillHeight: true
                             horizontalAlignment: Text.AlignHCenter
                             color: Singletons.Colors.foreground
-                            color: Singletons.Colors.foreground
-                        }
-                        Text {
-                            text: ""
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            horizontalAlignment: Text.AlignHCenter
-                            color: Singletons.Colors.foreground
 
                             MouseArea {
                                 anchors.fill: parent
@@ -532,22 +343,7 @@ PanelWindow {
                             }
                         }
                     }
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    if (currentPlayerIndex < Singletons.MusicSingleton.list.length - 1) {
-                                        currentPlayerIndex++
-                                    } else currentPlayerIndex = 0
-                                }
-                            }
-                        }
-                    }
 
-                    Item {
-                        Layout.fillHeight: true
-                    }
-                }
                     Item {
                         Layout.fillHeight: true
                     }
@@ -573,7 +369,6 @@ PanelWindow {
         onCleared: {
             closeAnim.running = true
             activeFocus = false
-            
         }
     }
 }
