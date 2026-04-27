@@ -13,7 +13,7 @@ Rectangle {
     Layout.minimumWidth: 10
     Layout.preferredWidth: 50
     Layout.maximumWidth: 300
-    height: 24
+    height: 20
     visible: Singletons.MusicSingleton.active !== null
 
     Bar.MusicCenterWindow {

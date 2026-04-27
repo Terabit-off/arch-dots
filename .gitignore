@@ -13,6 +13,7 @@ QtProject.conf
 trashrc
 go
 gtk-3.0
+gtk-4.0
 htop
 Meltytech
 obs-studio
@@ -28,3 +29,5 @@ spotify
 pavucontrol-qt
 Happ
 Happ.conf
+clangd
+cava

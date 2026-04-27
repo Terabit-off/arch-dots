@@ -42,18 +42,21 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 12
-        spacing: 20
 
         //HEADER
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.maximumHeight: 11
+            Layout.leftMargin: 10
+            Layout.topMargin: 10
+            Layout.rightMargin: 10
+            Layout.maximumHeight: 10
+            Layout.alignment: Qt.AlignVCenter
 
             Text {
                 text: "Bluetooth "
                 color: Singletons.Colors.foreground
+                verticalAlignment: Text.AlignVCenter
                 font.pixelSize: 12
                 font.bold: true
 
@@ -103,6 +106,7 @@ Rectangle {
             Layout.fillHeight: true
             clip: true
             spacing: 5
+            Layout.margins: 10
 
             model: Bluetooth.devices
 
