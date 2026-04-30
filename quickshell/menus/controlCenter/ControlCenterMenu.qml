@@ -53,14 +53,14 @@ PopupWindow {
         }
 
         ColumnLayout {
+            id: content
             anchors.fill: parent
             anchors.centerIn: parent
             Modules.CalendarModule { }
             // volumes
             Rectangle {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.maximumHeight: 100
+                implicitHeight: 100
                 radius: Singletons.Colors.moduleBorderRadius
                 color: Singletons.Colors.moduleBackgroundColor
                 border.color: Singletons.Colors.moduleBorderColor

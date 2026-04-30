@@ -43,8 +43,8 @@ QtObject {
     readonly property real sliderHandlerBorderRadius: 2
 
     // Buttons
-    readonly property color buttonOffBackground: 'transparent'
-    readonly property color buttonOnBackground: '#ffffff'
+    readonly property color buttonOffBackground: '#f4202020'
+    readonly property color buttonOnBackground: '#d0353535'
     readonly property color buttonBorderColor: '#bd939393'
     readonly property color buttonOffHoverColor: '#373737'
     readonly property color buttonOnHoverColor: '#707070'
@@ -56,23 +56,8 @@ QtObject {
     // Notification
     readonly property color notifyCardBackground: '#161616'
 
-
+    // Toggle
+    readonly property color toggleOffBackground: '#f4434343' 
+    readonly property color toggleOnBackground: '#f4d7d7d7' 
 
 }
-
-
-
-    //ROSE WALLPAPER
-
-    // readonly property color barBackground: '#7d595959'
-    // readonly property color foreground: '#7DB0C1'
-    // readonly property real trayIconColor: 0.5415 
-    //readonly property real trayIconSaturation: 1
-
-    // readonly property color wsFocusBackground: '#7DB0C1'
-    // readonly property color wsNotFocusBackground: 'transparent'
-    // readonly property color wsUrgentBackground: 'transparent'
-
-    // readonly property color wsUrgentForeground: 'transparent'
-    // readonly property color wsFocusForeground: '#222e34'
-    // readonly property color wsNotFocusForeground: '#7DB0C1'

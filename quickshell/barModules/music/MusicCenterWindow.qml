@@ -368,7 +368,6 @@ PanelWindow {
 
         onCleared: {
             closeAnim.running = true
-            activeFocus = false
         }
     }
 }

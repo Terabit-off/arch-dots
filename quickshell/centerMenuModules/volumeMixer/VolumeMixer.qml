@@ -7,13 +7,13 @@ import "../../Singletons" as Singletons
 
 Rectangle {
     Layout.fillWidth: true
-    Layout.fillHeight: true
+    //Layout.fillHeight: true
 
     property bool opened: false
 
-    Layout.maximumHeight: {
+    implicitHeight: {
         if (opened){
-            const s = 50 + Singletons.AudioState.streamNodes.length * 50 + ((Singletons.AudioState.streamNodes.length - 1) * 5);
+            const s = 50 + lsV.contentHeight;
             if (300 < s) {
                 return 300;
             }
@@ -27,7 +27,7 @@ Rectangle {
     visible: Singletons.AudioState.streamNodes.length > 0
     clip: true
 
-    Behavior on Layout.maximumHeight {
+    Behavior on implicitHeight {
         NumberAnimation {
             duration: 220
             easing.type: Easing.InOutCubic
@@ -56,6 +56,7 @@ Rectangle {
             }
         }
         ListView {
+            id: lsV
             Layout.fillHeight: true
             Layout.fillWidth: true
             model: Singletons.AudioState.streamNodes

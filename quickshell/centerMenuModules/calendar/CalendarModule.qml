@@ -7,9 +7,7 @@ import "../../Singletons" as Singletons
 
 Rectangle {
     Layout.fillWidth: true
-    Layout.fillHeight: true
-    Layout.maximumHeight: 250
-    Layout.minimumHeight: 250
+    implicitHeight: 250
     color: Singletons.Colors.moduleBackgroundColor
     border.color: Singletons.Colors.moduleBorderColor
     radius: Singletons.Colors.moduleBorderRadius

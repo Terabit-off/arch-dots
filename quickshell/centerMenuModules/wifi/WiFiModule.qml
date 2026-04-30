@@ -14,11 +14,11 @@ Rectangle {
 
 
     Layout.fillWidth: true
-    Layout.fillHeight: true
-    Layout.maximumHeight: {
+    //Layout.fillHeight: true
+    implicitHeight: {
         if (opened){
             const s = 60 + lsV.contentHeight;
-            if (300 < s) return 300;
+            if (400 < s) return 400;
             return s;
         }
         return 35;
@@ -28,7 +28,7 @@ Rectangle {
     color: Singletons.Colors.moduleBackgroundColor
     border.color: Singletons.Colors.moduleBorderColor
 
-    Behavior on Layout.maximumHeight {
+    Behavior on implicitHeight {
         NumberAnimation {
             duration: 220
             easing.type: Easing.InOutCubic
@@ -96,15 +96,14 @@ Rectangle {
             }
 
             passError = true
-            errorTimer.running = true
-            
-            getWifiList.running = true
+            errorTimer.restart()
         }
     }
 
     Timer {
         id: errorTimer
         interval: 5000
+        running: passError
         onTriggered: {
             passError = false
         }
@@ -212,7 +211,7 @@ Rectangle {
                 width: 21
                 height: 11
                 radius: 8
-                color: wifiActive ? Singletons.Colors.buttonOnBackground : Singletons.Colors.buttonOffBackground
+                color: wifiActive ? Singletons.Colors.toggleOnBackground : Singletons.Colors.toggleOffBackground
 
                 Rectangle {
                     width: 9
@@ -251,16 +250,32 @@ Rectangle {
 
             model: networks
 
+            property int openedIndex: -1
+
             delegate: Rectangle {
                 id: parentRoot
+                property bool isopen: index === lsV.openedIndex
+
                 width: 226
-                height: 42
+                height: {
+                    if (isopen) {
+                        if (modelData.known === "locked"){
+                            return 148
+                        } 
+                        else {
+                            return 118
+                        }
+                    }
+                    else {
+                        // close
+                        return 42
+                    }
+                }
                 radius: 10
                 clip: true
-                color: modelData.active ? '#393939' : Singletons.Colors.moduleBackgroundColor
+                color: modelData.active == "yes" ? Singletons.Colors.buttonOnBackground : Singletons.Colors.buttonOffBackground
                 border.color: Singletons.Colors.buttonBorderColor
 
-                property bool isopen: false
 
                 Behavior on height {
                     NumberAnimation {
@@ -324,17 +339,12 @@ Rectangle {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
-                                if (!isopen) {
-                                    if (modelData.known === "locked"){
-                                        parentRoot.height = 148
-                                    } 
-                                    else {
-                                        parentRoot.height = 118
-                                    }
-                                    isopen = !isopen
+                                if (lsV.openedIndex !== index) {
+                                    //open
+                                    lsV.openedIndex = index
                                 } else {
-                                    parentRoot.height = 42
-                                    isopen = !isopen
+                                    // close
+                                    lsV.openedIndex = -1
                                 }
                             }
                         }
@@ -375,15 +385,20 @@ Rectangle {
                                     radius: 8
                                     color: Singletons.Colors.moduleBackgroundColor
                                     border.width: 1
-                                    border.color:{
-                                        if (passwordField.activeFocus) {
-                                            passError = false
-                                            return "#8fd3ff"
-                                        } else if (passError) {
-                                            return '#bb4848'
-                                        }
-                                        return Singletons.Colors.buttonBorderColor
-                                    }
+                                    border.color: activeFocus ? '#8fd3ff' : passError ?'#bb4848' : Singletons.Colors.buttonBorderColor
+                                }
+
+                                SequentialAnimation on x {
+                                    running: passError
+                                    loops: 1
+
+                                    NumberAnimation { to: passwordField.x - 5; duration: 40 }
+                                    NumberAnimation { to: passwordField.x + 5; duration: 40 }
+                                    NumberAnimation { to: passwordField.x; duration: 40 }
+                                }
+
+                                onPressed: {
+                                    passError = false
                                 }
                             }
 
@@ -468,7 +483,7 @@ Rectangle {
 
                                     Text {
                                         anchors.centerIn: parent
-                                        text: modelData.active ? "Disconnect" : "Connect"
+                                        text: modelData.active === "yes" ? "Disconnect" : "Connect"
                                         color: Singletons.Colors.foreground
                                         font.pixelSize: 11
                                     }
@@ -477,7 +492,7 @@ Rectangle {
                                         anchors.fill: parent
                                         cursorShape: Qt.PointingHandCursor
                                         onClicked: {
-                                            if(modelData.active) {
+                                            if(modelData.active === "yes") {
                                                 if (modelData.security === "open") 
                                                     setConnections.command = ["nmcli", "device", "wifi", "connect", modelData.ssid];
                                                 else {

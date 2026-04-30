@@ -15,21 +15,21 @@ Rectangle {
     property bool opened: false
 
     Layout.fillWidth: true
-    Layout.fillHeight: true
-    Layout.maximumHeight: {
+    //Layout.fillHeight: true
+    implicitHeight: {
         if (opened){
-            const s = 100 + Bluetooth.devices.values.length * 42 + ((Bluetooth.devices.values.length - 1) * 5);
+            const s = 100 + lsV.contentHeight;
             if (300 < s) return 300;
             return s;
         }
         return 35;
-    } 
+    }
     clip: true
     radius: Singletons.Colors.moduleBorderRadius
     color: Singletons.Colors.moduleBackgroundColor
     border.color: Singletons.Colors.moduleBorderColor
 
-    Behavior on Layout.maximumHeight {
+    Behavior on implicitHeight {
         NumberAnimation {
             duration: 220
             easing.type: Easing.InOutCubic
@@ -78,7 +78,7 @@ Rectangle {
                 width: 21
                 height: 11
                 radius: 8
-                color: Bluetooth.defaultAdapter?.enabled ? Singletons.Colors.buttonOnBackground : Singletons.Colors.buttonOffBackground
+                color: Bluetooth.defaultAdapter?.enabled ? Singletons.Colors.toggleOnBackground : Singletons.Colors.toggleOffBackground
 
                 Rectangle {
                     width: 9
@@ -102,6 +102,7 @@ Rectangle {
 
         //DEVICES LIST
         ListView {
+            id: lsV
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
