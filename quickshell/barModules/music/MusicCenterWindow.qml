@@ -66,7 +66,7 @@ PanelWindow {
                     anchors.margins: 5
                     fillMode: Image.PreserveAspectFit
                     source: {
-                        return active.metadata["xesam:artUrl"] !== "" ? active.trackArtUrl : "bongo-cat.gif"
+                        return active ? active.metadata["xesam:artUrl"] !== "" ? active.trackArtUrl : "bongo-cat.gif" : ""
                     }
                     layer.enabled: true
                     layer.effect: OpacityMask {

@@ -256,6 +256,7 @@ PopupWindow {
 
             // bluetooth
             Modules.BluetoothModule { }
+            Modules.WiFiModule { }
             Modules.VolumePlayback { }
 
             Item {
