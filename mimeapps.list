@@ -1,5 +1,20 @@
-[Added Associations]
-video/mp4=firefox-2.desktop;
-
 [Default Applications]
-video/mp4=firefox-2.desktop;
+image/png=swayimg.desktop
+image/jpeg=swayimg.desktop
+image/gif=swayimg.desktop;
+application/json=userapp-kitty-SZ91O3.desktop
+text/plain=userapp-kitty-SZ91O3.desktop
+audio/x-mod=userapp-kitty-SZ91O3.desktop
+video/mp4=org.kde.haruna.desktop
+audio/mpeg=io.bassi.Amberol.desktop
+
+[Added Associations]
+image/png=swayimg.desktop;
+image/jpeg=swayimg.desktop;
+image/gif=swayimg.desktop;
+application/json=userapp-kitty-42TNO3.desktop;
+text/x-go=userapp-kitty-SZ91O3.desktop;
+text/plain=userapp-kitty-SZ91O3.desktop;
+audio/x-mod=userapp-kitty-SZ91O3.desktop;
+video/mp4=org.kde.haruna.desktop;
+audio/mpeg=io.bassi.Amberol.desktop;
