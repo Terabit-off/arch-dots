@@ -91,7 +91,15 @@ PopupWindow {
                             font.pixelSize: 15
                             horizontalAlignment: Text.AlignRight
                             verticalAlignment: Text.AlignVCenter 
-                            text: "󰕾"
+                            text: Singletons.AudioState.sink.audio.muted ? "󰝟 " : "󰕾 "
+
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    Singletons.AudioState.sink.audio.muted = !Singletons.AudioState.sink.audio.muted
+                                }
+                            }
                         }
 
                         Slider {
@@ -110,6 +118,7 @@ PopupWindow {
                                 target: null
                                 cursorShape: Qt.PointingHandCursor
                             }
+                            
 
                             background: Rectangle {
                                 x: parent.leftPadding
@@ -135,6 +144,7 @@ PopupWindow {
                                 color: Singletons.Colors.sliderHandlerColor
                             }
                             onMoved: {
+                                if (Singletons.AudioState.sink.audio.muted) Singletons.AudioState.sink.audio.muted = false;
                                 Singletons.AudioState.sink.audio.volume = value / 100
                             }
                         }

@@ -26,6 +26,7 @@ Rectangle {
                 text: "<"
                 color: Singletons.Colors.foreground
                 font.pixelSize: 18
+                Layout.maximumWidth: 30
                 Layout.fillWidth: true
                 MouseArea {
                     cursorShape: Qt.PointingHandCursor
@@ -40,6 +41,7 @@ Rectangle {
                 font.pixelSize: 18
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
+                Layout.minimumWidth: 150
             }
 
             Text {
@@ -47,6 +49,7 @@ Rectangle {
                 color: Singletons.Colors.foreground
                 font.pixelSize: 18
                 Layout.fillWidth: true
+                Layout.maximumWidth: 30
                 MouseArea {
                     cursorShape: Qt.PointingHandCursor
                     anchors.fill: parent

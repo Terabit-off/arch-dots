@@ -101,7 +101,15 @@ Rectangle {
                             font.pixelSize: 15
                             horizontalAlignment: Text.AlignRight
                             verticalAlignment: Text.AlignVCenter 
-                            text: "󰕾"
+                            text: modelData.audio.muted ? "󰝟 " : "󰕾 " 
+
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    modelData.audio.muted = !modelData.audio.muted
+                                }
+                            }
                         }
                         Slider {
                             id: soundVolumeSlider
@@ -144,8 +152,12 @@ Rectangle {
                                 color: Singletons.Colors.sliderHandlerColor
                             }
                             onMoved: {
-                                if (modelData.audio && modelData.ready)
+                                if (modelData.audio && modelData.ready){
+                                    if (modelData.audio.muted)
+                                        modelData.audio.muted = false;
+                                        
                                     modelData.audio.volume = value / 100
+                                }
                             }
                         }
                         Text {

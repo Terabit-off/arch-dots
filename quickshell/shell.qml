@@ -74,7 +74,9 @@ PanelWindow {
                             font.pixelSize: 14
                             color: '#e03030'
 
-                            text: "󰁻 " + Singletons.BatteryState.battery.percentage * 100 + "%"
+                            text: {
+                                Singletons.BatteryState.battery.state === UPowerDevice.Charging ? "󱐋 " + Singletons.BatteryState.battery.percentage * 100 + "%" : "󰁻 " + Singletons.BatteryState.battery.percentage * 100 + "%"
+                            } 
                         }
                     }
                     Modules.TrayModule { }
