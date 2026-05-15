@@ -49,7 +49,7 @@ Row {
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                     if (modelData) {
-                        modelData.activate()
+                        Hyprland.dispatch(hl.dsp.focus({workspace = 3}))
                     }
                 }
             }
