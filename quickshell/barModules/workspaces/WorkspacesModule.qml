@@ -48,9 +48,7 @@ Row {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                    if (modelData) {
-                        Hyprland.dispatch(hl.dsp.focus({workspace = 3}))
-                    }
+                    Hyprland.dispatch(`hl.dsp.focus({ workspace = ${modelData.name} })`)
                 }
             }
            
