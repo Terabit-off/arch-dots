@@ -48,7 +48,7 @@ local menu        = "wofi"
 hl.on("hyprland.start", function () 
   hl.exec_cmd("hyprpaper & firefox")
   hl.exec_cmd("sleep 1 && qs")
-  hl.exec_cmd("happ --class happ5w")
+  hl.exec_cmd("happ", { workspace = "5"})
 end)
 
 
@@ -58,8 +58,11 @@ end)
 
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/
 
-hl.env("XCURSOR_SIZE", "20")
 hl.env("HYPRCURSOR_SIZE", "20")
+hl.env("XCURSOR_SIZE", "20")
+hl.env("XCURSOR_THEME", "BreezeX-Black")
+
+
 
 hl.env("GDK_SCALE", "1")
 
@@ -90,11 +93,6 @@ hl.env("GDK_SCALE", "1")
 
 -- Refer to https://wiki.hypr.land/Configuring/Basics/Variables/
 hl.config({
-    exec = {
-        once = {
-            "[workspace 5 silent] happ"
-        }
-    },
     xwayland = {
         force_zero_scaling = true,
     },
@@ -116,7 +114,7 @@ hl.config({
         -- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
         allow_tearing = false,
 
-        layout = "dwindle",
+        layout = "master",
     },
 
     decoration = {
@@ -161,8 +159,8 @@ hl.curve("easy",           { type = "spring", mass = 1, stiffness = 71.2633, dam
 hl.animation({ leaf = "global",        enabled = true,  speed = 10,   bezier = "default" })
 hl.animation({ leaf = "border",        enabled = true,  speed = 5.39, bezier = "easeOutQuint" })
 hl.animation({ leaf = "windows",       enabled = true,  speed = 4.79, bezier = "easeOutQuint" })
-hl.animation({ leaf = "windowsIn",     enabled = true,  speed = 2.1,  bezier = "myCustom",         style = "popin 1%" })
-hl.animation({ leaf = "windowsOut",    enabled = true,  speed = 1.49, bezier = "myCustom",       style = "popin 1%" })
+hl.animation({ leaf = "windowsIn",     enabled = true,  speed = 2.1,  bezier = "myCustom",       style = "slide" })
+hl.animation({ leaf = "windowsOut",    enabled = true,  speed = 1.49, bezier = "myCustom",       style = "slide" })
 hl.animation({ leaf = "fadeIn",        enabled = true,  speed = 1.73, bezier = "almostLinear" })
 hl.animation({ leaf = "fadeOut",       enabled = true,  speed = 1.46, bezier = "almostLinear" })
 hl.animation({ leaf = "fade",          enabled = true,  speed = 3.03, bezier = "quick" })
@@ -186,11 +184,6 @@ hl.window_rule({
     match = { float = false, workspace = "w[tv1]" },
     border_size = 0,
     rounding    = 5,
-})
-hl.window_rule({
-    name = "vpn-on-5",
-    match = { class = "happ2w"},
-    workspace = 5,
 })
 
 -- hl.window_rule({
