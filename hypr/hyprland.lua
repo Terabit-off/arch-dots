@@ -93,6 +93,10 @@ hl.env("GDK_SCALE", "1")
 
 -- Refer to https://wiki.hypr.land/Configuring/Basics/Variables/
 hl.config({
+
+    master = {
+        orientation = "right"
+    },
     xwayland = {
         force_zero_scaling = true,
     },
@@ -134,9 +138,9 @@ hl.config({
 
         blur = {
             enabled   = true,
-            size      = 5,
-            passes    = 3,
-            vibrancy  = 0.1696,
+            size      = 2,
+            passes    = 1,
+            vibrancy  = 0.3696,
         },
     },
 
@@ -284,11 +288,17 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 -- hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 -- hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
 
+hl.bind(mainMod .. " + SHIFT + up", hl.dsp.layout("swapprev"))
+hl.bind(mainMod .. " + SHIFT + down", hl.dsp.layout("swapnext"))
+
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "down" }))
+
+-- Swap windows
+hl.bind(mainMod .. " + D", hl.dsp.layout("swapwithmaster", "master"))
 
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]

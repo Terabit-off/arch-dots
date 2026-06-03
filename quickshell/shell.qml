@@ -3,16 +3,17 @@
 import Quickshell
 import QtQuick
 import QtQuick.Layouts
+import Quickshell.Services.UPower
 import Qt5Compat.GraphicalEffects
 
-import "./Singletons" as Singletons
+import "./Singletons"
 import "./barModules" as Modules 
 
 PanelWindow {
     id: rootPanel
     anchors {
         top: true
-        left: true  
+        left: true
         right: true
     } 
     margins {
@@ -26,19 +27,19 @@ PanelWindow {
 
     Rectangle {
         anchors.fill: parent
-        color: Singletons.Colors.barBackground
-        border.color: Singletons.Colors.barBorderColor
+        color: Colors.barBackground
+        border.color: Colors.barBorderColor
         radius: 25
 
         RowLayout {
             anchors.fill: parent
             spacing: 12
-        
+         
             //LEFT
             Rectangle { 
                 color: 'transparent'
-                Layout.fillWidth: true
                 height: 20
+                Layout.fillWidth: true
 
                 Modules.WorkspacesModule { }
             }
@@ -48,8 +49,8 @@ PanelWindow {
             // //RIGHT
             Rectangle {
                 color: 'transparent'
-                Layout.fillWidth: true
                 height: 20
+                Layout.fillWidth: true
  
                 RowLayout {
                     anchors.fill: parent
@@ -64,7 +65,13 @@ PanelWindow {
                         Layout.fillHeight: true
                         Layout.minimumWidth: 50
                         Layout.maximumWidth: 50
-                        visible: Singletons.BatteryState.battery.percentage * 100 <= 20
+
+                        Behavior on x {
+                            NumberAnimation {
+                                duration: 180
+                                easing.type: Easing.OutCubic
+                            }
+                        }
 
                         Text {
                             anchors.fill: parent
@@ -72,11 +79,12 @@ PanelWindow {
                             verticalAlignment: Text.AlignVCenter
                             font.bold: true
                             font.pixelSize: 14
-                            color: '#e03030'
+                            color: BatteryState.battery.percentage * 100 < 20 ? '#e03030' : Colors.foregroundDim
 
                             text: {
-                                Singletons.BatteryState.battery.state === UPowerDevice.Charging ? "󱐋 " + Singletons.BatteryState.battery.percentage * 100 + "%" : "󰁻 " + Singletons.BatteryState.battery.percentage * 100 + "%"
-                            } 
+                                BatteryState.battery.state === UPowerDevice.Charging ? "󱐋 " + (BatteryState.battery.percentage * 100).toFixed(0) + "%" 
+                                    : "󰁻 " + (BatteryState.battery.percentage * 100).toFixed(0) + "%"
+                            }
                         }
                     }
                     Modules.TrayModule { }
