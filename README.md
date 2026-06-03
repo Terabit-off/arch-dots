@@ -13,7 +13,7 @@ Required:
 - overskride (ui bluetooth)
 - nmcli (wi-fi)
 - hyprland (0.55 with lua config for workspaces)
-- quickshell (0.2.1, maybe it`s will work on a later versions)
+- quickshell (0.3.0, maybe it`s will work on a later versions)
 - love shit (very important)
 
 top bar have 3 segment:
