@@ -72,7 +72,7 @@ PanelWindow {
                         Layout.fillHeight: true
                         Layout.minimumWidth: 50
                         Layout.maximumWidth: 50
-                        visible: SystemMonitoring.ramUsage > 23
+                        visible: SystemMonitoring.ramUsage > 26
 
                         Text {
                             anchors.fill: parent

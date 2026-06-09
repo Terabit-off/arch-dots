@@ -2,7 +2,7 @@ MY ARCH SETUP
 
 ## PREVIEW
 
-![screenshot](screenshot.png)
+![screenshot](image.png)
 
 If you use the feature once a month, you don't need it.
 
@@ -16,10 +16,17 @@ Required:
 - quickshell (0.3.0, maybe it`s will work on a later versions)
 - love shit (very important)
 
+- sensors, top, free (commands for system resources)
+
 top bar have 3 segment:
 
 - workspaces
 - audio/music
-- clock
+- right
+  - Processor usage in `%` (only displayed when greater than 70%)
+  - Processor temperature in `C` (only displayed when greater than 70C)
+  - Ram usage in `use/total GB`(only displayed when use greater than 26Gb (for me))
+  - Battery
+  - Time (clock)
 
 click on the clock to open the side panel
