@@ -262,7 +262,7 @@ hl.gesture({
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Devices/ for more
 hl.device({
     name        = "epic-mouse-v1",
-    sensitivity = -0.5,
+    sensitivity = -1.0,
 })
 
 
@@ -270,7 +270,7 @@ hl.device({
 ---- KEYBINDINGS ----
 ---------------------
 
-local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+local mainMod = "SUPER"
 
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("hyprshot -m output -f Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png"))
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region -f Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png"))
@@ -279,17 +279,11 @@ hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region -f Pictur
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
--- closeWindowBind:set_enabled(false)
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
+hl.bind(mainMod .. " + CTRL + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
--- hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
--- hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
-
-hl.bind(mainMod .. " + SHIFT + up", hl.dsp.layout("swapprev"))
-hl.bind(mainMod .. " + SHIFT + down", hl.dsp.layout("swapnext"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
@@ -297,28 +291,23 @@ hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "down" }))
 
--- Swap windows
+-- Swap master window 
 hl.bind(mainMod .. " + D", hl.dsp.layout("swapwithmaster", "master"))
+-- Swap windows
+hl.bind(mainMod .. " + SHIFT + up", hl.dsp.layout("swapprev"))
+hl.bind(mainMod .. " + SHIFT + down", hl.dsp.layout("swapnext"))
 
 -- Switch workspaces with mainMod + [0-9]
--- Move active window to a workspace with mainMod + SHIFT + [0-9]
 for i = 1, 10 do
     local key = i % 10 -- 10 maps to key 0
     hl.bind(mainMod .. " + " .. key,             hl.dsp.focus({ workspace = i}))
     hl.bind(mainMod .. " + SHIFT + " .. key,     hl.dsp.window.move({ workspace = i }))
 end
 
--- Example special workspace (scratchpad)
--- hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special("magic"))
--- hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
-
--- Scroll through existing workspaces with mainMod + scroll
-hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
-
--- Move/resize windows with mainMod + LMB/RMB and dragging
+-- Move/resize windows with mainMod + LMB/RMB/swipe and dragging
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+hl.gesture({ fingers = 3, direction = "swipe", mods = "SUPER", action = "resize" }) -- super + swipe 3 fingers
 
 -- Laptop multimedia keys for volume and LCD brightness
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
@@ -345,7 +334,6 @@ hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = tr
 -- Example window rules that are useful
 
 local suppressMaximizeRule = hl.window_rule({
-    -- Ignore maximize requests from all apps. You'll probably like this.
     name  = "suppress-maximize-events",
     match = { class = ".*" },
 
@@ -354,7 +342,6 @@ local suppressMaximizeRule = hl.window_rule({
 -- suppressMaximizeRule:set_enabled(false)
 
 hl.window_rule({
-    -- Fix some dragging issues with XWayland
     name  = "fix-xwayland-drags",
     match = {
         class      = "^$",
@@ -368,23 +355,7 @@ hl.window_rule({
     no_focus = true,
 })
 
--- Layer rules also return a handle.
--- local overlayLayerRule = hl.layer_rule({
---     name  = "no-anim-overlay",
---     match = { namespace = "^my-overlay$" },
---     no_anim = true,
--- })
--- overlayLayerRule:set_enabled(false)
-
--- Hyprland-run windowrule
-hl.window_rule({
-    name  = "move-hyprland-run",
-    match = { class = "hyprland-run" },
-
-    move  = "20 monitor_h-120",
-    float = true,
-})
-
+-- bluetooth UI app
 hl.window_rule({
     name = "floatWindowOverskride",
     match = { class = "io.github.kaii_lb.Overskride" },
@@ -393,6 +364,7 @@ hl.window_rule({
     size = {800,600}
 })
 
+-- swayimg - image view app 
 hl.window_rule({
     name = "floatImageView",
     match = { class = "swayimg" },

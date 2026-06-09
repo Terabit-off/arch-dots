@@ -264,7 +264,8 @@ PopupWindow {
                 }
             }
 
-            // bluetooth
+            Modules.SystemMonitoring { }
+
             Modules.BluetoothModule { }
             Modules.WiFiModule { }
             Modules.VolumePlayback { }

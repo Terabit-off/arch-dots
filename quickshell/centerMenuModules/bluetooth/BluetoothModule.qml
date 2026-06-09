@@ -271,6 +271,8 @@ Rectangle {
             case "audio-card":
             case "audio-headphones":
             case "audio-headset": return ""
+            case "input-mouse": return "󰍽"
+            case "phone": return ""
             // ....
             default: return ""
         }

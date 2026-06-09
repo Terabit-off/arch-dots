@@ -6,3 +6,4 @@ singleton AudioState 1.0 AudioState.qml
 singleton BatteryState 1.0 BatteryState.qml
 singleton MusicSingleton 1.0 MusicSingleton.qml
 singleton NetworkingManager 1.0 WiFiState.qml
+singleton SystemMonitoring 1.0 SystemMonitoring.qml
