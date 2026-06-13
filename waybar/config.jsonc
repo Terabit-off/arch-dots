@@ -1,0 +1,54 @@
+{
+  "layer": "top",
+  "position": "top",
+  //"height": 10,
+  "spacing": 8,
+
+  "modules-left": ["hyprland/workspaces"],
+
+  "modules-right": ["network", "bluetooth", "battery", "tray", "clock"],
+
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "format": "{name}",
+    "sort-by-number": true,
+    //"on-click": "activate",
+  },
+
+  "clock": {
+    "interval": 1,
+    "tooltip-format": "<big>{:%Y-%m-%d}</big>",
+    "format-alt": "{:%H:%M | %d.%m}",
+    "format": "{:%H:%M}",
+  },
+
+  "battery": {
+    "states": {
+      "warning": 25,
+      "critical": 15,
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+  },
+
+  "network": {
+    "format-wifi": "󰤨 ",
+    "format-ethernet": "󰈀 ",
+    "format-disconnected": "󰤮 ",
+    "tooltip-format": "{essid}",
+  },
+
+  "bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "",
+    "format-off": "",
+    "on-click": "overskride",
+  },
+
+  "tray": {
+    "spacing": 10,
+    "icon-size": 14,
+  },
+}

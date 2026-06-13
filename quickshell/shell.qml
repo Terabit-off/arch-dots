@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.UPower
 import Qt5Compat.GraphicalEffects
+import Quickshell.Services.SystemTray
 
 import "./Singletons"
 import "./barModules" as Modules 
@@ -70,8 +71,8 @@ PanelWindow {
                         color: 'transparent'
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.minimumWidth: 50
-                        Layout.maximumWidth: 50
+                        Layout.minimumWidth: 60
+                        Layout.maximumWidth: 60
                         visible: SystemMonitoring.ramUsage > 26
 
                         Text {
@@ -82,7 +83,7 @@ PanelWindow {
                             font.pixelSize: 14
                             color:'#e03030'
 
-                            text: " " + SystemMonitoring.ramUsage + "/32" 
+                            text: "   " + SystemMonitoring.ramUsage + "/32" 
                         }     
                     }
                     // Processor usage
@@ -90,8 +91,8 @@ PanelWindow {
                         color: 'transparent'
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.minimumWidth: 50
-                        Layout.maximumWidth: 50
+                        Layout.minimumWidth: 60
+                        Layout.maximumWidth: 60
                         visible: SystemMonitoring.procUsage > 70
 
                         Text {
@@ -102,7 +103,7 @@ PanelWindow {
                             font.pixelSize: 14
                             color:'#e03030'
 
-                            text: " " + SystemMonitoring.procUsage + "%" 
+                            text: "   " + SystemMonitoring.procUsage + "%" 
                         }     
                     }
                     // Processor temperature
@@ -122,7 +123,7 @@ PanelWindow {
                             font.pixelSize: 14
                             color:'#e03030'
 
-                            text: " " + SystemMonitoring.procTemp + "󰔄" 
+                            text: "   " + SystemMonitoring.procTemp + "󰔄" 
                         }     
                     }
                     //battery
@@ -155,12 +156,6 @@ PanelWindow {
                         color: Colors.moduleSeparatorColor 
                     }
                     Modules.TrayModule { }
-                    // separator
-                    Rectangle {
-                        width: 1
-                        height: 10
-                        color: Colors.moduleSeparatorColor 
-                    }
                     Modules.TimeDateModule { id: timeModule }
                 }
             }

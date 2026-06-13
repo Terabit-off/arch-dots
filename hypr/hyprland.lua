@@ -47,7 +47,7 @@ local menu        = "wofi"
 --
 hl.on("hyprland.start", function () 
   hl.exec_cmd("hyprpaper & firefox")
-  hl.exec_cmd("sleep 1 && qs")
+  hl.exec_cmd("waybar")
   hl.exec_cmd("happ", { workspace = "5"})
 end)
 
