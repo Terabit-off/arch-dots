@@ -1,14 +1,21 @@
 MY ARCH SETUP
 
-## PREVIEW
-
-![screenshot](image.png)
-
 If you use the feature once a month, you don't need it.
 
 IF YOU STARED THIS REPO YOUR IQ WILL BE LOWER BY 10 POINTS
 
-Required:
+## PREVIEW
+
+#### With quickshell
+
+![screenshot](image.png)
+
+#### With waybar
+
+![waybar-screenshot](wayabar-screen.png)
+!!!! `waybar 0.15.0 and below` + `hyprland 0.55` has a bug with switching desktops by clicking on a button on top bar.
+
+### Required for quickshell:
 
 - overskride (ui bluetooth)
 - nmcli (wi-fi)
@@ -30,3 +37,8 @@ top bar have 3 segment:
   - Time (clock)
 
 click on the clock to open the side panel
+
+### For Waybar
+
+- just use
+- overskride (ui bluetooth)

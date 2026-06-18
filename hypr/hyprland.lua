@@ -46,8 +46,10 @@ local menu        = "wofi"
 -- Or execute your favorite apps at launch like this:
 --
 hl.on("hyprland.start", function () 
-  hl.exec_cmd("hyprpaper & firefox")
-  hl.exec_cmd("waybar")
+  hl.exec_cmd("hyprpaper & waybar")
+  hl.exec_cmd("firefox")
+  hl.exec_cmd("vscodium", { workspace = "2"})
+  hl.exec_cmd("kitty", { workspace = "3"})
   hl.exec_cmd("happ", { workspace = "5"})
 end)
 

@@ -13,7 +13,6 @@ window#waybar {
 }
 
 .modules-left,
-.modules-center,
 .modules-right {
   margin: 1px 4px;
 }
@@ -22,27 +21,35 @@ window#waybar {
 #clock,
 #battery,
 #bluetooth,
+#backlight,
+#pulseaudio,
 #tray {
-  background: rgba(33, 33, 33, 0.293);
+  background: rgba(75, 75, 75, 0.293);
   padding: 0 8px;
   margin-top: 2px;
   border-radius: 5px;
+  transition: all 150ms ease;
 }
 
 #network {
-  background: rgba(33, 33, 33, 0.293);
+  background: rgba(75, 75, 75, 0.293);
   padding: 0 4px 0 8px;
   margin-top: 2px;
   border-radius: 5px;
+  transition: all 150ms ease;
 }
 
 #workspaces button {
   padding: 0 6px;
   color: #7e7e7e;
+  transition: color 0.2s ease;
 }
 
 #workspaces button.active {
   color: #ffffff;
+}
+#workspaces button.urgent {
+  color: #d54646;
 }
 
 #workspaces button:hover {

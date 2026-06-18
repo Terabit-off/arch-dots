@@ -7,6 +7,7 @@ text/plain=userapp-kitty-SZ91O3.desktop
 audio/x-mod=userapp-kitty-SZ91O3.desktop
 video/mp4=org.kde.haruna.desktop
 audio/mpeg=io.bassi.Amberol.desktop
+x-scheme-handler/postman=Postman.desktop
 
 [Added Associations]
 image/png=swayimg.desktop;
