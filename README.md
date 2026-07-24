@@ -15,7 +15,7 @@ IF YOU STARED THIS REPO YOUR IQ WILL BE LOWER BY 10 POINTS
 ![waybar-screenshot](wayabar-screen.png)
 !!!! `waybar 0.15.0 and below` + `hyprland 0.55` has a bug with switching desktops by clicking on a button on top bar.
 
-### Required for quickshell:
+### Required for quickshell (have too much bugs (shitcode)) :
 
 - overskride (ui bluetooth)
 - nmcli (wi-fi)
@@ -32,7 +32,7 @@ top bar have 3 segment:
 - right
   - Processor usage in `%` (only displayed when greater than 70%)
   - Processor temperature in `C` (only displayed when greater than 70C)
-  - Ram usage in `use/total GB`(only displayed when use greater than 26Gb (for me))
+  - Ram usage in `use/total GB`(only displayed when use greater than 26Gb (for my system))
   - Battery
   - Time (clock)
 

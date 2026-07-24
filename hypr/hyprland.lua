@@ -48,9 +48,6 @@ local menu        = "wofi"
 hl.on("hyprland.start", function () 
   hl.exec_cmd("hyprpaper & waybar")
   hl.exec_cmd("firefox")
-  hl.exec_cmd("vscodium", { workspace = "2"})
-  hl.exec_cmd("kitty", { workspace = "3"})
-  hl.exec_cmd("happ", { workspace = "5"})
 end)
 
 
@@ -325,7 +322,6 @@ hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tr
 hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
 
-
 --------------------------------
 ---- WINDOWS AND WORKSPACES ----
 --------------------------------
@@ -341,7 +337,7 @@ local suppressMaximizeRule = hl.window_rule({
 
     suppress_event = "maximize",
 })
--- suppressMaximizeRule:set_enabled(false)
+suppressMaximizeRule:set_enabled(false)
 
 hl.window_rule({
     name  = "fix-xwayland-drags",
