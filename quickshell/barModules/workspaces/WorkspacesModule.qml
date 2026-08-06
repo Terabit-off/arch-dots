@@ -5,53 +5,48 @@ import Quickshell.Hyprland
 
 import "../../Singletons" as Singletons
 
-Row {
-    id: root
-    spacing: 5
 
-    Repeater {
-        model: Hyprland.workspaces
+Rectangle {
+    color: '#4b4b4b4b'
+    radius: 5
+    width: root.implicitWidth + 10
+    height: 20
+    
+    Row {
+        id: root
+        spacing: 0
+        anchors.centerIn: parent
 
-        delegate: Rectangle {
-            width: 20
-            height: 15
-            color: 'transparent'
-            Text {
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    bottomMargin: 0
+        Repeater {
+            model: Hyprland.workspaces
+
+            delegate: Rectangle {
+                width: 30
+                height: 20
+                color: 'transparent'
+                Text {
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        bottomMargin: 0
+                    }
+                    horizontalAlignment: Text.AlignHCenter
+                    text: modelData.id
+                    color: modelData.focused ? Singletons.Colors.wsFocusForeground : modelData.urgent ? 
+                        Singletons.Colors.wsUrgentForeground : Singletons.Colors.wsNotFocusForeground
+                    font.family: "JetBrainsMono Nerd Font"
+                    font.pixelSize: 14
                 }
-                horizontalAlignment: Text.AlignHCenter
-                text: modelData.id
-                color: Singletons.Colors.wsNotFocusForeground
-                font.bold: true
-                font.pixelSize: 15
-            }
-            Rectangle {
-                height: 2
-                radius: 2
-                width: parent.width
-                anchors {
-                    top: parent.top
-                    topMargin: 0
-                }
 
-                Behavior on color {
-                    ColorAnimation { duration: 250 }
-                }   
-                color: modelData.focused ? Singletons.Colors.wsFocusBackground : modelData.urgent ? 
-                    Singletons.Colors.wsUrgentBackground : Singletons.Colors.wsNotFocusBackground
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked: {
-                    Hyprland.dispatch(`hl.dsp.focus({ workspace = ${modelData.name} })`)
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        Hyprland.dispatch(`hl.dsp.focus({ workspace = ${modelData.name} })`)
+                    }
                 }
+            
             }
-           
         }
     }
 }

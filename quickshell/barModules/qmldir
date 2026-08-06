@@ -4,5 +4,7 @@ MusicModule 1.0 music/MusicModule.qml
 TimeDateModule 1.0 time_date/TimeDateModule.qml
 TrayModule 1.0 tray/TrayModule.qml
 WorkspacesModule 1.0 workspaces/WorkspacesModule.qml
+VolumesModule 1.0 volumes/VolumesModule.qml
+BluetoothModule 1.0 bluetooth/Bluetooth.qml
 
 MusicCenterWindow 1.0 music/MusicCenterWindow.qml

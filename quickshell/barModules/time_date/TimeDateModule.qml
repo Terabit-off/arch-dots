@@ -6,37 +6,34 @@ import "../../Singletons" as Singletons
 import "../../menus" as Menus
 
 Rectangle {
-    color: 'transparent'
+    color: '#4b4b4b4b'
+    radius: 5
     Layout.fillHeight: true
-    Layout.fillWidth: true
-    Layout.maximumWidth: 120
+    implicitWidth: timeText.implicitWidth + 10
 
-    Menus.ControlCenter {
-        id: controlCenterMenu
-        panel: timeText
-    }
-
+    property bool timeWithDate: false
+    
     Text {
         id: timeText
         anchors {
-            left: parent.left
-            right: parent.right
+            centerIn: parent
             bottomMargin: 0
         }
-        color: Singletons.Colors.foreground
-        font.bold: true
-        font.pixelSize: 15
+        color: "#ffffff"
+        font.family: "JetBrainsMono Nerd Font"
+        font.pixelSize: 14
     }
     Behavior on color {
         ColorAnimation { duration: 200; easing.type: Easing.InQuad }
     }
 
     Timer {
+        id: timeTimer
         running: true
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-            timeText.text = Qt.formatDateTime(new Date(), "HH:mm  ddd, dd");
+            timeText.text = Qt.formatDateTime(new Date(), timeWithDate ? "HH:mm | ddd.dd" : "HH:mm");
             var now = new Date();
             var nextMinute = new Date(
                 now.getFullYear(),
@@ -44,7 +41,7 @@ Rectangle {
                 now.getDate(),
                 now.getHours(),
                 now.getMinutes() + 1,
-                0, 0, 0
+                0, 0
             );
 
             interval = nextMinute.getTime() - now.getTime() + 500;
@@ -55,9 +52,17 @@ Rectangle {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         onClicked: {
-            controlCenterMenu.visible = true
-            controlCenterMenu.activeFocus = true
-            controlCenterMenu.currentDate = new Date()
+            timeWithDate = !timeWithDate
+            timeText.text = Qt.formatDateTime(new Date(), timeWithDate ? "HH:mm | ddd.dd" : "HH:mm");
+            var now = new Date();
+            var nextMinute = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate(),
+                now.getHours(),
+                now.getMinutes() + 1,
+                0, 0
+            );
         }
     }
 }

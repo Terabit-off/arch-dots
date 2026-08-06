@@ -4,18 +4,15 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
-
-import "../../Singletons" as Singletons
-
 Rectangle {
-    color: 'transparent'
-    Layout.fillWidth: true
+    color: '#4b4b4b4b'
+    radius: 5
     Layout.fillHeight: true
-    Layout.minimumWidth: 21 * SystemTray.items.values.length
-    Layout.maximumWidth: 21 * SystemTray.items.values.length
+    implicitWidth: trayLayout.implicitWidth + 10
+
     RowLayout {
         id: trayLayout
-        layoutDirection: Qt.RightToLeft
+        layoutDirection: Qt.LeftToRight
         spacing: 5
         anchors {
             right: parent.right

@@ -15,11 +15,11 @@ QtObject {
     // Left side --- WorkSpace
     readonly property color wsFocusBackground: '#c9c9c9'
     readonly property color wsNotFocusBackground: 'transparent'
-    readonly property color wsUrgentBackground: '#dfa74949'
+    readonly property color wsUrgentBackground: '#d54646'
 
-    readonly property color wsUrgentForeground: '#c9c9c9'
-    readonly property color wsFocusForeground: '#222e34'
-    readonly property color wsNotFocusForeground: '#c9c9c9'
+    readonly property color wsUrgentForeground: '#a76565'
+    readonly property color wsFocusForeground: '#ffffff'
+    readonly property color wsNotFocusForeground: '#7e7e7e'
 
 
     //Panel

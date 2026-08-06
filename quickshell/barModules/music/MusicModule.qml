@@ -8,11 +8,9 @@ import "./menus" as Menus
 
 Rectangle {
     id: root
-    color: 'transparent'
-    Layout.fillWidth: true
-    Layout.minimumWidth: 10
-    Layout.preferredWidth: 50
-    Layout.maximumWidth: 300
+    color: '#4b4b4b4b'
+    radius: 5
+    implicitWidth: content.implicitWidth + 20
     height: 20
     visible: Singletons.MusicSingleton.active !== null
 
@@ -29,6 +27,7 @@ Rectangle {
     }
 
     RowLayout {
+        id: content
         spacing: 5
         anchors.centerIn: parent
 
@@ -39,9 +38,8 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
             text: musicCenterWindow.active? musicCenterWindow.active.metadata["xesam:title"]: "Unknown"
-            color: Singletons.Colors.foreground
-            font.bold: true
-            font.pixelSize: 13
+            color: "#ffffff"
+            font.pixelSize: 14
         }
     }
 }
