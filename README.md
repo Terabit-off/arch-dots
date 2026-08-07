@@ -7,13 +7,8 @@ IF YOU STARED THIS REPO YOUR IQ WILL BE LOWER BY 10 POINTS
 ## PREVIEW
 
 #### With quickshell
+https://github.com/user-attachments/assets/45929488-3258-4d46-b68e-ba2a82c19c28
 
-![video](video.mp4)
-
-<figure class="video_container">
-  <iframe src="video.mp4" frameborder="1" allowfullscreen="true"> 
-</iframe>
-</figure>
 
 #### With waybar
 
