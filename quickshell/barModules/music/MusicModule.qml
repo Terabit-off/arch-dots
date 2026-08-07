@@ -4,7 +4,7 @@ import Quickshell
 
 import "../../Singletons" as Singletons
 import "." as Bar
-import "./menus" as Menus
+import "../../menus" as Menus
 
 Rectangle {
     id: root
@@ -12,10 +12,11 @@ Rectangle {
     radius: 5
     implicitWidth: content.implicitWidth + 20
     height: 20
-    visible: Singletons.MusicSingleton.active !== null
+    visible: true
 
-    Bar.MusicCenterWindow {
+    Menus.CenterMenu {
         id: musicCenterWindow
+        anchorItem: root
     }
 
     MouseArea {
@@ -37,7 +38,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-            text: musicCenterWindow.active? musicCenterWindow.active.metadata["xesam:title"]: "Unknown"
+            text: musicCenterWindow.active ? musicCenterWindow.active.metadata["xesam:title"]: "{--------}"
             color: "#ffffff"
             font.pixelSize: 14
         }

@@ -5,9 +5,11 @@ import QtQuick
 import QtQuick.Layouts
 
 Rectangle {
+    id: root
     color: '#4b4b4b4b'
     radius: 5
     Layout.fillHeight: true
+    visible: SystemTray.items.values.length > 0
     implicitWidth: trayLayout.implicitWidth + 10
 
     RowLayout {
@@ -22,8 +24,6 @@ Rectangle {
 
         Repeater {
             model: SystemTray.items
-            anchors {
-            }
             delegate: Item {
                 id: itemParent
                 width: 15
@@ -42,9 +42,9 @@ Rectangle {
                     menu: modelData.menu
                     anchor {
                         window: rootPanel
-                        item: itemParent
-                        rect.x: itemParent.x
-                        rect.y: itemParent.y + itemParent.height
+                        item: root
+                        rect.x: root.x
+                        rect.y: root.y + root.height + 5
                     }
                 }
                 MouseArea {

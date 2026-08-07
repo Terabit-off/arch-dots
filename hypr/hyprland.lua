@@ -372,6 +372,5 @@ hl.window_rule({
     name = "floatImageView",
     match = { class = "swayimg" },
 
-    float = true,
-    size = {800,600}
+    fullscreen = true
 })

@@ -84,7 +84,6 @@ PanelWindow {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             font.family: "JetBrainsMono Nerd Font"
-                            font.bold: false
                             font.pixelSize: 14
                             color: BatteryState.battery.percentage * 100 < 25 ? '#f38ba8' : "#ffffff"
 

@@ -5,7 +5,7 @@ import QtQuick
 QtObject {
 
     readonly property color barBackground: 'transparent'//'#61434343'//'#cf595959'
-    readonly property color foreground: '#c9c9c9'
+    readonly property color foreground: '#ffffff'
     readonly property color foregroundDim: '#a0a0a0'
     readonly property color barBorderColor: '#00939393'
     readonly property color barModuleColor: '#00313131'
