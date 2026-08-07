@@ -8,7 +8,12 @@ IF YOU STARED THIS REPO YOUR IQ WILL BE LOWER BY 10 POINTS
 
 #### With quickshell
 
-![screenshot](image.png)
+![video](video.mp4)
+
+<figure class="video_container">
+  <iframe src="video.mp4" frameborder="1" allowfullscreen="true"> 
+</iframe>
+</figure>
 
 #### With waybar
 
