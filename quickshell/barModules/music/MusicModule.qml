@@ -38,7 +38,10 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-            text: musicCenterWindow.active ? musicCenterWindow.active.metadata["xesam:title"]: "{--------}"
+            text: musicCenterWindow.active ? (!musicCenterWindow.active.isPlaying ?
+                    "󰐊 " + musicCenterWindow.active.metadata["xesam:title"]
+                    : musicCenterWindow.active.metadata["xesam:title"])
+                    : "{--------}"
             color: "#ffffff"
             font.pixelSize: 14
         }

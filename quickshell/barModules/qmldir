@@ -6,5 +6,6 @@ TrayModule 1.0 tray/TrayModule.qml
 WorkspacesModule 1.0 workspaces/WorkspacesModule.qml
 VolumesModule 1.0 volumes/VolumesModule.qml
 BluetoothModule 1.0 bluetooth/Bluetooth.qml
+WifiModule 1.9 wifi/WifiModule.qml
 
 MusicCenterWindow 1.0 music/MusicCenterWindow.qml

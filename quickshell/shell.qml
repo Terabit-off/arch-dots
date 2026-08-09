@@ -10,6 +10,7 @@ import Quickshell.Services.SystemTray
 import "./Singletons"
 import "./barModules" as Modules 
 
+
 PanelWindow {
     id: rootPanel
     anchors {
@@ -25,7 +26,6 @@ PanelWindow {
     }
     implicitHeight: 20
     color: 'transparent'
-    
 
     Rectangle {
         anchors.fill: parent
@@ -68,6 +68,7 @@ PanelWindow {
                     Item {
                         Layout.fillWidth: true
                     }
+                    Modules.WifiModule { }
                     Modules.BluetoothModule { }
                     Modules.VolumesModule { }  
                     //battery

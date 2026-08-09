@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import QtCore
 import Quickshell.Io
+import Quickshell
 import Qt.labs.folderlistmodel
 
 import "../../Singletons" as Singletons
@@ -11,7 +12,6 @@ Item {
     id: screenshotsRoot
 
     property var popup
-    // Укажите путь до папки со скриншотами (по умолчанию стандартная папка Pictures/Screenshots)
     property string screenshotsFolder: "file:///home/terabit/Pictures/Screenshots"
 
     Process {
@@ -76,8 +76,8 @@ Item {
             }
 
             delegate: Item {
-                width: GridView.view.cellWidth
-                height: GridView.view.cellHeight
+                width: GridView.view.cellWidth - 2
+                height: GridView.view.cellHeight - 2
 
                 Rectangle {
                     anchors.fill: parent
@@ -110,9 +110,17 @@ Item {
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
 
+                        onClicked: {
+                            singleClickTimer.selectedFilePath = filePath
+                            singleClickTimer.restart()
+                        }
+
                         onDoubleClicked: {
+                            singleClickTimer.stop()
+
                             openImage.command = ["swayimg", filePath]
                             openImage.running = true
+
                             popup.visible = false
                         }
                     }
@@ -128,5 +136,31 @@ Item {
                 opacity: 0.5
             }
         }
+    }
+    Timer {
+        id: singleClickTimer
+
+        property string selectedFilePath: ""
+
+        interval: 250
+        repeat: false
+
+        onTriggered: {
+            copyImage.selectedFilePath = selectedFilePath
+            // TODO: make notify
+        }
+    }
+    Process {
+        id: copyImage
+
+        property string selectedFilePath: ""
+
+        command: [
+            "sh",
+            "-c",
+            "cat -- \"$1\" | wl-copy --type image/png",
+            "sh",
+            selectedFilePath
+        ]
     }
 }

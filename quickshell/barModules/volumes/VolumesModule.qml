@@ -180,7 +180,7 @@ Rectangle {
                         font.pixelSize: 15
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter 
-                        text: Singletons.AudioState.sink.audio.muted ? "󰝟 " : "󰕾 "
+                        text: Singletons.AudioState.sink ? Singletons.AudioState.sink.audio.muted ? "󰝟 " : "󰕾 " : "󰕾 "
 
                         MouseArea {
                             anchors.fill: parent
