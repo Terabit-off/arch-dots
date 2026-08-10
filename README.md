@@ -8,7 +8,7 @@ IF YOU STARED THIS REPO YOUR IQ WILL BE LOWER BY 10 POINTS
 
 #### With quickshell
 
-https://github.com/user-attachments/assets/45929488-3258-4d46-b68e-ba2a82c19c28
+`demo in progress`
 
 #### With waybar
 
@@ -23,7 +23,8 @@ https://github.com/user-attachments/assets/45929488-3258-4d46-b68e-ba2a82c19c28
 - love shit (very important)
 - sensors, top, free (commands for system resources)
 - swayimg (photo viewer)
-- nemo
+- nemo (file manager)
+- cliphist, and add it to autostart (`wl-paste --watch cliphist store`)
 
 ### For Waybar
 

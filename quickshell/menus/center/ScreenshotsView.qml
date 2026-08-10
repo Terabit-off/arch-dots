@@ -5,6 +5,7 @@ import QtCore
 import Quickshell.Io
 import Quickshell
 import Qt.labs.folderlistmodel
+import Qt5Compat.GraphicalEffects
 
 import "../../Singletons" as Singletons
 
@@ -58,11 +59,18 @@ Item {
             }
         }
 
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: Singletons.Colors.foreground
+            opacity: 0.1
+        }
+
         GridView {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            cellWidth: 120
-            cellHeight: 120
+            cellWidth: 103
+            cellHeight: 103
             clip: true
             
             ScrollBar.vertical: ScrollBar {
@@ -80,28 +88,49 @@ Item {
                 height: GridView.view.cellHeight - 2
 
                 Rectangle {
+                    id: coverFrame
                     anchors.fill: parent
                     anchors.margins: 0
                     color: "#302f2f2f"
                     radius: 8
                     clip: true
                     
-                    border.color: dragArea.containsMouse ? Singletons.Colors.foreground : "transparent"
+                    border.color: dragArea.containsMouse ? Singletons.Colors.foreground : 'transparent'
                     border.width: 1
+                    Behavior on border.color {
+                        ColorAnimation {
+                            duration: 250
+                            easing.type: Easing.OutCubic
+                        }
+                    }
 
                     Image {
                         id: img
                         anchors.fill: parent
-                        anchors.margins: {
-                            top: 5
-                            left: 5
-                            right: 5
-                            bottom: 5
-                        }
                         source: filePath
                         fillMode: Image.PreserveAspectCrop
                         asynchronous: true
                         cache: true
+                        visible: false
+                    }
+
+                    Rectangle {
+                        id: coverMask
+
+                        anchors.fill: parent
+                        radius: coverFrame.radius
+                        color: "white"
+                        visible: false
+                    }
+
+                    OpacityMask {
+                        id: roundedCover
+
+                        anchors.fill: coverFrame
+                        anchors.margins: 1
+                        source: img
+                        maskSource: coverMask
+                        visible: img.status === Image.Ready
                     }
 
                     MouseArea {
@@ -147,7 +176,7 @@ Item {
 
         onTriggered: {
             copyImage.selectedFilePath = selectedFilePath
-            // TODO: make notify
+            copyImage.running = true
         }
     }
     Process {
@@ -162,5 +191,25 @@ Item {
             "sh",
             selectedFilePath
         ]
+
+        onExited: {
+            doSome.command = [
+                "notify-send",
+                "--icon", selectedFilePath,
+                "--hint", "string:image-path:" + selectedFilePath,
+                "Image copied",
+                fileName(selectedFilePath)
+            ]
+            doSome.running = true
+        }
+    }
+    Process {
+        id: doSome
+    }
+    function fileName(path) {
+        if (!path)
+            return ""
+
+        return path.split("/").pop()
     }
 }

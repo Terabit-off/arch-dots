@@ -11,7 +11,7 @@ PopupWindow {
     id: centerWindowRoot
     grabFocus: true
     visible: false
-    implicitWidth: 600
+    implicitWidth: 550
     implicitHeight: 220
     color: "transparent"
 
@@ -27,6 +27,8 @@ PopupWindow {
     onVisibleChanged: {
         if (visible)
             openAnimation.restart()
+        
+        clipboardView.refresh()
     }
 
     property Item anchorItem
@@ -99,7 +101,7 @@ PopupWindow {
             anchors.fill: parent
             spacing: 0
 
-            // Левая панель навигации
+            // left navigation panel
             Rectangle {
                 Layout.preferredWidth: 60
                 Layout.fillHeight: true
@@ -133,10 +135,15 @@ PopupWindow {
                         isActive: centerWindowRoot.currentSegmentIndex === 2
                         onClicked: centerWindowRoot.currentSegmentIndex = 2
                     }
+                    NavButton {
+                        iconText: ""
+                        isActive: centerWindowRoot.currentSegmentIndex === 3
+                        onClicked: centerWindowRoot.currentSegmentIndex = 3
+                    }
                 }
             }
 
-            // Разделитель
+            // separator
             Rectangle {
                 Layout.preferredWidth: 1
                 Layout.fillHeight: true
@@ -144,7 +151,7 @@ PopupWindow {
                 opacity: 0.3
             }
 
-            // Основная область с переключением сегментов
+            // Main area with segment switching
             StackLayout {
                 id: contentStack
                 Layout.fillWidth: true
@@ -163,9 +170,16 @@ PopupWindow {
                     }
                 }
 
-                onCurrentIndexChanged: updatePages()
-                Component.onCompleted: updatePages()
+                onCurrentIndexChanged:{
+                    updatePages()
+                    if (currentIndex === 3)
+                        clipboardView.refresh()
 
+                } 
+                Component.onCompleted: {
+                    updatePages()
+                    clipboardView.refresh()
+                }
                 Modules.MusicView {
                     id: musicView
                     Layout.fillWidth: true
@@ -208,6 +222,25 @@ PopupWindow {
                 }
 
                 Modules.SystemResourcesView {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 180
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    Behavior on x {
+                        NumberAnimation {
+                            duration: 180
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+                }
+                Modules.ClipboardView {
+                    id: clipboardView
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 

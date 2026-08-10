@@ -230,7 +230,7 @@ PopupWindow {
 
                         width: networkList.width
 
-                        // Обычная высота / раскрытая высота
+                        // regular height / opened height
                         height: expanded
                             ? networkRow.height +
                             expandedContent.implicitHeight +
@@ -261,10 +261,8 @@ PopupWindow {
                             }
                         }
 
-                        // ============================================================
+                        
                         // ОСНОВНАЯ СТРОКА
-                        // ============================================================
-
                         RowLayout {
                             id: networkRow
 
@@ -379,10 +377,8 @@ PopupWindow {
                             }
                         }
 
-                        // ============================================================
+                        
                         // РАСКРЫТАЯ ЧАСТЬ
-                        // ============================================================
-
                         ColumnLayout {
                             id: expandedContent
 
@@ -408,10 +404,8 @@ PopupWindow {
                                 }
                             }
 
-                            // --------------------------------------------------------
+                            
                             // OPEN NETWORK
-                            // --------------------------------------------------------
-
                             Rectangle {
                                 visible: modelData.security === WifiSecurityType.Open
 
@@ -458,10 +452,8 @@ PopupWindow {
                                 }
                             }
 
-                            // --------------------------------------------------------
+                            
                             // PASSWORD
-                            // --------------------------------------------------------
-
                             RowLayout {
                                 visible: modelData.security !== WifiSecurityType.Open &&
                                         !modelData.connected
@@ -597,10 +589,8 @@ PopupWindow {
                                 }
                             }
 
-                            // --------------------------------------------------------
+                            
                             // DISCONNECT
-                            // --------------------------------------------------------
-
                             Rectangle {
                                 visible: modelData.connected
 
@@ -642,10 +632,7 @@ PopupWindow {
                                 }
                             }
 
-                            // --------------------------------------------------------
                             // FORGET
-                            // --------------------------------------------------------
-
                             Rectangle {
                                 visible: modelData.known &&
                                         !modelData.connected
@@ -686,10 +673,7 @@ PopupWindow {
                             }
                         }
 
-                        // ============================================================
-                        // CLICK ПО СТРОКЕ
-                        // ============================================================
-
+                        
                         MouseArea {
                             id: networkMouse
 

@@ -48,6 +48,7 @@ local menu        = "wofi"
 hl.on("hyprland.start", function () 
   hl.exec_cmd("hyprpaper & qs")
   hl.exec_cmd("firefox")
+  hl.exec_cmd("wl-paste --watch cliphist store")
 end)
 
 
@@ -104,7 +105,7 @@ hl.config({
         gaps_in  = 2,
         gaps_out = 0,
 
-        border_size = 0,
+        border_size = 1,
 
         col = {
             active_border   = { colors = {"rgba(5eb3f995)"}, angle = 45 },
@@ -372,5 +373,6 @@ hl.window_rule({
     name = "floatImageView",
     match = { class = "swayimg" },
 
-    fullscreen = true
+    float = true,
+    size = {1000, 800}
 })

@@ -48,7 +48,7 @@ PanelWindow {
             //CENTER
             Modules.MusicModule { }
 
-            // //RIGHT
+            //RIGHT
             Rectangle {
                 color: 'transparent'
                 height: 20     
@@ -94,6 +94,7 @@ PanelWindow {
                         }
                     }
                     Modules.TrayModule { }
+                    Modules.NotificationModule { }
                     Modules.TimeDateModule { id: timeModule }
                 }
             }

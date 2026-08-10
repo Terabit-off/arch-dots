@@ -25,6 +25,13 @@ Item {
             font.bold: true
         }
 
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: Singletons.Colors.foreground
+            opacity: 0.1
+        }
+
         Item { Layout.fillHeight: true } // Spacer
         RowLayout {
             Layout.fillWidth: true

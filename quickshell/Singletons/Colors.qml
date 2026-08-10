@@ -50,7 +50,7 @@ QtObject {
     readonly property color buttonOffTextColor: '#c9c9c9'
 
     // Notification
-    readonly property color notifyCardBackground: '#161616'
+    readonly property color notifiCardBackground: '#161616'
 
     // Toggle
     readonly property color toggleOffBackground: '#f4434343' 

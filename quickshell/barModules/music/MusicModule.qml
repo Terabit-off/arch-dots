@@ -41,7 +41,7 @@ Rectangle {
             text: musicCenterWindow.active ? (!musicCenterWindow.active.isPlaying ?
                     "󰐊 " + musicCenterWindow.active.metadata["xesam:title"]
                     : musicCenterWindow.active.metadata["xesam:title"])
-                    : "{--------}"
+                    : "{---------}"
             color: "#ffffff"
             font.pixelSize: 14
         }
