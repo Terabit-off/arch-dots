@@ -11,18 +11,37 @@ import "../../Singletons" as Singletons
 Rectangle {
     id: notificationsRoot
 
-    color: 'transparent'
+    color: '#4b4b4b4b'
     radius: 5
     Layout.fillHeight: true
     implicitWidth: 25
 
-    Text {
-        anchors.centerIn: parent
-        text: "󰂚" 
-        color: historyModel.count > 0 ? '#a54242' : Singletons.Colors.foreground
-        font.family: "JetBrainsMono Nerd Font"
-        font.pixelSize: 15
+    RowLayout {
+        anchors.fill: parent
+        spacing: 0
+
+        Text {
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            text: "󰂚" 
+            color: historyModel.count > 0 ? '#ff6a6a' : Singletons.Colors.foreground
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 15
+        }
+        Text {
+            visible: historyModel.count > 0
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            Layout.fillWidth: true
+            text: historyModel.count 
+            color:'#ff6a6a'
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 13
+        }
+
     }
+
 
     MouseArea {
         anchors.fill: parent
@@ -43,19 +62,22 @@ Rectangle {
         imageSupported: true
 
         onNotification: n => {
-            historyModel.insert(0, {
-                notification: n,
-                notificationId: n.id,
-                showInPanel: true,
+            if (n.urgency != NotificationUrgency.Low){
 
-                summary: n.summary,
-                body: n.body,
-                appName: n.appName,
-                urgency: n.urgency,
-                time: Qt.formatDateTime(new Date(), "HH:mm"),
-                image: n.image || "",
-                appIcon: n.appIcon || ""
-            })
+                historyModel.insert(0, {
+                    notification: n,
+                    notificationId: n.id,
+                    showInPanel: true,
+
+                    summary: n.summary,
+                    body: n.body,
+                    appName: n.appName,
+                    urgency: n.urgency,
+                    time: Qt.formatDateTime(new Date(), "HH:mm"),
+                    image: n.image || "",
+                    appIcon: n.appIcon || ""
+                })
+            }
 
             n.tracked = true
         }
@@ -83,25 +105,25 @@ Rectangle {
             spacing: 10
 
             Repeater {
-                model: historyModel
+                model: server.trackedNotifications
 
                 delegate: Rectangle {
                     id: card
                     required property var modelData
 
                     Timer {
-                        running: modelData.showInPanel &&
-                                modelData.urgency !== NotificationUrgency.Critical
+                        running: modelData.urgency !== NotificationUrgency.Critical
 
                         interval: 5000
                         repeat: false
 
                         onTriggered: {
-                            hideFromPanel(modelData.notificationId)
+                            visible = false
+                            // hideFromPanel(modelData.notificationId)
                         }
                     }
 
-                    visible: modelData.showInPanel
+                    visible: true
 
                     Layout.fillWidth: true
                     Layout.preferredHeight: layout.implicitHeight + 30
@@ -191,7 +213,7 @@ Rectangle {
                         cursorShape: Qt.PointingHandCursor
 
                         onClicked: {
-                            notificationsRoot.activateOrDismiss(card.modelData.notification)
+                            notificationsRoot.activateOrDismiss(card.modelData)
                         }
                     }
                 }
@@ -528,9 +550,10 @@ Rectangle {
 
             if (action && action.invoke)
                 action.invoke()
+        }else {
+            notification.dismiss()
         }
 
-        notification.dismiss()
         removeFromHistory(notification.id)
         centerPopup.visible = false
     }

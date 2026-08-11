@@ -195,6 +195,8 @@ Item {
         onExited: {
             doSome.command = [
                 "notify-send",
+                "-u", 
+                "low",
                 "--icon", selectedFilePath,
                 "--hint", "string:image-path:" + selectedFilePath,
                 "Image copied",
@@ -206,6 +208,7 @@ Item {
     Process {
         id: doSome
     }
+
     function fileName(path) {
         if (!path)
             return ""

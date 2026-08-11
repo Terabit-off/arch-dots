@@ -58,10 +58,10 @@ PopupWindow {
         id: card
 
         anchors.fill: parent
-        radius: 18
-        color: "#e91b1b1f"
+        radius: 5
+        color: "#f11c1c1c"
         border.width: 1
-        border.color: "#35ffffff"
+        border.color: "#db6e6e6e"
 
         opacity: root.visible ? 1 : 0
         scale: root.visible ? 1 : 0.96
@@ -168,12 +168,6 @@ PopupWindow {
                         }
                     }
                 }
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: "#18ffffff"
             }
 
             RowLayout {

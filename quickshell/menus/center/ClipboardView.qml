@@ -10,7 +10,7 @@ import "../../Singletons" as Singletons
 Item {
     id: root
     property bool active: false
-    property int maxItems: 100
+    property int maxItems: 20
 
     property var clipboardItems: []
 
@@ -522,10 +522,7 @@ Item {
                         }
                     }
 
-                    // =
                     // IMAGE
-                    // =
-
                     Rectangle {
                         id: imageContainer
 
@@ -581,10 +578,7 @@ Item {
                         }
                     }
 
-                    // =
                     // NON IMAGE
-                    // =
-
                     Rectangle {
                         anchors {
                             left: parent.left
@@ -624,10 +618,7 @@ Item {
                         }
                     }
 
-                    // =
                     // TEXT / MIME
-                    // =
-
                     Text {
                         anchors {
                             left: parent.left
@@ -651,10 +642,7 @@ Item {
                         elide: Text.ElideRight
                     }
 
-                    // =
                     // DELETE
-                    // =
-
                     Rectangle {
                         id: deleteButton
 
@@ -695,10 +683,7 @@ Item {
                         }
                     }
 
-                    // =
                     // CLICK
-                    // =
-
                     MouseArea {
                         id: cardMouse
                         anchors.fill: parent
@@ -715,8 +700,6 @@ Item {
 
             
             // EMPTY
-            
-
             Column {
                 anchors.centerIn: parent
                 spacing: 8
