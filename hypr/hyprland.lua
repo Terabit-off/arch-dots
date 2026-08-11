@@ -273,7 +273,7 @@ hl.device({
 local mainMod = "SUPER"
 
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("hyprshot -m output -f Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region -f Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd('~/.config/hypr/screenshot.sh'))
 
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
