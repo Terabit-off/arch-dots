@@ -38,6 +38,7 @@ PanelWindow {
             spacing: 12
          
             //LEFT
+            //Modules.OverviewModule { }
             Rectangle { 
                 color: 'transparent'
                 height: 20
