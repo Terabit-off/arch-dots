@@ -4,6 +4,8 @@ import QtQuick.Controls
 import Quickshell
 import Quickshell.Networking
 
+import "../../Singletons" as Singletons
+
 PopupWindow {
     id: root
 
@@ -58,10 +60,10 @@ PopupWindow {
         id: card
 
         anchors.fill: parent
-        radius: 5
-        color: "#f11c1c1c"
+        radius: Singletons.Colors.menuBorderRadius
+        color: Singletons.Colors.menuBackground
         border.width: 1
-        border.color: "#db6e6e6e"
+        border.color: Singletons.Colors.menuBorderColor
 
         opacity: root.visible ? 1 : 0
         scale: root.visible ? 1 : 0.96
@@ -101,7 +103,7 @@ PopupWindow {
                         anchors.centerIn: parent
                         text: "󰖩"
                         color: root.wifiDevice && root.wifiDevice.connected
-                               ? "#9bd1aa" : "#d0d0d0"
+                               ? "#9bd1aa" : Singletons.Colors.foreground
                         font.family: "Symbols Nerd Font"
                         font.pixelSize: 21
                     }
@@ -113,7 +115,7 @@ PopupWindow {
 
                     Text {
                         text: "Wi-Fi"
-                        color: "#f4f4f5"
+                        color: Singletons.Colors.foreground
                         font.pixelSize: 17
                         font.weight: Font.DemiBold
                     }
@@ -126,7 +128,7 @@ PopupWindow {
                                  : "Not connected")
                               : "Wi-Fi device unavailable"
                         color: root.wifiDevice && root.wifiDevice.connected
-                               ? "#8fc99f" : "#85858d"
+                               ? "#8fc99f" : Singletons.Colors.foregroundDim
                         font.pixelSize: 10
                         elide: Text.ElideRight
                     }
@@ -137,12 +139,13 @@ PopupWindow {
                     Layout.preferredHeight: 36
                     radius: 10
                     color: scanMouse.containsMouse
-                           ? "#24ffffff" : "#12ffffff"
+                           ? Singletons.Colors.buttonBackgroundColorHover 
+                           : Singletons.Colors.buttonBackgroundColor
 
                     Text {
                         anchors.centerIn: parent
                         text: "󰑐"
-                        color: "#d0d0d4"
+                        color: Singletons.Colors.foreground
                         font.family: "Symbols Nerd Font"
                         font.pixelSize: 17
 
@@ -177,7 +180,7 @@ PopupWindow {
                 Text {
                     text: root.selectedNetwork
                           ? "Other networks" : "Available networks"
-                    color: "#92929a"
+                    color: Singletons.Colors.foregroundDim
                     font.pixelSize: 10
                     font.weight: Font.Medium
                 }
@@ -185,12 +188,12 @@ PopupWindow {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
-                    color: "#15ffffff"
+                    color: Singletons.Colors.separatorColor
                 }
 
                 Text {
                     text: networkList.count
-                    color: "#62626a"
+                    color: Singletons.Colors.foregroundDim
                     font.pixelSize: 9
                 }
             }
@@ -231,7 +234,7 @@ PopupWindow {
                             20
                             : 56
 
-                        radius: 11
+                        radius: 5
 
                         color: modelData.connected
                             ? "#1b3044"
@@ -305,7 +308,7 @@ PopupWindow {
 
                                     text: modelData.name || "Hidden network"
 
-                                    color: "#eeeeef"
+                                    color: Singletons.Colors.foreground
 
                                     font.pixelSize: 12
                                     font.weight: modelData.connected
@@ -322,7 +325,7 @@ PopupWindow {
 
                                     color: modelData.connected
                                         ? "#8fc99f"
-                                        : "#77777f"
+                                        : Singletons.Colors.foregroundDim
 
                                     font.pixelSize: 10
                                 }
@@ -333,7 +336,7 @@ PopupWindow {
 
                                 text: "󰌾"
 
-                                color: "#85858c"
+                                color: Singletons.Colors.foregroundDim
 
                                 font.family: "Symbols Nerd Font"
                                 font.pixelSize: 14

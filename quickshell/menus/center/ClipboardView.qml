@@ -393,8 +393,8 @@ Item {
                     text: "󰑐"
                     
                     color: refreshMouse.containsMouse
-                           ? "#ffffff"
-                           : Singletons.Colors.foreground
+                           ? Singletons.Colors.foreground
+                           : Singletons.Colors.foregroundDim
                     opacity: refreshMouse.containsMouse ? 1.0 : 0.6
 
                     font.family: "JetBrainsMono Nerd Font"
@@ -435,8 +435,8 @@ Item {
                     text: "Clear"
 
                     color: clearMouse.containsMouse
-                           ? "#ffffff"
-                           : Singletons.Colors.foreground
+                           ? Singletons.Colors.foreground
+                           : Singletons.Colors.foregroundDim
                     opacity: clearMouse.containsMouse ? 1.0 : 0.6
 
                     font.family: "JetBrainsMono Nerd Font"
@@ -666,7 +666,7 @@ Item {
                         Text {
                             anchors.centerIn: parent
                             text: "󰅖"
-                            color: "#ffffff"
+                            color: Singletons.Colors.foreground
                             font.family: "JetBrainsMono Nerd Font"
                             font.pixelSize: 12
                         }

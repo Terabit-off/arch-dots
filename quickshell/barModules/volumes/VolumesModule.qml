@@ -9,7 +9,7 @@ import "../../Singletons" as Singletons
 
 Rectangle {
     id: rootRec
-    color: '#4b4b4b4b'
+    color: Singletons.Colors.barModuleColor
     radius: 5
     Layout.fillHeight: true
     implicitWidth: root.implicitWidth + 10
@@ -39,7 +39,7 @@ Rectangle {
             Layout.fillHeight: true
             horizontalAlignment: Text.AlignHCenter
             text: "󰃠 " + Math.round(currentBrightness/ 64507 * 100)
-            color: "#ffffff"
+            color: Singletons.Colors.foreground
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: 14
 
@@ -76,7 +76,7 @@ Rectangle {
             text: {
                 return "󰕾 " + (Singletons.AudioState.sink ? Math.round(Singletons.AudioState.sink.audio.volume * 100) + "%" : 0 + "%")
             }
-            color: "#ffffff"
+            color: Singletons.Colors.foreground
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: 14
 
@@ -128,9 +128,9 @@ Rectangle {
         Rectangle {
             id: popupContent
             anchors.fill: parent
-            color: '#db1c1c1c'
-            border.color: '#db6e6e6e'
-            radius: 5
+            color: Singletons.Colors.menuBackground
+            border.color: Singletons.Colors.menuBorderColor
+            radius: Singletons.Colors.menuBorderRadius
 
 
             ParallelAnimation {

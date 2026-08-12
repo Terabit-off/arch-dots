@@ -11,7 +11,7 @@ import "../../Singletons" as Singletons
 Rectangle {
     id: notificationsRoot
 
-    color: '#4b4b4b4b'
+    color: Singletons.Colors.barModuleColor
     radius: 5
     Layout.fillHeight: true
     implicitWidth: 25
@@ -25,7 +25,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             text: "󰂚" 
-            color: historyModel.count > 0 ? '#ff6a6a' : Singletons.Colors.foreground
+            color: historyModel.count > 0 ? Singletons.Colors.criticalColor : Singletons.Colors.foreground
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: 15
         }
@@ -35,7 +35,7 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             Layout.fillWidth: true
             text: historyModel.count 
-            color:'#ff6a6a'
+            color: Singletons.Colors.criticalColor
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: 13
         }
@@ -119,7 +119,6 @@ Rectangle {
 
                         onTriggered: {
                             visible = false
-                            // hideFromPanel(modelData.notificationId)
                         }
                     }
 
@@ -130,16 +129,59 @@ Rectangle {
                     
                     radius: 5
                     color: modelData.urgency === NotificationUrgency.Critical
-                            ? "#422529" : "#f11c1c1c"
+                            ? Singletons.Colors.notifiCardCriticalBackground : Singletons.Colors.notifiCardBackground
                     border.width: 1
                     border.color: transientMouse.containsMouse 
-                                  ? Singletons.Colors.foreground 
-                                  : "#db6e6e6e"
+                                  ? Singletons.Colors.notifiCardHoverBorderBackground
+                                  : Singletons.Colors.notifiCardBorderBackground
 
                     Behavior on border.color {
                         ColorAnimation {
                             duration: 250
                             easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    MouseArea {
+                        id: transientMouse
+                        anchors.fill: parent 
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+
+                        onClicked: {
+                            notificationsRoot.activateOrDismiss(card.modelData)
+                        }
+                    }
+
+                    Text {
+                        width: 25
+                        height: 25
+
+                        anchors {
+                            right: parent.right
+                            top: parent.top
+
+                            margins: {
+                                top: 10
+                                right: 10
+                            }
+                        }
+
+                        text: ""
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 14
+                        font.bold: true
+                        color: closeMouse.containsMouse ? Singletons.Colors.foreground :Singletons.Colors.foregroundDim
+
+                        MouseArea {
+                            id: closeMouse
+                            anchors.fill: parent 
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+
+                            onClicked: {
+                                card.modelData.dismiss()
+                            }
                         }
                     }
 
@@ -149,6 +191,7 @@ Rectangle {
                         anchors.margins: 10
                         spacing: 12
 
+                        // App icon or image
                         Rectangle {
                             Layout.preferredHeight: 36
                             Layout.preferredWidth: 36
@@ -206,16 +249,7 @@ Rectangle {
                         }
                     }
 
-                    MouseArea {
-                        id: transientMouse
-                        anchors.fill: parent 
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-
-                        onClicked: {
-                            notificationsRoot.activateOrDismiss(card.modelData)
-                        }
-                    }
+                    
                 }
             }
         }
@@ -251,10 +285,10 @@ Rectangle {
 
             anchors.fill: parent
             radius: 5
-            color: "#f11c1c1c"
+            color: Singletons.Colors.menuBackground
 
             border.width: 1
-            border.color: "#db6e6e6e"
+            border.color: Singletons.Colors.menuBorderColor
 
             opacity: centerPopup.visible ? 1 : 0
             scale: centerPopup.visible ? 1 : 0.96
@@ -316,7 +350,7 @@ Rectangle {
                             anchors.centerIn: parent
                             text: "Clear"
                             color: clearMouse.containsMouse
-                                   ? "#ffffff"
+                                   ? Singletons.Colors.foregroundDim
                                    : Singletons.Colors.foreground
                             opacity: clearMouse.containsMouse ? 1.0 : 0.6
                             font.family: "JetBrainsMono Nerd Font"
@@ -340,8 +374,7 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
-                    color: Singletons.Colors.foreground
-                    opacity: 0.1
+                    color: Singletons.Colors.separatorColor
                 }
 
                 // NOTIFICATIONS
@@ -383,15 +416,13 @@ Rectangle {
                         radius: 8
 
                         color: urgency === NotificationUrgency.Critical
-                            ? "#422529"
-                            : "#302f2f2f"
+                            ? Singletons.Colors.notifiCardCriticalBackground
+                            : Singletons.Colors.notifiCardBackground
 
                         border.width: 1
-                        border.color: urgency === NotificationUrgency.Critical
-                                    ? "#55a54242"
-                                    : (notificationMouse.containsMouse 
+                        border.color: notificationMouse.containsMouse 
                                         ? Singletons.Colors.foreground 
-                                        : "#db6e6e6e")
+                                        : Singletons.Colors.notifiCardHoverBorderBackground
 
                         Behavior on border.color {
                             ColorAnimation {

@@ -4,10 +4,11 @@ import QtQuick.Layouts
 import QtQuick
 
 import "../../menus" as Menus
+import "../../Singletons" as Singletons
 
 
 Rectangle {
-    color: '#4b4b4b4b'
+    color: Singletons.Colors.barModuleColor
     radius: 5
     Layout.fillHeight: true
     implicitWidth: wfText.implicitWidth + 15
@@ -23,7 +24,7 @@ Rectangle {
         anchors.centerIn: parent
 
         text: wifiPopup.connected ? "󰤨" : "󰤮"
-        color: "#ffffff"
+        color: Singletons.Colors.foreground
         font.family: "JetBrainsMono Nerd Font"
         font.pixelSize: 15
 

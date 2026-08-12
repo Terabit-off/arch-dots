@@ -46,13 +46,18 @@ PopupWindow {
         Rectangle {
             anchors.fill: parent
             radius: 8
-            color: btn.isActive ? "#33ffffff" : (mouseArea.containsMouse ? "#1affffff" : "transparent")
+            color: btn.isActive
+                ? Singletons.Colors.activeButtonBackgroundColor
+                : (mouseArea.containsMouse 
+                    ? Singletons.Colors.buttonBackgroundColorHover
+                    : Singletons.Colors.buttonBackgroundColor)
 
             Text {
                 anchors.centerIn: parent
                 text: btn.iconText
                 font.family: "JetBrainsMono Nerd Font"
-                color: btn.isActive || mouseArea.containsMouse ? "#ffffff" : '#9b9b9b'
+                color: btn.isActive || mouseArea.containsMouse ? Singletons.Colors.foreground 
+                    : Singletons.Colors.foregroundDim
                 font.pixelSize: 20
             }
         }
@@ -69,9 +74,9 @@ PopupWindow {
         id: popupContent
         width: centerWindowRoot.implicitWidth
         height: centerWindowRoot.implicitHeight
-        color: '#f11c1c1c'
-        radius: Singletons.Colors.panelBorderRadius
-        border.color: '#db6e6e6e'
+        color: Singletons.Colors.menuBackground
+        radius: Singletons.Colors.menuBorderRadius
+        border.color: Singletons.Colors.menuBorderColor
         border.width: 1
         transformOrigin: Item.Center
 
@@ -105,7 +110,7 @@ PopupWindow {
             Rectangle {
                 Layout.preferredWidth: 60
                 Layout.fillHeight: true
-                color: "#1a000000"
+                color: Singletons.Colors.menuBackground
                 radius: popupContent.radius
                 
                 // Делаем правые углы прямыми для слияния с основным контентом
@@ -147,7 +152,7 @@ PopupWindow {
             Rectangle {
                 Layout.preferredWidth: 1
                 Layout.fillHeight: true
-                color: '#db6e6e6e'
+                color: Singletons.Colors.separatorColor
                 opacity: 0.3
             }
 

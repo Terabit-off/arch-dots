@@ -137,9 +137,7 @@ Item {
                     }
                 }
 
-                color: titleMouseArea.containsMouse
-                       ? "#ffffff"
-                       : Singletons.Colors.foreground
+                color: Singletons.Colors.foreground
             }
 
             // Artist Name
@@ -252,8 +250,8 @@ Item {
 
                     text: "󰒮"
                     color: previousMouse.containsMouse
-                           ? "#ffffff"
-                           : Singletons.Colors.foreground
+                           ? Singletons.Colors.foreground
+                           : Singletons.Colors.foregroundDim
                     font.pixelSize: 27
 
                     MouseArea {
@@ -275,8 +273,8 @@ Item {
 
                     text: musicViewRoot.active && musicViewRoot.active.isPlaying ? "󰏤" : "󰐊"
                     color: playMouse.containsMouse
-                           ? "#ffffff"
-                           : Singletons.Colors.foreground
+                           ? Singletons.Colors.foreground
+                           : Singletons.Colors.foregroundDim
                     font.pixelSize: 31
 
                     MouseArea {
@@ -298,8 +296,8 @@ Item {
                     text: "󰒭"
                     font.family: "JetBrainsMono Nerd Font"
                     color: nextMouse.containsMouse
-                           ? "#ffffff"
-                           : Singletons.Colors.foreground
+                           ? Singletons.Colors.foreground
+                           : Singletons.Colors.foregroundDim
                     font.pixelSize: 27
 
                     MouseArea {
@@ -324,8 +322,8 @@ Item {
                 Text {
                     text: ""
                     color: previousMouse2.containsMouse
-                        ? "#ffffff"
-                        : Singletons.Colors.foreground
+                        ? Singletons.Colors.foreground
+                        : Singletons.Colors.foregroundDim
 
                     font.family: "JetBrainsMono Nerd Font"
                     font.pixelSize: 14
@@ -364,8 +362,8 @@ Item {
                 Text {
                     text: ""
                     color: nextMouse2.containsMouse
-                        ? "#ffffff"
-                        : Singletons.Colors.foreground
+                        ? Singletons.Colors.foreground
+                        : Singletons.Colors.foregroundDim
                     font.pixelSize: 14
                     font.family: "JetBrainsMono Nerd Font"
 

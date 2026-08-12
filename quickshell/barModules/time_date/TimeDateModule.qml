@@ -6,7 +6,7 @@ import "../../Singletons" as Singletons
 import "../../menus" as Menus
 
 Rectangle {
-    color: '#4b4b4b4b'
+    color: Singletons.Colors.barModuleColor
     radius: 5
     Layout.fillHeight: true
     implicitWidth: timeText.implicitWidth + 10
@@ -19,7 +19,7 @@ Rectangle {
             centerIn: parent
             bottomMargin: 0
         }
-        color: "#ffffff"
+        color: Singletons.Colors.foreground
         font.family: "JetBrainsMono Nerd Font"
         font.pixelSize: 14
     }

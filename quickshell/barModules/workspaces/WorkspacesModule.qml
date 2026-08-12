@@ -7,7 +7,7 @@ import "../../Singletons" as Singletons
 
 
 Rectangle {
-    color: '#4b4b4b4b'
+    color: Singletons.Colors.barModuleColor
     radius: 5
     width: root.implicitWidth + 10
     height: 20

@@ -4,9 +4,11 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
+import "../../Singletons" as Singletons
+
 Rectangle {
     id: root
-    color: '#4b4b4b4b'
+    color: Singletons.Colors.barModuleColor
     radius: 5
     Layout.fillHeight: true
     visible: SystemTray.items.values.length > 0

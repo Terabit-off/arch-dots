@@ -39,7 +39,9 @@ Item {
             }
             Text {
                 text: "Open in Nemo"
-                color: mouseArea.containsMouse ? "#ffffff" : '#9b9b9b'
+                color: mouseArea.containsMouse
+                        ? Singletons.Colors.foreground 
+                        : Singletons.Colors.foregroundDim
                 font.pixelSize: 13
                 font.family: "JetBrainsMono Nerd Font"
                 

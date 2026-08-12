@@ -4,32 +4,29 @@ import QtQuick
 
 QtObject {
 
-    readonly property color barBackground: 'transparent'//'#61434343'//'#cf595959'
+    readonly property color barBackground: 'transparent'
     readonly property color foreground: '#ffffff'
-    readonly property color foregroundDim: '#a0a0a0'
-    readonly property color barBorderColor: '#00939393'
-    readonly property color barModuleColor: '#00313131'
-    readonly property real trayIconColor: 0.5415 
-    readonly property real trayIconSaturation: 0
+    readonly property color foregroundDim: '#7e7e7e'
+    readonly property color barBorderColor: 'transparent'
+    readonly property color barModuleColor: '#924b4b4b'
+
+    readonly property color criticalColor: '#f38ba8'
+
+    readonly property color buttonBackgroundColor: "transparent"
+    readonly property color buttonBackgroundColorHover: "#1affffff"
+    readonly property color activeButtonBackgroundColor: "#33ffffff"
 
     // Left side --- WorkSpace
-    readonly property color wsFocusBackground: '#c9c9c9'
-    readonly property color wsNotFocusBackground: 'transparent'
-    readonly property color wsUrgentBackground: '#d54646'
-
-    readonly property color wsUrgentForeground: '#a76565'
+    readonly property color wsUrgentForeground: '#a74343'
     readonly property color wsFocusForeground: '#ffffff'
     readonly property color wsNotFocusForeground: '#7e7e7e'
 
 
-    //Panel
-    readonly property color panelBackground: 'transparent'//'#bd202020'
-    readonly property color separatorColor: 'transparent'//'#bd939393'
-    readonly property color moduleSeparatorColor: '#bd939393'
-    readonly property color moduleBorderColor: '#bde6e6e6'
-    readonly property color moduleBackgroundColor: '#f4202020'
-    readonly property real moduleBorderRadius: 5
-    readonly property real panelBorderRadius: 5
+    // Menus
+    readonly property color menuBackground: '#f11c1c1c'
+    readonly property color separatorColor: '#bd939393'
+    readonly property color menuBorderColor: '#db6e6e6e'
+    readonly property real menuBorderRadius: 5
 
     // sliders
     readonly property color sliderBackgroundColor: '#494949'
@@ -38,22 +35,10 @@ QtObject {
     readonly property color sliderHandlerBorderColor: '#bd939393'
     readonly property real sliderHandlerBorderRadius: 2
 
-    // Buttons
-    readonly property color buttonOffBackground: '#f4202020'
-    readonly property color buttonOnBackground: '#d0353535'
-    readonly property color buttonBorderColor: '#bd939393'
-    readonly property color buttonOffHoverColor: '#373737'
-    readonly property color buttonOnHoverColor: '#707070'
-    readonly property real buttonBorderWidth: 2
-
-    readonly property color buttonOnTextColor: '#2c2c2c'
-    readonly property color buttonOffTextColor: '#c9c9c9'
-
     // Notification
-    readonly property color notifiCardBackground: '#161616'
+    readonly property color notifiCardBackground: '#f11c1c1c'
+    readonly property color notifiCardCriticalBackground: '#422529'
 
-    // Toggle
-    readonly property color toggleOffBackground: '#f4434343' 
-    readonly property color toggleOnBackground: '#f4d7d7d7' 
-
+    readonly property color notifiCardBorderBackground: '#db6e6e6e'
+    readonly property color notifiCardHoverBorderBackground: '#ffffff'
 }

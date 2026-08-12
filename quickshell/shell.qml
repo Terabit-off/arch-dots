@@ -38,7 +38,7 @@ PanelWindow {
             spacing: 12
          
             //LEFT
-            Modules.OverviewModule { }
+            //Modules.OverviewModule { }
             Rectangle { 
                 color: 'transparent'
                 height: 20
@@ -74,7 +74,7 @@ PanelWindow {
                     Modules.VolumesModule { }  
                     //battery
                     Rectangle {
-                        color: '#4b4b4b4b'
+                        color: Colors.barModuleColor
                         radius: 5
                         Layout.fillHeight: true
                         implicitWidth: batteryText.implicitWidth + 10
@@ -87,7 +87,7 @@ PanelWindow {
                             verticalAlignment: Text.AlignVCenter
                             font.family: "JetBrainsMono Nerd Font"
                             font.pixelSize: 14
-                            color: BatteryState.battery.percentage * 100 < 25 ? '#f38ba8' : "#ffffff"
+                            color: BatteryState.battery.percentage * 100 < 25 ? Colors.criticalColor : Colors.foreground
 
                             text: {
                                 return batteryIcon(BatteryState.battery.percentage * 100, BatteryState.battery.state === UPowerDevice.Charging) + (BatteryState.battery.percentage * 100).toFixed(0) + "%"
@@ -96,7 +96,7 @@ PanelWindow {
                     }
                     Modules.TrayModule { }
                     Modules.NotificationModule { }
-                    Modules.TimeDateModule { id: timeModule }
+                    Modules.TimeDateModule { }
                 }
             }
         }

@@ -8,7 +8,7 @@ import "../../menus" as Menus
 
 Rectangle {
     id: root
-    color: '#4b4b4b4b'
+    color: Singletons.Colors.barModuleColor
     radius: 5
     implicitWidth: content.implicitWidth + 20
     height: 20
@@ -42,7 +42,7 @@ Rectangle {
                     "󰐊 " + musicCenterWindow.active.metadata["xesam:title"]
                     : musicCenterWindow.active.metadata["xesam:title"])
                     : "{---------}"
-            color: "#ffffff"
+            color: Singletons.Colors.foreground
             font.pixelSize: 14
         }
     }
