@@ -4,6 +4,7 @@ DIR="$HOME/Pictures/Screenshots"
 FILE="$DIR/$(date +%Y-%m-%d_%H-%M-%S).png"
 
 grim -g "$(slurp)" "$FILE" || exit 0
+wl-copy --type image/png < "$FILE" & disown
 
 ACTION=$(notify-send \
     -u low \

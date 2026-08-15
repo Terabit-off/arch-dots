@@ -108,7 +108,7 @@ hl.config({
         border_size = 1,
 
         col = {
-            active_border   = { colors = {"rgba(5eb3f995)"}, angle = 45 },
+            active_border   = { colors = {"rgba(858585ff)"}, angle = 45 },
             inactive_border = "rgba(3d3d3dff)",
         },
 
@@ -130,9 +130,9 @@ hl.config({
         inactive_opacity = 0.9,
 
         shadow = {
-            enabled      = false,
-            range        = 4,
-            render_power = 3,
+            enabled      = true,
+            range        = 5,
+            render_power = 1,
             color        = 0xee1a1a1a,
         },
 
@@ -150,33 +150,69 @@ hl.config({
 })
 
 -- Default curves and animations, see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Animations/
-hl.curve("easeOutQuint",   { type = "bezier", points = { {0.23, 1},    {0.32, 1}    } })
-hl.curve("easeInOutCubic", { type = "bezier", points = { {0.65, 0.05}, {0.36, 1}    } })
-hl.curve("linear",         { type = "bezier", points = { {0, 0},       {1, 1}       } })
-hl.curve("almostLinear",   { type = "bezier", points = { {0.5, 0.5},   {0.75, 1}    } })
-hl.curve("quick",          { type = "bezier", points = { {0.15, 0},    {0.1, 1}     } })
-hl.curve("myCustom",       { type = "bezier", points = { {0, 0.9},     {0.1, 1}     } })
+--hl.curve("easeOutQuint",   { type = "bezier", points = { {0.23, 1},    {0.32, 1}    } })
+--hl.curve("easeInOutCubic", { type = "bezier", points = { {0.65, 0.05}, {0.36, 1}    } })
+--hl.curve("linear",         { type = "bezier", points = { {0, 0},       {1, 1}       } })
+--hl.curve("almostLinear",   { type = "bezier", points = { {0.5, 0.5},   {0.75, 1}    } })
+--hl.curve("quick",          { type = "bezier", points = { {0.15, 0},    {0.1, 1}     } })
+--hl.curve("myCustom",       { type = "bezier", points = { {0, 0.9},     {0.1, 1}     } })
+
+
+hl.curve("smooth", {type = "bezier",points = {{0.16, 1}, {0.3, 1}}})
+hl.curve("smoothOut", {type = "bezier",points = {{0.22, 1}, {0.36, 1}}})
+hl.curve("smoothInOut", {type = "bezier",points = {{0.65, 0}, {0.35, 1}}})
+hl.curve("quickOut", {type = "bezier",points = {{0.15, 0}, {0.15, 1}}})
+hl.curve("soft", {type = "bezier",points = {{0.25, 0.8}, {0.25, 1}}})
+hl.curve("linear", {type = "bezier",points = {{0, 0}, {1, 1}}})
 
 -- Default springs
-hl.curve("easy",           { type = "spring", mass = 1, stiffness = 71.2633, dampening = 15.8273644 })
+--hl.curve("easy",           { type = "spring", mass = 1, stiffness = 71.2633, dampening = 15.8273644 })
 
-hl.animation({ leaf = "global",        enabled = true,  speed = 10,   bezier = "default" })
-hl.animation({ leaf = "border",        enabled = true,  speed = 5.39, bezier = "easeOutQuint" })
-hl.animation({ leaf = "windows",       enabled = true,  speed = 4.79, bezier = "easeOutQuint" })
-hl.animation({ leaf = "windowsIn",     enabled = true,  speed = 2.1,  bezier = "myCustom",       style = "slide" })
-hl.animation({ leaf = "windowsOut",    enabled = true,  speed = 1.49, bezier = "myCustom",       style = "slide" })
-hl.animation({ leaf = "fadeIn",        enabled = true,  speed = 1.73, bezier = "almostLinear" })
-hl.animation({ leaf = "fadeOut",       enabled = true,  speed = 1.46, bezier = "almostLinear" })
-hl.animation({ leaf = "fade",          enabled = true,  speed = 3.03, bezier = "quick" })
-hl.animation({ leaf = "layers",        enabled = true,  speed = 3.81, bezier = "easeOutQuint" })
-hl.animation({ leaf = "layersIn",      enabled = true,  speed = 4,    bezier = "easeOutQuint", style = "fade" })
-hl.animation({ leaf = "layersOut",     enabled = true,  speed = 1.5,  bezier = "linear",       style = "fade" })
-hl.animation({ leaf = "fadeLayersIn",  enabled = true,  speed = 1.79, bezier = "almostLinear" })
-hl.animation({ leaf = "fadeLayersOut", enabled = true,  speed = 1.39, bezier = "almostLinear" })
-hl.animation({ leaf = "workspaces",    enabled = true,  speed = 2.94, bezier = "almostLinear", style = "slide" })
-hl.animation({ leaf = "workspacesIn",  enabled = true,  speed = 2.21, bezier = "myCustom", style = "slide" })
-hl.animation({ leaf = "workspacesOut", enabled = true,  speed = 2.94, bezier = "myCustom", style = "slide" })
-hl.animation({ leaf = "zoomFactor",    enabled = true,  speed = 7,    bezier = "quick" })
+--hl.animation({ leaf = "global",        enabled = true,  speed = 10,   bezier = "default" })
+--hl.animation({ leaf = "border",        enabled = true,  speed = 5.39, bezier = "easeOutQuint" })
+--hl.animation({ leaf = "windows",       enabled = true,  speed = 4.79, bezier = "easeOutQuint" })
+--hl.animation({ leaf = "windowsIn",     enabled = true,  speed = 2.1,  bezier = "myCustom",       style = "slide" })
+--hl.animation({ leaf = "windowsOut",    enabled = true,  speed = 1.49, bezier = "myCustom",       style = "slide" })
+--hl.animation({ leaf = "fadeIn",        enabled = true,  speed = 1.73, bezier = "almostLinear" })
+--hl.animation({ leaf = "fadeOut",       enabled = true,  speed = 1.46, bezier = "almostLinear" })
+--hl.animation({ leaf = "fade",          enabled = true,  speed = 3.03, bezier = "quick" })
+--hl.animation({ leaf = "layers",        enabled = true,  speed = 3.81, bezier = "easeOutQuint" })
+--hl.animation({ leaf = "layersIn",      enabled = true,  speed = 4,    bezier = "easeOutQuint", style = "fade" })
+--hl.animation({ leaf = "layersOut",     enabled = true,  speed = 1.5,  bezier = "linear",       style = "fade" })
+--hl.animation({ leaf = "fadeLayersIn",  enabled = true,  speed = 1.79, bezier = "almostLinear" })
+--hl.animation({ leaf = "fadeLayersOut", enabled = true,  speed = 1.39, bezier = "almostLinear" })
+--hl.animation({ leaf = "workspaces",    enabled = true,  speed = 2.94, bezier = "almostLinear", style = "slide" })
+--hl.animation({ leaf = "workspacesIn",  enabled = true,  speed = 2.21, bezier = "myCustom", style = "slide" })
+--hl.animation({ leaf = "workspacesOut", enabled = true,  speed = 2.94, bezier = "myCustom", style = "slide" })
+--hl.animation({ leaf = "zoomFactor",    enabled = true,  speed = 7,    bezier = "quick" })
+
+
+hl.animation({leaf = "global",enabled = true,speed = 10,bezier = "default"})
+-- Window border
+hl.animation({leaf = "border",enabled = true,speed = 5.8,bezier = "smoothOut"})
+-- Window movement / resize
+hl.animation({leaf = "windows",enabled = true,speed = 5.4,bezier = "smoothOut"})
+-- Window opening
+hl.animation({leaf = "windowsIn",enabled = true,speed = 4.2,bezier = "smoothOut",style = "slide"})
+-- Window closing
+hl.animation({leaf = "windowsOut",enabled = true,speed = 5.5,bezier = "smooth",style = "slide"})
+-- Fade
+hl.animation({leaf = "fade",enabled = true,speed = 6,bezier = "smoothOut"})
+hl.animation({leaf = "fadeIn",enabled = true,speed = 5.8,bezier = "smoothOut"})
+hl.animation({leaf = "fadeOut",enabled = true,speed = 6.2,bezier = "quickOut"})
+-- Layers
+hl.animation({leaf = "layers",enabled = true,speed = 5.5,bezier = "smoothOut"})
+hl.animation({leaf = "layersIn",enabled = true,speed = 5.2,bezier = "smoothOut",style = "fade"})
+hl.animation({leaf = "layersOut",enabled = true,speed = 6,bezier = "quickOut",style = "fade"})
+-- Layer fading
+hl.animation({leaf = "fadeLayersIn",enabled = true,speed = 6,bezier = "smoothOut"})
+hl.animation({leaf = "fadeLayersOut",enabled = true,speed = 6.5,bezier = "quickOut"})
+-- Workspaces
+hl.animation({leaf = "workspaces",enabled = true,speed = 4.2,bezier = "smoothInOut",style = "slide"})
+hl.animation({leaf = "workspacesIn",enabled = true,speed = 4.5,bezier = "smoothOut",style = "slide"})
+hl.animation({leaf = "workspacesOut",enabled = true,speed = 4.8,bezier = "smooth",style = "slide"})
+-- Zoom
+hl.animation({leaf = "zoomFactor",enabled = true,speed = 7,bezier = "quickOut"})
 
 -- Ref https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
 -- "Smart gaps" / "No gaps when only"
@@ -272,7 +308,6 @@ hl.device({
 
 local mainMod = "SUPER"
 
-hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("hyprshot -m output -f Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png"))
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd('~/.config/hypr/screenshot.sh'))
 
 

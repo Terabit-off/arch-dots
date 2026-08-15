@@ -27,8 +27,6 @@ PopupWindow {
     onVisibleChanged: {
         if (visible)
             openAnimation.restart()
-        
-        clipboardView.refresh()
     }
 
     property Item anchorItem
@@ -140,11 +138,6 @@ PopupWindow {
                         isActive: centerWindowRoot.currentSegmentIndex === 2
                         onClicked: centerWindowRoot.currentSegmentIndex = 2
                     }
-                    NavButton {
-                        iconText: ""
-                        isActive: centerWindowRoot.currentSegmentIndex === 3
-                        onClicked: centerWindowRoot.currentSegmentIndex = 3
-                    }
                 }
             }
 
@@ -177,13 +170,10 @@ PopupWindow {
 
                 onCurrentIndexChanged:{
                     updatePages()
-                    if (currentIndex === 3)
-                        clipboardView.refresh()
 
                 } 
                 Component.onCompleted: {
                     updatePages()
-                    clipboardView.refresh()
                 }
                 Modules.MusicView {
                     id: musicView
@@ -227,25 +217,6 @@ PopupWindow {
                 }
 
                 Modules.SystemResourcesView {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 180
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-
-                    Behavior on x {
-                        NumberAnimation {
-                            duration: 180
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-                }
-                Modules.ClipboardView {
-                    id: clipboardView
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
