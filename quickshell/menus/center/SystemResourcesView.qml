@@ -156,7 +156,7 @@ Item {
             Rectangle {
                 width: 2
                 height: 20
-                color: Singletons.Colors.moduleSeparatorColor 
+                color: Singletons.Colors.separatorColor 
             }
 
             Rectangle{
