@@ -17,9 +17,13 @@ QtObject {
     readonly property color activeButtonBackgroundColor: "#33ffffff"
 
     // Left side --- WorkSpace
-    readonly property color wsUrgentForeground: '#a74343'
+    readonly property color wsUrgentForeground: '#cecbcb'
     readonly property color wsFocusForeground: '#ffffff'
-    readonly property color wsNotFocusForeground: '#7e7e7e'
+    readonly property color wsNotFocusForeground: '#7e7e7e' 
+    
+    readonly property color wsFocusBackground: '#92323232'
+    readonly property color wsUrgentBackground: '#93a37171'
+    readonly property color wsNotFocusBackground: 'transparent'
 
 
     // Menus

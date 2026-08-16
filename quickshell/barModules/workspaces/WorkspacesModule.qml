@@ -23,14 +23,13 @@ Rectangle {
             delegate: Rectangle {
                 width: 30
                 height: 20
-                color: 'transparent'
+                radius: 5
+                color: modelData.focused ? Singletons.Colors.wsFocusBackground : modelData.urgent ? 
+                        Singletons.Colors.wsUrgentBackground : Singletons.Colors.wsNotFocusBackground
                 Text {
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        bottomMargin: 0
-                    }
+                    anchors.centerIn: parent
                     horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
                     text: modelData.id
                     color: modelData.focused ? Singletons.Colors.wsFocusForeground : modelData.urgent ? 
                         Singletons.Colors.wsUrgentForeground : Singletons.Colors.wsNotFocusForeground
