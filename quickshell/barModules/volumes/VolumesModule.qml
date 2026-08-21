@@ -71,7 +71,7 @@ Rectangle {
                     wheel.accepted = true
                 }
                 onClicked: {
-                    popup.visible = true
+                    popup.visible = true 
                 }
             }
         }

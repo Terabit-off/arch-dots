@@ -98,6 +98,7 @@ Rectangle {
 
         color: "transparent"
         exclusionMode: ExclusionMode.Ignore
+        WlrLayershell.layer: WlrLayer.Overlay
 
         ColumnLayout {
             id: column
@@ -196,6 +197,7 @@ Rectangle {
                             Layout.preferredHeight: 36
                             Layout.preferredWidth: 36
                             color: "transparent"
+                            visible: card.modelData.image || card.modelData.appIcon
                             
                             Image {
                                 id: transientIcon
