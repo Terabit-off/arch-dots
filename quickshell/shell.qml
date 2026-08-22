@@ -5,7 +5,8 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.UPower
 import Qt5Compat.GraphicalEffects
-import Quickshell.Services.SystemTray 
+import Quickshell.Services.SystemTray
+import Quickshell.Wayland
 
 import "./Singletons"
 import "./barModules" as Modules 
@@ -30,6 +31,7 @@ ShellRoot {
         }
         implicitHeight: 20
         color: 'transparent'
+        WlrLayershell.namespace: "qs-blur"
 
         Rectangle {
             anchors.fill: parent

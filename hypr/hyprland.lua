@@ -97,9 +97,11 @@ hl.config({
 
         blur = {
             enabled   = true,
-            size      = 2,
-            passes    = 1,
+            size      = 3,
+            passes    = 2,
             vibrancy  = 0.3696,
+
+            ignore_opacity = true,
         },
     },
 
@@ -341,6 +343,16 @@ local suppressMaximizeRule = hl.window_rule({
     suppress_event = "maximize",
 })
 suppressMaximizeRule:set_enabled(false)
+
+hl.layer_rule({
+    match = {
+        namespace = "^qs-blur$",
+    },
+
+    blur = true,
+    ignore_alpha = 0.05,
+})
+
 
 hl.window_rule({
     name  = "fix-xwayland-drags",

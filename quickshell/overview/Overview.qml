@@ -14,6 +14,7 @@ PanelWindow {
     visible: false
     color: "transparent"
 
+    WlrLayershell.namespace: "qs-blur"
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: visible ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
