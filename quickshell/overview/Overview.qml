@@ -212,46 +212,24 @@ PanelWindow {
                         Layout.fillWidth: true
                         spacing: 8
 
-                        ColumnLayout {
+                        Text {
+                            text: card.modelData.title && card.modelData.title !== ""
+                                ? card.modelData.title 
+                                : (card.modelData.appId && card.modelData.appId !== "" ? card.modelData.appId : "No name")
+                            color: Singletons.Colors.foreground
+                            font.pixelSize: 12
+                            font.bold: true
+                            elide: Text.ElideRight
                             Layout.fillWidth: true
-                            spacing: 2
-
-                            Text {
-                                text: card.modelData.title && card.modelData.title !== ""
-                                    ? card.modelData.title 
-                                    : (card.modelData.appId && card.modelData.appId !== "" ? card.modelData.appId : "No name")
-                                color: Singletons.Colors.foreground
-                                font.pixelSize: 12
-                                font.bold: true
-                                elide: Text.ElideRight
-                                Layout.fillWidth: true
-                            }
-
-                            Text {
-                                text: card.modelData.appId && card.modelData.appId !== "" ? card.modelData.wayland.appId : "App"
-                                color: Singletons.Colors.foregroundDim
-                                font.pixelSize: 10
-                                elide: Text.ElideRight
-                                Layout.fillWidth: true
-                            }
                         }
-
-                        Rectangle {
-                            color: Singletons.Colors.wsFocusBackground
-                            border.color: Singletons.Colors.separatorColor
-                            border.width: 1
-                            radius: Singletons.Colors.menuBorderRadius
-                            implicitWidth: wsText.implicitWidth + 10
-                            implicitHeight: wsText.implicitHeight + 4
-
-                            Text {
-                                id: wsText
-                                anchors.centerIn: parent
-                                text: card.modelData?.workspace?.name ?? card.modelData?.workspace?.id ?? "—"
-                                color: Singletons.Colors.wsFocusForeground
-                                font.pixelSize: 10
-                                font.bold: true
-                            }
+                        
+                        Text {
+                            id: wsText
+                            width: content + 10
+                            text: card.modelData?.workspace?.name ?? card.modelData?.workspace?.id ?? "—"
+                            color: Singletons.Colors.wsFocusForeground
+                            font.pixelSize: 10
+                            font.bold: true
                         }
                     }
                 }
