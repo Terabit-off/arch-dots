@@ -38,7 +38,7 @@ PanelWindow {
     HyprlandFocusGrab {
         active: overviewWindow.visible
         windows: [ overviewWindow ]
-        onCleared: overviewWindow.visible = false
+        onCleared: closeOverview()
     }
 
     IpcHandler {

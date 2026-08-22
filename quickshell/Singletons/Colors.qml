@@ -8,7 +8,7 @@ QtObject {
     readonly property color foreground: '#ffffff'
     readonly property color foregroundDim: '#7e7e7e'
     readonly property color barBorderColor: 'transparent'
-    readonly property color barModuleColor: '#924b4b4b'
+    readonly property color barModuleColor: '#634b4b4b'
 
     readonly property color criticalColor: '#f38ba8'
 
