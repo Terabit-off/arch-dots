@@ -45,4 +45,12 @@ QtObject {
 
     readonly property color notifiCardBorderBackground: '#db6e6e6e'
     readonly property color notifiCardHoverBorderBackground: '#ffffff'
+
+    // Overview / Cards
+    readonly property color overviewBackground: '#f11c1c1c'       // Фон панели обзора (или используется menuBackground)
+    readonly property color overviewCardBackground: '#262626'   // Фон карточки окна в покое
+    readonly property color overviewCardHoverBackground: '#33ffffff' // Фон карточки при наведении
+    readonly property color overviewCardBorder: '#3d3d3d'         // Обводка карточки
+    readonly property color overviewCardHoverBorder: '#ffffff'    // Обводка карточки при наведении
+    readonly property real overviewBorderRadius: 10              // Скругление углов карточки
 }

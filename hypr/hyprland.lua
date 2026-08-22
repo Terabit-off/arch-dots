@@ -1,19 +1,4 @@
 ---@diagnostic disable: trailing-space
--- This is an example Hyprland Lua config file.
--- Refer to the wiki for more information.
--- https://wiki.hypr.land/Configuring/Start/
-
--- Please note not all available settings / options are set here.
--- For a full list, see the wiki
-
--- You can (and should!!) split this configuration into multiple files
--- Create your files separately and then require them like this:
--- require("myColors")
-
-
-------------------
----- MONITORS ----
-------------------
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 hl.monitor({
@@ -29,7 +14,6 @@ hl.monitor({
 ---- MY PROGRAMS ----
 ---------------------
 
--- Set programs that you use
 local terminal    = "kitty"
 local fileManager = "nemo"
 local menu        = "wofi"
@@ -40,11 +24,6 @@ local menu        = "wofi"
 ---- AUTOSTART ----
 -------------------
 
--- See https://wiki.hypr.land/Configuring/Basics/Autostart/
-
--- Autostart necessary processes (like notifications daemons, status bars, etc.)
--- Or execute your favorite apps at launch like this:
---
 hl.on("hyprland.start", function () 
   hl.exec_cmd("hyprpaper & qs")
   hl.exec_cmd("firefox")
@@ -65,26 +44,6 @@ hl.env("XCURSOR_THEME", "BreezeX-Black")
 
 
 hl.env("GDK_SCALE", "1")
-
-
-
------------------------
------ PERMISSIONS -----
------------------------
-
--- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Permissions/
--- Please note permission changes here require a Hyprland restart and are not applied on-the-fly
--- for security reasons
-
--- hl.config({
---   ecosystem = {
---     enforce_permissions = true,
---   },
--- })
-
--- hl.permission("/usr/(bin|local/bin)/grim", "screencopy", "allow")
--- hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
--- hl.permission("/usr/(bin|local/bin)/hyprpm", "plugin", "allow")
 
 
 -----------------------
@@ -226,13 +185,6 @@ hl.window_rule({
     rounding    = 5,
 })
 
--- hl.window_rule({
---     name  = "no-gaps-f1",
---     match = { float = false, workspace = "f[1]" },
---     border_size = 0,
---     rounding    = 0,
--- })
-
 -- See https://wiki.hypr.land/Configuring/Layouts/Dwindle-Layout/ for more
 hl.config({
     dwindle = {
@@ -310,10 +262,9 @@ local mainMod = "SUPER"
 
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd('~/.config/hypr/screenshot.sh'))
 
-
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
-local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
+hl.bind(mainMod .. " + C", hl.dsp.window.close())
 hl.bind(mainMod .. " + CTRL + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", function ()
@@ -323,7 +274,9 @@ hl.bind(mainMod .. " + V", function ()
                             end)
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
-
+hl.bind(mainMod .. " + TAB", function ()
+   Toggle_qs_overview() 
+end)
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
@@ -348,6 +301,15 @@ end
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 hl.gesture({ fingers = 3, direction = "swipe", mods = "SUPER", action = "resize" }) -- super + swipe 3 fingers
+
+
+hl.gesture({ fingers = 3, direction = "up", action = function ()
+    Toggle_qs_overview()
+end })
+
+hl.gesture({ fingers = 3, direction = "down", action = function ()
+    hl.exec_cmd("qs ipc call overview close");
+end })
 
 -- Laptop multimedia keys for volume and LCD brightness
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
@@ -411,3 +373,9 @@ hl.window_rule({
     float = true,
     size = {1000, 800}
 })
+
+function Toggle_qs_overview()
+    hl.exec_cmd([[
+        sh -lc 'qs ipc call overview toggle "$(hyprctl activewindow -j | jq -r ".address")"'
+    ]])
+end

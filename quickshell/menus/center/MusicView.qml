@@ -100,6 +100,23 @@ Item {
                 font.pixelSize: 48
                 opacity: 0.55
             }
+            AnimatedImage {
+                id: coverEmpty
+                anchors.fill: parent
+
+                source: Qt.resolvedUrl("sleepy_cat.gif")
+                fillMode: Image.PreserveAspectFit
+                playing: true
+                visible: false
+            }
+            OpacityMask {
+                id: roundedCoverEmpty
+
+                anchors.fill: coverFrame
+                source: coverEmpty
+                maskSource: coverMask
+                visible: !roundedCover.visible
+            }
         }
 
         ColumnLayout {
