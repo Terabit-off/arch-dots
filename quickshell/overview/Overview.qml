@@ -5,6 +5,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Widgets
 import Quickshell.Io
+import QtQuick.Effects
 
 import "../Singletons" as Singletons
 
@@ -18,8 +19,6 @@ PanelWindow {
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: visible ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
-    implicitWidth: Math.min(1320, 320 * sortedToplevels.length + 40)
-    implicitHeight: Math.min(800, windowGrid.contentHeight + 40)
     property bool isOpen: false
 
     readonly property var sortedToplevels: {
@@ -33,12 +32,33 @@ PanelWindow {
             return (a.title || "").localeCompare(b.title || "");
         });
     }
-    
 
-    HyprlandFocusGrab {
-        active: overviewWindow.visible
-        windows: [ overviewWindow ]
-        onCleared: closeOverview()
+    anchors {
+        top: true
+        bottom: true
+        left: true
+        right: true
+    }
+
+    Connections {
+        target: Hyprland.toplevels
+        function onValuesChanged() {
+            if (overviewWindow.isOpen) {
+                overviewWindow.updateSortedToplevels();
+            }
+        }
+    }
+    Connections {
+        target: Hyprland
+        function onFocusedToplevelChanged() {
+            if (!overviewWindow.isOpen && Hyprland.focusedToplevel) {
+                overviewWindow.lastFocusedToplevel = Hyprland.focusedToplevel;
+            }
+        }
+    }
+    MouseArea {
+        anchors.fill: parent
+        onClicked: overviewWindow.closeOverview()
     }
 
     IpcHandler {
@@ -108,17 +128,32 @@ PanelWindow {
 
     Rectangle {
         id: mainContainer
-        anchors.fill: parent
+        anchors.centerIn: parent
+        implicitWidth: Math.min(1320, 320 * sortedToplevels.length + 40)
+        implicitHeight: Math.min(800, windowGrid.contentHeight + 40)
         color: Singletons.Colors.overviewBackground
         radius: Singletons.Colors.menuBorderRadius
         border.color: Singletons.Colors.menuBorderColor
         border.width: 1
-
+        clip: true
         opacity: overviewWindow.isOpen ? 1 : 0
 
         transform: Translate {
             id: slideTransform
             y: 120
+        }
+        Behavior on implicitWidth {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        Behavior on implicitHeight {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.OutCubic
+            }
         }
 
         GridView {
@@ -198,7 +233,7 @@ PanelWindow {
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        color: "#000000"
+                        color: '#8e000000'
                         radius: Singletons.Colors.menuBorderRadius
                         clip: true
 
@@ -226,7 +261,6 @@ PanelWindow {
                         
                         Text {
                             id: wsText
-                            width: content + 10
                             text: card.modelData?.workspace?.name ?? card.modelData?.workspace?.id ?? "—"
                             color: Singletons.Colors.wsFocusForeground
                             font.pixelSize: 10
