@@ -4,3 +4,4 @@ CenterMenu 1.0 center/CenterWindow.qml
 WifiPopup 1.0 wifi/WifiPopup.qml
 OverviewPopup 1.0 overview/Overview.qml
 VolumesPopup 1.0 volumes/VolumesPopup.qml
+BatteryPopup 1.0 battery/BatteryPopup.qml

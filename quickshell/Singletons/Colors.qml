@@ -26,8 +26,8 @@ QtObject {
     readonly property color wsNotFocusBackground: 'transparent'
 
 
-    // Menus
-    readonly property color menuBackground: '#f11c1c1c'
+    // Menus 
+    readonly property color menuBackground: '#ba1c1c1c'
     readonly property color separatorColor: '#bd939393'
     readonly property color menuBorderColor: '#db6e6e6e'
     readonly property real menuBorderRadius: 5
@@ -47,10 +47,10 @@ QtObject {
     readonly property color notifiCardHoverBorderBackground: '#ffffff'
 
     // Overview / Cards
-    readonly property color overviewBackground: '#be1c1c1c'       // Фон панели обзора (или используется menuBackground)
-    readonly property color overviewCardBackground: '#262626'   // Фон карточки окна в покое
-    readonly property color overviewCardHoverBackground: '#494949' // Фон карточки при наведении
-    readonly property color overviewCardBorder: '#3d3d3d'         // Обводка карточки
-    readonly property color overviewCardHoverBorder: '#db6e6e6e'    // Обводка карточки при наведении
-    readonly property real overviewBorderRadius: 10              // Скругление углов карточки
+    readonly property color overviewBackground: '#be1c1c1c'
+    readonly property color overviewCardBackground: '#262626'
+    readonly property color overviewCardHoverBackground: '#494949'
+    readonly property color overviewCardBorder: '#3d3d3d'
+    readonly property color overviewCardHoverBorder: '#db6e6e6e'
+    readonly property real overviewBorderRadius: 10
 }

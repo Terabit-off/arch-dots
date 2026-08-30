@@ -52,10 +52,6 @@ hl.env("GDK_SCALE", "1")
 
 -- Refer to https://wiki.hypr.land/Configuring/Basics/Variables/
 hl.config({
-
-    master = {
-        orientation = "right"
-    },
     xwayland = {
         force_zero_scaling = true,
     },
@@ -77,7 +73,7 @@ hl.config({
         -- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
         allow_tearing = false,
 
-        layout = "master",
+        layout = "dwindle",
     },
 
     decoration = {
@@ -102,6 +98,9 @@ hl.config({
             vibrancy  = 0.3696,
 
             ignore_opacity = true,
+
+            popups = true,
+            popups_ignorealpha = 0,
         },
     },
 
@@ -191,6 +190,7 @@ hl.window_rule({
 hl.config({
     dwindle = {
         preserve_split = true, -- You probably want this
+        smart_split = false,
     },
 })
 
@@ -287,10 +287,10 @@ hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "down" }))
 
 -- Swap master window 
-hl.bind(mainMod .. " + D", hl.dsp.layout("swapwithmaster", "master"))
+-- hl.bind(mainMod .. " + D", hl.dsp.layout("swapwithmaster", "master"))
 -- Swap windows
-hl.bind(mainMod .. " + SHIFT + up", hl.dsp.layout("swapprev"))
-hl.bind(mainMod .. " + SHIFT + down", hl.dsp.layout("swapnext"))
+-- hl.bind(mainMod .. " + SHIFT + up", hl.dsp.layout("swapprev"))
+-- hl.bind(mainMod .. " + SHIFT + down", hl.dsp.layout("swapnext"))
 
 -- Switch workspaces with mainMod + [0-9]
 for i = 1, 10 do
@@ -350,6 +350,7 @@ hl.layer_rule({
     },
 
     blur = true,
+    blur_popups = true,
     ignore_alpha = 0.05,
 })
 
@@ -384,6 +385,13 @@ hl.window_rule({
 
     float = true,
     size = {1000, 800}
+})
+hl.window_rule({
+    name = "floatKitty",
+    match = { class = "kitty" },
+
+    float = true,
+    size = {1000, 600}
 })
 
 function Toggle_qs_overview()

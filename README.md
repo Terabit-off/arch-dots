@@ -25,6 +25,7 @@ IF YOU STARED THIS REPO YOUR IQ WILL BE LOWER BY 10 POINTS
 - swayimg (photo viewer)
 - nemo (file manager)
 - cliphist, and add it to autostart (`wl-paste --watch cliphist store`)
+- power-profiles-daemon (`sudo pacman -S power-profiles-daemon`)
 
 ### For Waybar
 

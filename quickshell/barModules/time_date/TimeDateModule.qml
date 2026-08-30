@@ -26,6 +26,12 @@ Rectangle {
     Behavior on color {
         ColorAnimation { duration: 200; easing.type: Easing.InQuad }
     }
+    Behavior on implicitWidth {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutCubic
+        }
+    }
 
     Timer {
         id: timeTimer

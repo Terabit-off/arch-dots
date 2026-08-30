@@ -108,15 +108,14 @@ PopupWindow {
             Rectangle {
                 Layout.preferredWidth: 60
                 Layout.fillHeight: true
-                color: Singletons.Colors.menuBackground
+                color: "transparent" //Singletons.Colors.menuBackground
                 radius: popupContent.radius
                 
-                // Делаем правые углы прямыми для слияния с основным контентом
                 Rectangle {
                     width: popupContent.radius
                     height: parent.height
                     anchors.right: parent.right
-                    color: parent.color
+                    color: Singletons.Colors.menuBackground
                 }
 
                 ColumnLayout {

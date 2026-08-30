@@ -19,6 +19,13 @@ Rectangle {
         anchorItem: wfText
     }
 
+    Behavior on x {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutCubic
+        }
+    }
+
     Text {
         id: wfText
         anchors.centerIn: parent

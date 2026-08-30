@@ -10,6 +10,12 @@ Rectangle {
     radius: 5
     Layout.fillHeight: true
     implicitWidth: btText.implicitWidth + 15
+    Behavior on x {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutCubic
+        }
+    }
 
     Text {
         id: btText

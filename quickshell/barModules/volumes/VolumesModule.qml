@@ -16,6 +16,19 @@ Rectangle {
     implicitWidth: root.implicitWidth + 10
     property int currentBrightness: 0
 
+    Behavior on x {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutCubic
+        }
+    }
+    Behavior on implicitWidth {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutCubic
+        }
+    }
+
     Menus.VolumesPopup {
         id: popup
         anchorItem: rootRec

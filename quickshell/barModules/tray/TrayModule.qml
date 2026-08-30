@@ -14,6 +14,19 @@ Rectangle {
     visible: SystemTray.items.values.length > 0
     implicitWidth: trayLayout.implicitWidth + 10
 
+    Behavior on x {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutCubic
+        }
+    }
+    Behavior on implicitWidth {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutCubic
+        }
+    }
+
     RowLayout {
         id: trayLayout
         layoutDirection: Qt.LeftToRight

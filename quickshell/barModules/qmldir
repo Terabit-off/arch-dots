@@ -8,4 +8,4 @@ VolumesModule 1.0 volumes/VolumesModule.qml
 BluetoothModule 1.0 bluetooth/Bluetooth.qml
 WifiModule 1.0 wifi/WifiModule.qml
 NotificationModule 1.0 notifications/Notifications.qml
-OverviewModule 1.0 overview/OverviewModule.qml
+BatteryModule battery/BatteryModule.qml
