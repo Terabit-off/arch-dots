@@ -16,7 +16,7 @@ hl.monitor({
 
 local terminal    = "kitty"
 local fileManager = "nemo"
-local menu        = "wofi"
+local menu        =  "qs ipc call launcher toggle"--"wofi"
 
 
 

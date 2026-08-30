@@ -11,6 +11,7 @@ import Quickshell.Wayland
 import "./Singletons" as Singletons
 import "./barModules" as Modules 
 import "./overview"
+import "./launcher"
 
 
 ShellRoot {
@@ -87,5 +88,6 @@ ShellRoot {
     }
 
     Overview { }
+    LaucherShell { } 
 }
 
