@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-// Импортируем типы данных и встроенные сервисы Quickshell
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Widgets

@@ -314,10 +314,7 @@ PopupWindow {
 
             
 
-            // =========================================================
             // APPLICATION MIXER
-            // =========================================================
-
             Rectangle {
                 visible: Singletons.AudioState.streamNodes.length > 0
                 Layout.fillWidth: true
@@ -553,10 +550,7 @@ PopupWindow {
         id: brightnessSet
     }
 
-    // ================================================================
     // APPLICATION NAMES
-    // ================================================================
-
     function displayName(node) {
         if (!node)
             return "Unknown"

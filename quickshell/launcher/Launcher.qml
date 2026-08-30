@@ -177,7 +177,7 @@ PanelWindow {
                 focus: true
 
                 placeholderText:
-                    "Search applications, files, commands..."
+                    "Search applications, files, calculate..."
 
                 font.pixelSize: 14
 

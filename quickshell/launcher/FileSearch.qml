@@ -52,7 +52,7 @@ Item {
 
         stderr: StdioCollector {
             onStreamFinished: {
-                // fd errors intentionally ignored.
+                // fd errors intentionally ignored
             }
         }
     }
