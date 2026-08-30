@@ -36,7 +36,9 @@ Item {
 
                         description: path,
 
-                        icon: "󰈔",
+                        icon: isImage(path)
+                            ? "file://" + path 
+                            : "󰈔",
 
                         type: "file",
 
@@ -157,5 +159,38 @@ Item {
         process.command = command
 
         process.running = true
+    }
+
+    function searchHome(query) {
+        process.running = false
+
+        var home = Quickshell.env("HOME") || "."
+
+        process.command = [
+            "fd",
+            "--hidden",
+            "--exclude", ".git",
+            "--type", "f",
+            "--type", "l",
+            "--ignore-case",
+            "--max-results", "40",
+            query,
+            home
+        ]
+
+        process.running = true
+    }
+
+    function isImage(path) {
+        var lower = path.toLowerCase()
+
+        return lower.endsWith(".jpg") ||
+            lower.endsWith(".jpeg") ||
+            lower.endsWith(".png") ||
+            lower.endsWith(".webp") ||
+            lower.endsWith(".gif") ||
+            lower.endsWith(".bmp") ||
+            lower.endsWith(".svg") ||
+            lower.endsWith(".avif")
     }
 }

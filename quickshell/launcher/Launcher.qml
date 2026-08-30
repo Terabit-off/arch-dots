@@ -4,11 +4,12 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Widgets
+import Quickshell.Io
 
 import "../Singletons" as Singletons
 
 PanelWindow {
-    id: root
+    id: launcher
 
     visible: false
 
@@ -27,8 +28,23 @@ PanelWindow {
     color: "transparent"
 
     property int selectedIndex: 0
-    property bool commandConfirmVisible: false
-    property string pendingCommand: ""
+
+    IpcHandler {
+        target: "launcher"
+
+        function toggle(): void {
+            launcher.visible = !launcher.visible
+
+            if (launcher.visible)
+                launcher.open()
+            else
+                launcher.close()
+        }
+
+        function close(): void {
+            launcher.close()
+        }
+    }
 
     FileSearch {
         id: fileSearch
@@ -38,28 +54,13 @@ PanelWindow {
         }
     }
 
-    CommandRunner {
-        id: commandRunner
-
-        onOutputReady: function(text) {
-            router.appendCommandOutput(text)
-        }
-
-        onFinished: function(exitCode) {
-            router.appendCommandOutput(
-                "\n[exit code: " + exitCode + "]"
-            )
-        }
-    }
-
     Router {
         id: router
 
         fileSearch: fileSearch
-        commandRunner: commandRunner
 
         onResultsChanged: {
-            root.selectedIndex = 0
+            launcher.selectedIndex = 0
 
             if (resultList.count > 0) {
                 resultList.positionViewAtBeginning()
@@ -68,42 +69,37 @@ PanelWindow {
     }
 
     function open() {
-        root.visible = true
-        root.commandConfirmVisible = false
-        root.pendingCommand = ""
+        launcher.visible = true
 
         search.forceActiveFocus()
         search.selectAll()
+        search.text = ""
 
         router.search(search.text)
+        showAnim.start();
     }
 
     function close() {
-        root.commandConfirmVisible = false
-        root.pendingCommand = ""
-
-        commandRunner.stop()
         fileSearch.stop()
 
-        root.visible = false
-
-        root.closed()
+        showAnim.stop();
+        hideAnim.start();
     }
 
     function moveSelection(delta) {
         if (router.results.length === 0)
             return
 
-        root.selectedIndex += delta
+        launcher.selectedIndex += delta
 
-        if (root.selectedIndex < 0)
-            root.selectedIndex = router.results.length - 1
+        if (launcher.selectedIndex < 0)
+            launcher.selectedIndex = router.results.length - 1
 
-        if (root.selectedIndex >= router.results.length)
-            root.selectedIndex = 0
+        if (launcher.selectedIndex >= router.results.length)
+            launcher.selectedIndex = 0
 
         resultList.positionViewAtIndex(
-            root.selectedIndex,
+            launcher.selectedIndex,
             ListView.Contain
         )
     }
@@ -112,67 +108,63 @@ PanelWindow {
         if (router.results.length === 0)
             return
 
-        var item = router.results[root.selectedIndex]
+        var item = router.results[launcher.selectedIndex]
 
         if (!item)
             return
 
-        if (item.type === "command") {
-            root.pendingCommand = item.command
-            root.commandConfirmVisible = true
-            return
-        }
-
         router.execute(item)
     }
 
-    function executePendingCommand() {
-        if (root.pendingCommand.length === 0)
-            return
-
-        root.commandConfirmVisible = false
-
-        router.execute({
-            type: "command",
-            command: root.pendingCommand
-        })
-
-        root.pendingCommand = ""
+    ParallelAnimation {
+        id: showAnim
+        NumberAnimation { target: window; property: "opacity"; to: 1; duration: 150; easing.type: Easing.OutCubic }
+        NumberAnimation { target: slideTransform; property: "y"; to: 0; duration: 250; easing.type: Easing.OutCubic }
     }
 
-    // Rectangle {
-    //     anchors.fill: parent
+    ParallelAnimation {
+        id: hideAnim
+        NumberAnimation { target: window; property: "opacity"; to: 0; duration: 150; easing.type: Easing.InCubic }
+        NumberAnimation { target: slideTransform; property: "y"; to: 120; duration: 200; easing.type: Easing.InCubic }
 
-    //     color: "#000000"
-    //     opacity: 0.45
+        onFinished: {
+            launcher.visible = false;
+        }
+    }
 
-    //     MouseArea {
-    //         anchors.fill: parent
-    //     }
-    // }
     MouseArea {
         anchors.fill: parent
-        onClicked: parent.close()
+        onClicked: close()
     }
 
     Rectangle {
         id: window
 
-        width: Math.min(parent.width - 80, 760)
+        transform: Translate {
+            id: slideTransform
+            y: 120
+        }
+
+        width: 460
         height: Math.min(parent.height - 100, 600)
 
         anchors.centerIn: parent
 
-        radius: 16
+        radius: Singletons.Colors.menuBorderRadius + 5
 
-        color: "#18181b"
+        color: Singletons.Colors.menuBackground
 
         border.width: 1
-        border.color: "#3f3f46"
+        border.color: Singletons.Colors.menuBorderColor
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 16
+            anchors.margins: {
+                top: 16
+                left: 16
+                right: 16
+                //bottom: 6
+            }
 
             spacing: 10
 
@@ -180,16 +172,16 @@ PanelWindow {
                 id: search
 
                 Layout.fillWidth: true
-                Layout.preferredHeight: 52
+                Layout.preferredHeight: 42
 
                 focus: true
 
                 placeholderText:
                     "Search applications, files, commands..."
 
-                font.pixelSize: 19
+                font.pixelSize: 14
 
-                color: "#fafafa"
+                color: Singletons.Colors.foreground
                 placeholderTextColor: "#71717a"
 
                 leftPadding: 16
@@ -209,27 +201,29 @@ PanelWindow {
                 }
 
                 Keys.onEscapePressed: {
-                    root.close()
+                    launcher.close()
                 }
 
                 Keys.onUpPressed: {
-                    root.moveSelection(-1)
+                    launcher.moveSelection(-1)
                 }
 
                 Keys.onDownPressed: {
-                    root.moveSelection(1)
+                    launcher.moveSelection(1)
                 }
 
                 Keys.onTabPressed: {
-                    root.moveSelection(1)
+                    launcher.moveSelection(1)
                 }
 
                 Keys.onReturnPressed: {
-                    root.executeSelected()
+                    launcher.executeSelected()
+                    launcher.close()
                 }
 
                 Keys.onEnterPressed: {
-                    root.executeSelected()
+                    launcher.executeSelected()
+                    launcher.close()
                 }
             }
 
@@ -239,7 +233,7 @@ PanelWindow {
                 Text {
                     text: router.modeText
 
-                    color: "#a1a1aa"
+                    color: Singletons.Colors.foregroundDim
                     font.pixelSize: 12
 
                     Layout.fillWidth: true
@@ -248,18 +242,17 @@ PanelWindow {
                 Text {
                     text: router.results.length + " results"
 
-                    color: "#71717a"
+                    color: Singletons.Colors.foregroundDim
                     font.pixelSize: 12
                 }
             }
 
+            // RESULTS
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                radius: 10
-
-                color: "#111113"
+                color: 'transparent'
 
                 clip: true
 
@@ -267,7 +260,7 @@ PanelWindow {
                     id: resultList
 
                     anchors.fill: parent
-                    anchors.margins: 6
+                    //anchors.margins: 6
 
                     clip: true
 
@@ -275,6 +268,8 @@ PanelWindow {
 
                     model: router.results
 
+
+                    // result card
                     delegate: Rectangle {
                         required property var modelData
                         required property int index
@@ -285,7 +280,7 @@ PanelWindow {
                         radius: 9
 
                         color:
-                            index === root.selectedIndex
+                            index === launcher.selectedIndex
                             ? "#3f3f46"
                             : "transparent"
 
@@ -295,12 +290,12 @@ PanelWindow {
                             hoverEnabled: true
 
                             onEntered: {
-                                root.selectedIndex = index
+                                launcher.selectedIndex = index
                             }
 
                             onClicked: {
-                                root.selectedIndex = index
-                                root.executeSelected()
+                                launcher.selectedIndex = index
+                                launcher.executeSelected()
                             }
                         }
 
@@ -325,35 +320,43 @@ PanelWindow {
                                     width: 32
                                     height: 32
 
-                                    source: {
-                                        return modelData.type === "app" && Quickshell.hasThemeIcon(modelData.icon)
-                                            ? Quickshell.iconPath(modelData.icon)
-                                            : ""
-                                        
+                                    source: modelData.type === "app" && Quickshell.hasThemeIcon(modelData.icon)
+                                                ? Quickshell.iconPath(modelData.icon)
+                                                : ""
+                                }
+                                Image {
+                                    id: fileImage
+                                    anchors.centerIn: parent
+                                    visible: source != ""
 
+                                    width: 32
+                                    height: 32
+
+                                    source: {
+                                        var lower = modelData.icon.toLowerCase()
+                                        return modelData.type === "file" && lower.startsWith("file://")
+                                                ? modelData.icon
+                                                : ""
                                     }
                                 }
 
                                 Text {
                                     anchors.centerIn: parent
 
-                                    visible: modelData.type !== "app" || iconImage.source == ""
+                                    visible: (modelData.type !== "app" || iconImage.source == "") && !fileImage.visible
 
                                     text: {
                                         if (modelData.type === "calculator")
                                             return "="
 
-                                        if (modelData.type === "command")
-                                            return "$"
-
-                                        if (modelData.type === "file")
+                                        if (modelData.type === "file") 
                                             return "󰈔"
 
                                         return "󰀻"
                                     }
 
-                                    color: "#e4e4e7"
-                                    font.pixelSize: 19
+                                    color: Singletons.Colors.foreground
+                                    font.pixelSize: 24
                                 }
                             }
                             
@@ -368,7 +371,7 @@ PanelWindow {
 
                                     text: modelData.title || ""
 
-                                    color: "#fafafa"
+                                    color: Singletons.Colors.foreground
 
                                     font.pixelSize: 14
                                     font.bold: true
@@ -381,7 +384,7 @@ PanelWindow {
 
                                     text: modelData.description || ""
 
-                                    color: "#a1a1aa"
+                                    color: Singletons.Colors.foregroundDim
 
                                     font.pixelSize: 12
 
@@ -392,7 +395,7 @@ PanelWindow {
                             Text {
                                 text: modelData.type || ""
 
-                                color: "#71717a"
+                                color: Singletons.Colors.foregroundDim
 
                                 font.pixelSize: 10
                             }
@@ -409,179 +412,11 @@ PanelWindow {
 
                     text: "Nothing found"
 
-                    color: "#52525b"
+                    color: Singletons.Colors.foregroundDim
 
                     font.pixelSize: 16
                 }
             }
-
-            Rectangle {
-                Layout.fillWidth: true
-
-                Layout.preferredHeight:
-                    router.commandOutput.length > 0
-                    ? 110
-                    : 0
-
-                visible:
-                    router.commandOutput.length > 0
-
-                radius: 10
-
-                color: "#09090b"
-
-                clip: true
-
-                Text {
-                    anchors.fill: parent
-                    anchors.margins: 10
-
-                    text: router.commandOutput
-
-                    color: "#d4d4d8"
-
-                    font.family: "monospace"
-                    font.pixelSize: 11
-
-                    wrapMode: Text.WrapAnywhere
-
-                    verticalAlignment: Text.AlignTop
-                }
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-
-                Text {
-                    text: "↑↓ Navigate"
-
-                    color: "#71717a"
-                    font.pixelSize: 11
-                }
-
-                Text {
-                    text: "Enter Run"
-
-                    color: "#71717a"
-                    font.pixelSize: 11
-                }
-
-                Text {
-                    text: "Esc Close"
-
-                    color: "#71717a"
-                    font.pixelSize: 11
-                }
-
-                Item {
-                    Layout.fillWidth: true
-                }
-
-                Text {
-                    text: "Quickshell 0.3.0"
-
-                    color: "#52525b"
-                    font.pixelSize: 11
-                }
-            }
-        }
-    }
-
-    Rectangle {
-        visible: root.commandConfirmVisible
-
-        anchors.fill: window
-
-        radius: 16
-
-        color: "#18181b"
-
-        border.width: 1
-        border.color: "#52525b"
-
-        ColumnLayout {
-            anchors.centerIn: parent
-
-            width: parent.width - 80
-
-            spacing: 18
-
-            Text {
-                Layout.fillWidth: true
-
-                text: "Execute command?"
-
-                color: "#fafafa"
-
-                font.pixelSize: 22
-                font.bold: true
-
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
-
-                Layout.preferredHeight: 100
-
-                radius: 10
-
-                color: "#09090b"
-
-                Text {
-                    anchors.fill: parent
-                    anchors.margins: 14
-
-                    text: "$ " + root.pendingCommand
-
-                    color: "#d4d4d8"
-
-                    font.family: "monospace"
-                    font.pixelSize: 13
-
-                    wrapMode: Text.WrapAnywhere
-
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-
-            RowLayout {
-                Layout.alignment: Qt.AlignHCenter
-
-                spacing: 10
-
-                Button {
-                    text: "Cancel"
-
-                    onClicked: {
-                        root.commandConfirmVisible = false
-                        root.pendingCommand = ""
-                        search.forceActiveFocus()
-                    }
-                }
-
-                Button {
-                    text: "Execute"
-
-                    onClicked: {
-                        root.executePendingCommand()
-                    }
-                }
-            }
-        }
-
-        Keys.onEscapePressed: {
-            root.commandConfirmVisible = false
-            root.pendingCommand = ""
-            search.forceActiveFocus()
-        }
-
-        Keys.onReturnPressed: {
-            root.executePendingCommand()
-        }
-
-        Keys.onEnterPressed: {
-            root.executePendingCommand()
         }
     }
 }

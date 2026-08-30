@@ -88,6 +88,5 @@ ShellRoot {
     }
 
     Overview { }
-    LaucherShell { } 
+    Launcher { } 
 }
-

@@ -65,6 +65,7 @@ PanelWindow {
         target: "overview"
 
         function close() { closeOverview() }
+        
         function toggle(address: string) { 
             if (!isOpen) {
                 openOverview(address);

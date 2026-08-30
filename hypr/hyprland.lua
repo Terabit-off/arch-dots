@@ -10,13 +10,16 @@ hl.monitor({
 })
 
 
+local mainMod = "SUPER"
 ---------------------
 ---- MY PROGRAMS ----
 ---------------------
 
+
+
 local terminal    = "kitty"
 local fileManager = "nemo"
-local menu        =  "qs ipc call launcher toggle"--"wofi"
+local menu        = "qs ipc call launcher toggle"--"wofi"
 
 
 
@@ -260,7 +263,6 @@ hl.device({
 ---- KEYBINDINGS ----
 ---------------------
 
-local mainMod = "SUPER"
 
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd('~/.config/hypr/screenshot.sh'))
 

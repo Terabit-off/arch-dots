@@ -5,13 +5,17 @@ QtObject {
     id: root
 
     property QtObject fileSearch
-    property QtObject commandRunner
 
     property var results: []
 
+    property var applicationResultsCache: []
+    property var fileResultsCache: []
+
+    property string currentQuery: ""
+    property string currentMode: ""
+
     property string modeText: "Applications"
 
-    property string commandOutput: ""
 
     function normalize(text) {
         return String(text).toLowerCase().trim()
@@ -93,49 +97,47 @@ QtObject {
     }
 
     function search(text) {
-        commandOutput = ""
-
         var query = normalize(text)
 
+        currentQuery = query
+
         if (query.length === 0) {
+            currentMode = "apps"
             modeText = "Applications"
+
             results = applicationResults("")
+
             return
         }
 
-        if (query.startsWith("=")) {
+        if (isCalculation(query)) {
+            currentMode = "calculator"
             modeText = "Calculator"
 
-            results = calculatorResults(
-                query.substring(1).trim()
-            )
+            results = calculatorResults(query)
 
             return
         }
 
-        if (query.startsWith(">")) {
-            modeText = "Command"
-
-            results = commandResults(
-                query.substring(1).trim()
-            )
-
-            return
-        }
-
-        if (
-            query.startsWith("/") ||
-            query.startsWith("~")
-        ) {
+        if (looksLikePath(query)) {
+            currentMode = "files"
             modeText = "Files"
 
-            fileSearch.search(query)
+            fileSearch.searchHome(query)
+
             return
         }
 
-        modeText = "Applications"
+        currentMode = "combined"
+        modeText = "Applications + Files"
 
-        results = applicationResults(query)
+        applicationResultsCache =
+            applicationResults(query)
+
+        results =
+            applicationResultsCache
+
+        fileSearch.searchHome(query)
     }
 
     function applicationResults(query) {
@@ -237,40 +239,22 @@ QtObject {
         }
     }
 
-    function commandResults(command) {
-        if (command.length === 0) {
-            return [{
-                title: "Execute shell command",
+    function setFileResults(items) {
+        fileResultsCache = items
 
-                description:
-                    "Type a command after >",
+        if (currentQuery.length === 0)
+            return
 
-                icon: "$",
+        if (currentMode === "combined") {
+            results = mergeResults(
+                applicationResultsCache,
+                fileResultsCache
+            )
 
-                type: "command"
-            }]
+            return
         }
 
-        return [{
-            title: command,
-
-            description:
-                "Execute using /bin/sh",
-
-            icon: "$",
-
-            type: "command",
-
-            command: command
-        }]
-    }
-
-    function setFileResults(items) {
         results = items
-    }
-
-    function appendCommandOutput(text) {
-        commandOutput += text
     }
 
     function execute(item) {
@@ -297,16 +281,40 @@ QtObject {
 
             return
         }
+    }
 
-        if (item.type === "command") {
-            if (!item.command)
-                return
+    function isCalculation(text) {
+        if (!/[+\-*/%]/.test(text))
+            return false
+            
+        return /^[0-9+\-*/().%\s]+$/.test(text)
+    }
 
-            commandOutput = ""
+    function looksLikePath(text) {
+        if (text.startsWith("/"))
+            return true
 
-            commandRunner.run(item.command)
+        if (text.startsWith("~/"))
+            return true
 
-            return
-        }
+        if (text.startsWith("./"))
+            return true
+
+        if (text.startsWith("../"))
+            return true
+
+        return false
+    }
+
+    function mergeResults(apps, files) {
+        var output = []
+
+        for (var i = 0; i < apps.length; ++i)
+            output.push(apps[i])
+
+        for (var j = 0; j < files.length; ++j)
+            output.push(files[j])
+
+        return output.slice(0, 40)
     }
 }
