@@ -28,6 +28,11 @@ PanelWindow {
     color: "transparent"
 
     property int selectedIndex: 0
+    property alias favorites: favoritesApp.data
+
+    Favorites {
+        id: favoritesApp
+    }
 
     IpcHandler {
         target: "launcher"
@@ -75,6 +80,8 @@ PanelWindow {
         search.selectAll()
         search.text = ""
 
+        favoritesApp.load()
+
         router.search(search.text)
         showAnim.start();
     }
@@ -84,6 +91,27 @@ PanelWindow {
 
         showAnim.stop();
         hideAnim.start();
+    }
+
+    function toggleFavorite(entry) {
+        if (!entry) return
+
+        var id = entry.id
+        var data = Object.assign({}, favorites)
+
+        if (data[id] !== undefined) {
+            favoritesApp.remove(id)
+            delete data[id]
+        } else {
+            data[id] = {
+                id: entry.id,
+                icon: entry.icon,
+                entry: entry.entry // if you see it, im sorry
+            }
+            favoritesApp.add(data[id])
+        }
+
+        favorites = data
     }
 
     function moveSelection(delta) {
@@ -176,8 +204,7 @@ PanelWindow {
 
                 focus: true
 
-                placeholderText:
-                    "Search applications, files, calculate..."
+                placeholderText: "Search applications, files, calculate..."
 
                 font.pixelSize: 14
 
@@ -256,6 +283,8 @@ PanelWindow {
 
                 clip: true
 
+
+
                 ListView {
                     id: resultList
 
@@ -268,7 +297,72 @@ PanelWindow {
 
                     model: router.results
 
+                    headerPositioning: ListView.InlineHeader
 
+                    // Rectangle {
+                    //         width: parent.width
+                    //         height: 1
+                    //         anchors.margins: 3
+                    //         anchors.bottom: parent.bottom
+                    //         color: Singletons.Colors.separatorColor
+                    //     }
+
+                    // Favorits
+                    header: Item {
+                        width: resultList.width
+                        visible: search.text.trim() === "" && favAppsRepeater.model.length > 0
+                        height: visible ? 66 : 0
+
+                        RowLayout {
+                            anchors.centerIn: parent
+                            Repeater {
+                                id: favAppsRepeater
+                                model: Object.keys(favorites)
+
+                                delegate: Rectangle {
+                                    required property string modelData
+                                    property var app: favorites[modelData]
+
+                                    Layout.preferredWidth: 56
+                                    Layout.preferredHeight: 56
+
+                                    radius: 10
+
+                                    color: mouse.containsMouse
+                                        ? "#3f3f46"
+                                        : "#27272a"
+
+                                    MouseArea {
+                                        id: mouse
+
+                                        anchors.fill: parent
+
+                                        hoverEnabled: true
+
+                                        onClicked: {
+                                            app.entry.execute()
+                                            launcher.close()
+                                        }
+                                    }
+
+                                    IconImage {
+                                        anchors.margins: 6
+                                        anchors.centerIn: parent
+                                        width: 50
+                                        height: 50
+                                        Layout.alignment: Qt.AlignHCenter
+
+                                        source: Quickshell.hasThemeIcon(app.icon)
+                                                    ? Quickshell.iconPath(app.icon)
+                                                    : ""
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+
+                    
                     // result card
                     delegate: Rectangle {
                         required property var modelData
@@ -279,25 +373,11 @@ PanelWindow {
 
                         radius: 9
 
-                        color:
-                            index === launcher.selectedIndex
+                        color: index === launcher.selectedIndex
                             ? "#3f3f46"
                             : "transparent"
 
-                        MouseArea {
-                            anchors.fill: parent
-
-                            hoverEnabled: true
-
-                            onEntered: {
-                                launcher.selectedIndex = index
-                            }
-
-                            onClicked: {
-                                launcher.selectedIndex = index
-                                launcher.executeSelected()
-                            }
-                        }
+                        
 
                         RowLayout {
                             anchors.fill: parent
@@ -320,9 +400,11 @@ PanelWindow {
                                     width: 32
                                     height: 32
 
-                                    source: modelData.type === "app" && Quickshell.hasThemeIcon(modelData.icon)
+                                    source: {
+                                        return modelData.type === "app" && Quickshell.hasThemeIcon(modelData.icon)
                                                 ? Quickshell.iconPath(modelData.icon)
                                                 : ""
+                                    }
                                 }
                                 Image {
                                     id: fileImage
@@ -391,6 +473,35 @@ PanelWindow {
                                     elide: Text.ElideRight
                                 }
                             }
+                            Item {
+                                Layout.preferredWidth: 32
+                                Layout.preferredHeight: 32
+
+                                visible: modelData.type === "app"
+
+                                Text {
+                                    anchors.centerIn: parent
+
+                                    text: favorites[modelData.id || modelData.title] !== undefined
+                                        ? "★"
+                                        : "☆"
+
+                                    color: text === "★"
+                                        ? "#facc15"
+                                        : "#71717a"
+
+                                    font.pixelSize: 22
+                                }
+                                MouseArea {
+                                    anchors.fill: parent
+
+                                    hoverEnabled: true
+
+                                    onClicked: {
+                                        toggleFavorite(modelData)
+                                    }
+                                }
+                            }
 
                             Text {
                                 text: modelData.type || ""
@@ -398,6 +509,19 @@ PanelWindow {
                                 color: Singletons.Colors.foregroundDim
 
                                 font.pixelSize: 10
+                            }
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+
+                            hoverEnabled: true
+
+                            z: -1
+
+                            onClicked: {
+                                launcher.selectedIndex = index
+                                launcher.executeSelected()
+                                launcher.close()
                             }
                         }
                     }

@@ -43,9 +43,7 @@ QtObject {
         var q = 0
         var score = 0
 
-        for (var i = 0;
-             i < text.length && q < query.length;
-             i++) {
+        for (var i = 0; i < text.length && q < query.length;i++) {
 
             if (text[i] === query[q]) {
                 score += 100
@@ -159,6 +157,7 @@ QtObject {
                 icon: app.icon || "•",
 
                 type: "app",
+                id: app.id,
 
                 keywords:
                     (app.keywords || []).join(" "),
