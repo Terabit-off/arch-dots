@@ -80,6 +80,5 @@ Item {
 
         copyProcess.selectedValue = item.title
         copyProcess.running = true
-        console.log(item.title)
     }
 }
