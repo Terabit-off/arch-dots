@@ -28,10 +28,23 @@ PanelWindow {
     color: "transparent"
 
     property int selectedIndex: 0
-    property alias favorites: favoritesApp.data
 
-    Favorites {
-        id: favoritesApp
+    UsageStats {
+        id: usageStats
+
+        onReady: {
+            if (launcher.visible && search.text.trim() === "") {
+                router.search("")
+            }
+        }
+    }
+
+    ClipboardHistory { 
+        id: clipboardHistory
+
+        onResultsReady: function(items) {
+            router.setClipboardResults(items)
+        }
     }
 
     IpcHandler {
@@ -63,6 +76,8 @@ PanelWindow {
         id: router
 
         fileSearch: fileSearch
+        usageStats: usageStats
+        clipboardHistory: clipboardHistory
 
         onResultsChanged: {
             launcher.selectedIndex = 0
@@ -80,7 +95,7 @@ PanelWindow {
         search.selectAll()
         search.text = ""
 
-        favoritesApp.load()
+        usageStats.load()
 
         router.search(search.text)
         showAnim.start();
@@ -91,27 +106,6 @@ PanelWindow {
 
         showAnim.stop();
         hideAnim.start();
-    }
-
-    function toggleFavorite(entry) {
-        if (!entry) return
-
-        var id = entry.id
-        var data = Object.assign({}, favorites)
-
-        if (data[id] !== undefined) {
-            favoritesApp.remove(id)
-            delete data[id]
-        } else {
-            data[id] = {
-                id: entry.id,
-                icon: entry.icon,
-                entry: entry.entry // if you see it, im sorry
-            }
-            favoritesApp.add(data[id])
-        }
-
-        favorites = data
     }
 
     function moveSelection(delta) {
@@ -297,71 +291,6 @@ PanelWindow {
 
                     model: router.results
 
-                    headerPositioning: ListView.InlineHeader
-
-                    // Rectangle {
-                    //         width: parent.width
-                    //         height: 1
-                    //         anchors.margins: 3
-                    //         anchors.bottom: parent.bottom
-                    //         color: Singletons.Colors.separatorColor
-                    //     }
-
-                    // Favorits
-                    header: Item {
-                        width: resultList.width
-                        visible: search.text.trim() === "" && favAppsRepeater.model.length > 0
-                        height: visible ? 66 : 0
-
-                        RowLayout {
-                            anchors.centerIn: parent
-                            Repeater {
-                                id: favAppsRepeater
-                                model: Object.keys(favorites)
-
-                                delegate: Rectangle {
-                                    required property string modelData
-                                    property var app: favorites[modelData]
-
-                                    Layout.preferredWidth: 56
-                                    Layout.preferredHeight: 56
-
-                                    radius: 10
-
-                                    color: mouse.containsMouse
-                                        ? "#3f3f46"
-                                        : "#27272a"
-
-                                    MouseArea {
-                                        id: mouse
-
-                                        anchors.fill: parent
-
-                                        hoverEnabled: true
-
-                                        onClicked: {
-                                            app.entry.execute()
-                                            launcher.close()
-                                        }
-                                    }
-
-                                    IconImage {
-                                        anchors.margins: 6
-                                        anchors.centerIn: parent
-                                        width: 50
-                                        height: 50
-                                        Layout.alignment: Qt.AlignHCenter
-
-                                        source: Quickshell.hasThemeIcon(app.icon)
-                                                    ? Quickshell.iconPath(app.icon)
-                                                    : ""
-                                    }
-                                }
-                            }
-                        }
-                        
-                    }
-
                     
                     // result card
                     delegate: Rectangle {
@@ -434,14 +363,16 @@ PanelWindow {
                                         if (modelData.type === "file") 
                                             return "󰈔"
 
+                                        if (modelData.type === "clipboard")
+                                            return ""
+
                                         return "󰀻"
                                     }
 
                                     color: Singletons.Colors.foreground
                                     font.pixelSize: 24
                                 }
-                            }
-                            
+                            }                
 
                             ColumnLayout {
                                 Layout.fillWidth: true
@@ -473,35 +404,6 @@ PanelWindow {
                                     elide: Text.ElideRight
                                 }
                             }
-                            Item {
-                                Layout.preferredWidth: 32
-                                Layout.preferredHeight: 32
-
-                                visible: modelData.type === "app"
-
-                                Text {
-                                    anchors.centerIn: parent
-
-                                    text: favorites[modelData.id || modelData.title] !== undefined
-                                        ? "★"
-                                        : "☆"
-
-                                    color: text === "★"
-                                        ? "#facc15"
-                                        : "#71717a"
-
-                                    font.pixelSize: 22
-                                }
-                                MouseArea {
-                                    anchors.fill: parent
-
-                                    hoverEnabled: true
-
-                                    onClicked: {
-                                        toggleFavorite(modelData)
-                                    }
-                                }
-                            }
 
                             Text {
                                 text: modelData.type || ""
@@ -515,8 +417,6 @@ PanelWindow {
                             anchors.fill: parent
 
                             hoverEnabled: true
-
-                            z: -1
 
                             onClicked: {
                                 launcher.selectedIndex = index

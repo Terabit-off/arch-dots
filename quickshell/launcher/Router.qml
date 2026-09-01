@@ -5,6 +5,10 @@ QtObject {
     id: root
 
     property QtObject fileSearch
+    property QtObject usageStats
+
+    property QtObject clipboardHistory
+    property var clipboardResultsCache: []
 
     property var results: []
 
@@ -58,6 +62,7 @@ QtObject {
     }
 
     function sortResults(items, query) {
+        var isEmptyQuery = normalize(query).length === 0
         var scored = []
 
         for (var i = 0; i < items.length; i++) {
@@ -68,28 +73,47 @@ QtObject {
                 String(item.description || "") + " " +
                 String(item.keywords || "")
 
-            var score = fuzzyScore(query, haystack)
+            var score = isEmptyQuery
+                ? 0
+                : fuzzyScore(query, haystack)
 
-            if (score >= 0) {
-                scored.push({
-                    item: item,
-                    score: score
-                })
-            }
+            if (!isEmptyQuery && score < 0)
+                continue
+
+            scored.push({
+                item: item,
+                score: score,
+                weight: usageStats && item.type === "app"
+                    ? usageStats.weight(item.id)
+                    : 0
+            })
         }
 
         scored.sort(function(a, b) {
-            return b.score - a.score
+            if (isEmptyQuery) {
+                if (b.weight !== a.weight)
+                    return b.weight - a.weight
+
+                return String(a.item.title || "").localeCompare(
+                    String(b.item.title || "")
+                )
+            }
+
+            if (b.score !== a.score)
+                return b.score - a.score
+
+            if (b.weight !== a.weight)
+                return b.weight - a.weight
+
+            return String(a.item.title || "").localeCompare(
+                String(b.item.title || "")
+            )
         })
 
         var output = []
 
-        for (var j = 0;
-             j < scored.length && j < 40;
-             j++) {
-
+        for (var j = 0; j < scored.length && j < 40; j++)
             output.push(scored[j].item)
-        }
 
         return output
     }
@@ -98,6 +122,29 @@ QtObject {
         var query = normalize(text)
 
         currentQuery = query
+
+        if (query === "!") {
+            currentMode = "clipboard"
+            modeText = "Clipboard"
+
+            results = []
+            clipboardHistory.search()
+
+            return
+        }
+
+        if (query.startsWith("!") && query.length > 1) {
+            currentMode = "clipboard"
+            modeText = "Clipboard"
+
+            clipboardResultsCache = filterClipboardResults(
+                query.substring(1)
+            )
+
+            results = clipboardResultsCache
+
+            return
+        }
 
         if (query.length === 0) {
             currentMode = "apps"
@@ -260,7 +307,15 @@ QtObject {
         if (!item)
             return
 
+        if (item.type === "clipboard") {
+            clipboardHistory.copy(item)
+            return
+        }
+
         if (item.type === "app") {
+            if (usageStats)
+                usageStats.record(item.id)
+
             if (item.entry)
                 item.entry.execute()
 
@@ -315,5 +370,46 @@ QtObject {
             output.push(files[j])
 
         return output.slice(0, 40)
+    }
+
+    function setClipboardResults(items) {
+        clipboardResultsCache = items.slice(0, 40)
+
+        if (currentMode !== "clipboard")
+            return
+
+        var query = currentQuery
+
+        if (query === "!") {
+            results = clipboardResultsCache
+            return
+        }
+
+        if (query.startsWith("!")) {
+            results = filterClipboardResults(
+                query.substring(1)
+            )
+        }
+    }
+
+    function filterClipboardResults(query) {
+        query = normalize(query)
+
+        if (query.length === 0)
+            return clipboardResultsCache
+
+        var output = []
+
+        for (var i = 0; i < clipboardResultsCache.length; i++) {
+            var item = clipboardResultsCache[i]
+            var text = normalize(
+                item.title + " " + item.description
+            )
+
+            if (text.indexOf(query) >= 0)
+                output.push(item)
+        }
+
+        return output
     }
 }

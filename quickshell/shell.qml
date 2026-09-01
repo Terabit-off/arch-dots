@@ -3,9 +3,6 @@
 import Quickshell
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Services.UPower
-import Qt5Compat.GraphicalEffects
-import Quickshell.Services.SystemTray
 import Quickshell.Wayland
 
 import "./Singletons" as Singletons
@@ -16,7 +13,7 @@ import "./launcher"
 
 ShellRoot {
     id: root
-    
+
     PanelWindow {
         id: rootPanel
         anchors {
@@ -43,6 +40,7 @@ ShellRoot {
             radius: 25
 
             RowLayout {
+                id: layoutContent
                 anchors.fill: parent
                 spacing: 12
             
@@ -82,9 +80,6 @@ ShellRoot {
                 }
             }
         }
-
-
-        
     }
 
     //Overview { }

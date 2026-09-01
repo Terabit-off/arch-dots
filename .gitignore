@@ -42,3 +42,4 @@ mimeapps.list
 autostart
 gopls
 configstore
+systemd
