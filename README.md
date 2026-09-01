@@ -17,7 +17,7 @@ IF YOU STARED THIS REPO YOUR IQ WILL BE LOWER BY 10 POINTS
 
 ### Required for quickshell:
 
-- hyprland (0.55 with lua config for workspaces)
+- hyprland (0.55 or higher with lua config for workspaces)
 - quickshell (0.3.0, maybe it`s will work on a later versions)
 - overskride (ui bluetooth)
 - love shit (very important)

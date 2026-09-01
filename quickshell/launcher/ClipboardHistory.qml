@@ -22,14 +22,14 @@ Item {
     }
 
     Process {
-        id: decodeProcess
+        id: copyProcess
 
         property string selectedValue: ""
 
         command: [
             "sh",
             "-c",
-            "printf '%s' \"$1\" | cliphist decode | wl-copy && notify-send --urgency=low 'Clipboard' 'Copied'",
+            "printf '%s' \"$1\" | cliphist decode | wl-copy && notify-send --urgency=low \"Copied: '$1'\" 'Clipboard'",
             "clipboard-helper",
             selectedValue
         ]
@@ -78,7 +78,8 @@ Item {
         if (!item || item.type !== "clipboard")
             return
 
-        decodeProcess.selectedValue = item.value
-        decodeProcess.running = true
+        copyProcess.selectedValue = item.title
+        copyProcess.running = true
+        console.log(item.title)
     }
 }
