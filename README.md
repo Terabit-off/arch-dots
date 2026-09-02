@@ -17,17 +17,17 @@ IF YOU STARED THIS REPO YOUR IQ WILL BE LOWER BY 10 POINTS
 
 ### Required for quickshell:
 
-- hyprland (0.55 or higher with lua config for workspaces)
-- quickshell (0.3.0, maybe it`s will work on a later versions)
-- overskride (ui bluetooth)
+- [hyprland](https://hypr.land/) (0.55 or higher with lua config for workspaces)
+- [quickshell](https://github.com/quickshell-mirror/quickshell) (0.3.0, maybe it`s will work on a later versions)
+- [overskride](https://github.com/kaii-lb/overskride) (ui bluetooth)
 - love shit (very important)
 - sensors, top, free (commands for system resources)
-- swayimg (photo viewer)
+- [swayimg](https://github.com/artemsen/swayimg) (photo viewer)
 - nemo (file manager)
-- cliphist, and add it to autostart (`wl-paste --watch cliphist store`)
-- power-profiles-daemon (`sudo pacman -S power-profiles-daemon`)
+- [cliphist](https://github.com/sentriz/cliphist), and add it to autostart (`wl-paste --watch cliphist store`)
+- [power-profiles-daemon](https://gitlab.freedesktop.org/upower/power-profiles-daemon) (`sudo pacman -S power-profiles-daemon`)
 
 ### For Waybar
 
 - just use
-- overskride (ui bluetooth)
+- [overskride](https://github.com/kaii-lb/overskride) (ui bluetooth)

@@ -375,7 +375,6 @@ PopupWindow {
                         }
 
                         
-                        // РАСКРЫТАЯ ЧАСТЬ
                         ColumnLayout {
                             id: expandedContent
 

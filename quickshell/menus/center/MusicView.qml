@@ -12,7 +12,7 @@ Item {
     property int currentPlayerIndex: 0
 
     readonly property var active: {
-        const players = Singletons.MusicSingleton.list
+        const players = Singletons.MusicSingleton.list 
         return players.length > 0
             ? players[Math.min(currentPlayerIndex, players.length - 1)]
             : null
@@ -131,7 +131,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 24
                 text: musicViewRoot.active
-                      ? (musicViewRoot.active.trackTitle || musicViewRoot.active.metadata["xesam:title"] || "Unknown")
+                      ? musicViewRoot.active.trackTitle
                       : "No player"
                 font.pixelSize: 17
                 font.bold: true
@@ -165,7 +165,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 19
                 text: musicViewRoot.active
-                      ? (musicViewRoot.active.trackArtist || "Unknown Artist")
+                      ? musicViewRoot.active.trackArtist
                       : " "
                 color: Singletons.Colors.foreground
                 font.pixelSize: 12
@@ -183,7 +183,7 @@ Item {
                 to: musicViewRoot.active && musicViewRoot.active.length > 0
                     ? musicViewRoot.active.length
                     : 100
-                value: musicViewRoot.active ? musicViewRoot.active.position : 0
+                value: musicViewRoot.active ? Math.max(0, Math.min(musicViewRoot.active.position, to)) : 0
 
                 HoverHandler {
                     target: null
