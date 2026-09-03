@@ -80,30 +80,45 @@ QtObject {
             if (!isEmptyQuery && score < 0)
                 continue
 
+            // 0 — самое последнее запущенное приложение.
+            // Большое значение означает, что приложения нет в истории.
+            var usageIndex = Number.MAX_SAFE_INTEGER
+
+            if (usageStats && item.type === "app") {
+                var index = usageStats.indexOf(item.id)
+
+                if (index >= 0)
+                    usageIndex = index
+            }
+
             scored.push({
                 item: item,
                 score: score,
-                weight: usageStats && item.type === "app"
-                    ? usageStats.weight(item.id)
-                    : 0
+                usageIndex: usageIndex
             })
         }
 
         scored.sort(function(a, b) {
+            // Когда строка поиска пустая, порядок полностью берётся
+            // из usage.json: первый ID в массиве будет первым в лаунчере.
             if (isEmptyQuery) {
-                if (b.weight !== a.weight)
-                    return b.weight - a.weight
+                if (a.usageIndex !== b.usageIndex)
+                    return a.usageIndex - b.usageIndex
 
+                // Приложения, которых ещё не запускали, сортируем по имени.
                 return String(a.item.title || "").localeCompare(
                     String(b.item.title || "")
                 )
             }
 
+            // При поиске сначала важнее совпадение с запросом.
             if (b.score !== a.score)
                 return b.score - a.score
 
-            if (b.weight !== a.weight)
-                return b.weight - a.weight
+            // При одинаковом fuzzy-score выше будет то,
+            // что запускалось более недавно.
+            if (a.usageIndex !== b.usageIndex)
+                return a.usageIndex - b.usageIndex
 
             return String(a.item.title || "").localeCompare(
                 String(b.item.title || "")

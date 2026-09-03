@@ -5,12 +5,11 @@ import Quickshell.Io
 Item {
     id: root
 
-    property var data: ({})
+    // list of apps
+    property var data: []
 
-    property real totalWeight: 10.0
-
-    property string filePath: (Quickshell.env("HOME") || "") +
-        "/.config/quickshell/launcher/usage.json"
+    property string filePath: (Quickshell.env("HOME") || "")
+                              + "/.config/quickshell/launcher/usage.json"
 
     signal changed()
     signal ready()
@@ -30,7 +29,7 @@ Item {
         var text = usageFile.text()
 
         if (!text || text.trim() === "") {
-            root.data = ({})
+            root.data = []
             root.save()
             root.ready()
             return
@@ -39,72 +38,65 @@ Item {
         try {
             var json = JSON.parse(text)
 
-            if (typeof json !== "object" || Array.isArray(json)) {
-                root.data = ({})
+            if (Array.isArray(json)) {
+                var restored = []
+                var seen = {}
+
+                for (var i = 0; i < json.length; i++) {
+                    var id = String(json[i] || "").trim()
+
+                    if (id && !seen[id]) {
+                        restored.push(id)
+                        seen[id] = true
+                    }
+                }
+
+                root.data = restored
                 root.ready()
                 return
             }
 
-            var restored = {}
-
-            for (var id in json) {
-                var launches = Number(json[id])
-
-                if (isFinite(launches) && launches > 0)
-                    restored[id] = Math.floor(launches)
-            }
-
-            root.data = restored
+            root.data = []
+            root.save()
+            root.ready()
         } catch (error) {
-            console.log(
-                "Failed to parse launcher usage.json:",
-                error
-            )
+            console.log("Failed to parse launcher usage.json:", error)
 
-            root.data = ({})
+            root.data = []
+            root.ready()
         }
-
-        root.ready()
     }
 
     function save() {
-        usageFile.setText(
-            JSON.stringify(root.data, null, 4)
-        )
+        usageFile.setText(JSON.stringify(root.data, null, 4))
     }
 
-    function launches(id) {
+    // 0 - last started app, -1 - no app.
+    function indexOf(id) {
         if (!id)
-            return 0
+            return -1
 
-        return Number(root.data[id] || 0)
-    }
-
-    function totalLaunches() {
-        var total = 0
-
-        for (var id in root.data)
-            total += launches(id)
-
-        return total
-    }
-
-    function weight(id) {
-        var total = totalLaunches()
-
-        if (total <= 0)
-            return 0
-
-        return totalWeight * launches(id) / total
+        return root.data.indexOf(id)
     }
 
     function record(id) {
+        id = String(id || "").trim()
+
         if (!id)
             return
 
-        var updated = Object.assign({}, root.data)
+        // Создаём новый список, не изменяя root.data напрямую.
+        var updated = []
 
-        updated[id] = launches(id) + 1
+        // Сначала ставим только что запущенное приложение.
+        updated.push(id)
+
+        // Затем добавляем все остальные, кроме него самого.
+        // Благодаря этому существующий ID переместится на первую строку.
+        for (var i = 0; i < root.data.length; i++) {
+            if (root.data[i] !== id)
+                updated.push(root.data[i])
+        }
 
         root.data = updated
         root.save()
@@ -112,7 +104,7 @@ Item {
     }
 
     function clear() {
-        root.data = ({})
+        root.data = []
         root.save()
         root.changed()
     }
