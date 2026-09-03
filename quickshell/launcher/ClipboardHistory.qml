@@ -24,12 +24,12 @@ Item {
     Process {
         id: copyProcess
 
-        property string selectedValue: ""
+        property string selectedValue: "" 
 
         command: [
             "sh",
             "-c",
-            "printf '%s' \"$1\" | cliphist decode | wl-copy && notify-send --urgency=low \"Copied: '$1'\" 'Clipboard'",
+            "wl-copy \"$1\" && notify-send --urgency=low \"Copied: '$1'\" 'Clipboard'",
             "clipboard-helper",
             selectedValue
         ]
