@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 
-QtObject {
+Item {
     id: root
 
     property QtObject fileSearch
@@ -20,6 +20,24 @@ QtObject {
 
     property string modeText: "Applications"
 
+    Timer {
+        id: applicationsLoader
+
+        interval: 100
+        repeat: true
+        running: true
+
+        onTriggered: {
+            var entries = DesktopEntries.applications.values
+
+            if (entries.length === 0)
+                return
+
+            stop()
+
+            root.refreshApplications()
+        }
+    }
 
     function normalize(text) {
         return String(text).toLowerCase().trim()
@@ -216,7 +234,7 @@ QtObject {
                     app.comment ||
                     "Application",
 
-                icon: app.icon || "•",
+                icon: app.icon || "",
 
                 type: "app",
                 id: app.id,
@@ -426,5 +444,15 @@ QtObject {
         }
 
         return output
+    }
+
+    function refreshApplications() {
+        if (currentQuery.length !== 0)
+            return
+
+        currentMode = "apps"
+        modeText = "Applications"
+
+        results = applicationResults("")
     }
 }
