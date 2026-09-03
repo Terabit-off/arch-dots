@@ -5,3 +5,4 @@ WifiPopup 1.0 wifi/WifiPopup.qml
 OverviewPopup 1.0 overview/Overview.qml
 VolumesPopup 1.0 volumes/VolumesPopup.qml
 BatteryPopup 1.0 battery/BatteryPopup.qml
+BluetoothPopup 1.9 bluetooth/BluetoothPopup.qml

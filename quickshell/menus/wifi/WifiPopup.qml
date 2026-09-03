@@ -97,13 +97,13 @@ PopupWindow {
                     Layout.preferredHeight: 40
                     radius: 12
                     color: root.wifiDevice && root.wifiDevice.connected
-                           ? "#263f7f58" : "#18ffffff"
+                           ? '#26828282' : "#18ffffff"
 
                     Text {
                         anchors.centerIn: parent
                         text: "󰖩"
                         color: root.wifiDevice && root.wifiDevice.connected
-                               ? "#9bd1aa" : Singletons.Colors.foreground
+                               ? Singletons.Colors.foreground : Singletons.Colors.foregroundDim
                         font.family: "Symbols Nerd Font"
                         font.pixelSize: 21
                     }
@@ -128,7 +128,7 @@ PopupWindow {
                                  : "Not connected")
                               : "Wi-Fi device unavailable"
                         color: root.wifiDevice && root.wifiDevice.connected
-                               ? "#8fc99f" : Singletons.Colors.foregroundDim
+                               ? Singletons.Colors.foreground : Singletons.Colors.foregroundDim
                         font.pixelSize: 10
                         elide: Text.ElideRight
                     }
@@ -237,13 +237,11 @@ PopupWindow {
                         radius: 5
 
                         color: modelData.connected
-                            ? "#1b3044"
-                            : networkMouse.containsMouse
-                                ? "#16ffffff"
-                                : "#0bffffff"
+                            ? '#e0282828'
+                            : "#d2242424"
 
                         border.width: modelData.connected ? 1 : 0
-                        border.color: "#386b91"
+                        border.color: '#78818181'
 
                         Behavior on height {
                             NumberAnimation {
@@ -280,11 +278,7 @@ PopupWindow {
                                 Layout.preferredWidth: 36
                                 Layout.preferredHeight: 36
 
-                                radius: 10
-
-                                color: modelData.connected
-                                    ? "#263f7f58"
-                                    : "#15ffffff"
+                                color: "transparent"
 
                                 Text {
                                     anchors.centerIn: parent
@@ -323,9 +317,7 @@ PopupWindow {
 
                                     text: networkState(modelData)
 
-                                    color: modelData.connected
-                                        ? "#8fc99f"
-                                        : Singletons.Colors.foregroundDim
+                                    color: Singletons.Colors.foregroundDim
 
                                     font.pixelSize: 10
                                 }
@@ -347,7 +339,7 @@ PopupWindow {
 
                                 text: "󰄬"
 
-                                color: "#8fc99f"
+                                color: Singletons.Colors.foregroundDim
 
                                 font.family: "Symbols Nerd Font"
                                 font.pixelSize: 17
@@ -401,7 +393,7 @@ PopupWindow {
                             }
 
                             
-                            // OPEN NETWORK
+                            // OPENED NETWORK
                             Rectangle {
                                 visible: modelData.security === WifiSecurityType.Open
 
@@ -411,8 +403,8 @@ PopupWindow {
                                 radius: 9
 
                                 color: connectMouse.containsMouse
-                                    ? "#6f8fce"
-                                    : "#5f7fba"
+                                    ? '#6dadadad'
+                                    : '#6d707070'
 
                                 Text {
                                     anchors.centerIn: parent
@@ -472,7 +464,8 @@ PopupWindow {
 
                                     text: delegateRoot.password
 
-                                    color: "#eeeeef"
+                                    color: Singletons.Colors.foreground
+
 
                                     placeholderTextColor: "#66666d"
 
@@ -485,9 +478,7 @@ PopupWindow {
 
                                         border.width: 1
 
-                                        border.color: passwordField.activeFocus
-                                                    ? "#5275b0"
-                                                    : "#20ffffff"
+                                        border.color: "#20ffffff"
                                     }
 
                                     onTextChanged: {
@@ -516,7 +507,7 @@ PopupWindow {
                                             ? "󰈈"
                                             : "󰈉"
 
-                                        color: "#9999a0"
+                                        color: Singletons.Colors.foregroundDim
 
                                         font.family: "Symbols Nerd Font"
                                         font.pixelSize: 15
@@ -547,8 +538,8 @@ PopupWindow {
                                     radius: 9
 
                                     color: passwordMouse.containsMouse
-                                        ? "#6f8fce"
-                                        : "#5f7fba"
+                                        ? '#6dadadad'
+                                        : '#6d707070'
 
                                     opacity: delegateRoot.password.length > 0
                                             ? 1
@@ -759,7 +750,7 @@ function signalIcon(strength) {
 
 function signalColor(strength) {
     if (strength >= 0.5)
-        return "#8fc99f"
+        return '#ffffff'
     if (strength >= 0.25)
         return "#e5c07b"
     return "#e06c75"

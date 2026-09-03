@@ -27,7 +27,7 @@ QtObject {
 
 
     // Menus 
-    readonly property color menuBackground: '#ba1c1c1c'
+    readonly property color menuBackground: '#d31c1c1c'
     readonly property color separatorColor: '#bd939393'
     readonly property color menuBorderColor: '#db6e6e6e'
     readonly property real menuBorderRadius: 5
