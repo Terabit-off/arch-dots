@@ -148,8 +148,10 @@ Item {
                     onClicked: {
                         if (musicViewRoot.active) {
                             const url = musicViewRoot.active.metadata["xesam:url"]
-                            if (url)
+                            if (url) {
                                 Qt.openUrlExternally(url)
+                                popup.visible = false
+                            }
                         }
                     }
                 }

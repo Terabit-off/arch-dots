@@ -25,8 +25,10 @@ PopupWindow {
     }
 
     onVisibleChanged: {
-        if (visible)
+        if (visible) {
             openAnimation.restart()
+            timeDateView.today()
+        }
     }
 
     property Item anchorItem
@@ -108,32 +110,25 @@ PopupWindow {
             Rectangle {
                 Layout.preferredWidth: 60
                 Layout.fillHeight: true
-                color: "transparent" //Singletons.Colors.menuBackground
+                color: "transparent"
                 radius: popupContent.radius
-                
-                Rectangle {
-                    width: popupContent.radius
-                    height: parent.height
-                    anchors.right: parent.right
-                    color: Singletons.Colors.menuBackground
-                }
 
                 ColumnLayout {
                     anchors.centerIn: parent
                     spacing: 16
 
                     NavButton {
-                        iconText: "󰝚"
+                        iconText: ""
                         isActive: centerWindowRoot.currentSegmentIndex === 0
                         onClicked: centerWindowRoot.currentSegmentIndex = 0
                     }
                     NavButton {
-                        iconText: "󰄄"
+                        iconText: "󰝚"
                         isActive: centerWindowRoot.currentSegmentIndex === 1
                         onClicked: centerWindowRoot.currentSegmentIndex = 1
                     }
                     NavButton {
-                        iconText: "󰍛"
+                        iconText: "󰄄"
                         isActive: centerWindowRoot.currentSegmentIndex === 2
                         onClicked: centerWindowRoot.currentSegmentIndex = 2
                     }
@@ -169,10 +164,28 @@ PopupWindow {
 
                 onCurrentIndexChanged:{
                     updatePages()
-
                 } 
                 Component.onCompleted: {
                     updatePages()
+                }
+                Modules.DateTimeView {
+                    id: timeDateView
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 180
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    Behavior on x {
+                        NumberAnimation {
+                            duration: 180
+                            easing.type: Easing.OutCubic
+                        }
+                    }
                 }
                 Modules.MusicView {
                     id: musicView
@@ -196,26 +209,6 @@ PopupWindow {
                 }
 
                 Modules.ScreenshotsView {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    popup: centerWindowRoot
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 180
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-
-                    Behavior on x {
-                        NumberAnimation {
-                            duration: 180
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-                }
-
-                Modules.SystemResourcesView {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 

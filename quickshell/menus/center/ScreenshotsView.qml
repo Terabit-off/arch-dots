@@ -84,7 +84,7 @@ Item {
                 nameFilters: ["*.png", "*.jpg", "*.jpeg"]
                 sortField: FolderListModel.Time
             }
-
+            
             delegate: Item {
                 width: GridView.view.cellWidth - 2
                 height: GridView.view.cellHeight - 2

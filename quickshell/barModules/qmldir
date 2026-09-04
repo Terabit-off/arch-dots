@@ -1,7 +1,6 @@
 module BarModules
 
-MusicModule 1.0 music/MusicModule.qml
-TimeDateModule 1.0 time_date/TimeDateModule.qml
+CenterModule 1.0 center/CenterModule.qml
 TrayModule 1.0 tray/TrayModule.qml
 WorkspacesModule 1.0 workspaces/WorkspacesModule.qml
 VolumesModule 1.0 volumes/VolumesModule.qml

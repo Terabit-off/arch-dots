@@ -7,7 +7,6 @@ import Quickshell.Wayland
 
 import "./Singletons" as Singletons
 import "./barModules" as Modules 
-import "./overview"
 import "./launcher"
 
 
@@ -44,7 +43,7 @@ ShellRoot {
                 anchors.fill: parent
                 spacing: 12
             
-                //LEFT
+                //LEFT 
                 Rectangle { 
                     color: 'transparent'
                     height: 20
@@ -52,8 +51,8 @@ ShellRoot {
 
                     Modules.WorkspacesModule { }
                 }
-                //CENTER
-                Modules.MusicModule { }
+                //CENTER                   
+                Modules.CenterModule { }
 
                 //RIGHT
                 Rectangle {
@@ -75,13 +74,11 @@ ShellRoot {
                         Modules.BatteryModule { }
                         Modules.TrayModule { }
                         Modules.NotificationModule { }
-                        Modules.TimeDateModule { }
                     }
                 }
             }
         }
     }
 
-    //Overview { }
     Launcher { } 
 }
