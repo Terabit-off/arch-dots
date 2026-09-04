@@ -159,31 +159,13 @@ Item {
                     dateTimeRoot.currentDate
                 )
 
-                color: Singletons.Colors.foreground
+                color: todayMouse.containsMouse ? Singletons.Colors.foreground : Singletons.Colors.foregroundDim
                 verticalAlignment: Text.AlignVCenter
 
                 font.family: "JetBrainsMono Nerd Font"
                 font.pixelSize: 13
 
                 opacity: 0.75
-
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            Item {
-                //Layout.fillHeight: true
-            }
-
-            Text {
-                Layout.fillWidth: true
-
-                text: dateTimeRoot.displayedMonth !== dateTimeRoot.currentDate.getMonth() || dateTimeRoot.displayedYear !== dateTimeRoot.currentDate.getFullYear() 
-                    ? "Today" : ""
-
-                color: todayMouse.containsMouse ? Singletons.Colors.foreground : Singletons.Colors.foregroundDim
-
-                font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 11
 
                 horizontalAlignment: Text.AlignHCenter
 
