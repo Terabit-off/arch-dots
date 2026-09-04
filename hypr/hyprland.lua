@@ -88,8 +88,8 @@ hl.config({
         inactive_opacity = 0.9,
 
         shadow = {
-            enabled      = true,
-            range        = 5,
+            enabled      = false,
+            range        = 3,
             render_power = 1,
             color        = 0xee1a1a1a,
         },

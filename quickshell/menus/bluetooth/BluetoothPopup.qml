@@ -16,7 +16,7 @@ PopupWindow {
     grabFocus: true
 
     implicitWidth: 290
-    implicitHeight: 400
+    implicitHeight: 300
     color: "transparent"
 
     anchor {
