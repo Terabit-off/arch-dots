@@ -24,14 +24,12 @@ Item {
     Process {
         id: copyProcess
 
+        property string selectedId: ""
         property string selectedValue: "" 
 
         command: [
-            "sh",
-            "-c",
-            "wl-copy \"$1\" && notify-send --urgency=low \"Copied: '$1'\" 'Clipboard'",
-            "clipboard-helper",
-            selectedValue
+            Quickshell.env("HOME") + "/.config/quickshell/launcher/copy.sh",
+            selectedId, selectedValue
         ]
     }
 
@@ -78,6 +76,7 @@ Item {
         if (!item || item.type !== "clipboard")
             return
 
+        copyProcess.selectedId = item.description
         copyProcess.selectedValue = item.title
         copyProcess.running = true
     }
