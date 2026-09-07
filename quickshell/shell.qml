@@ -1,36 +1,37 @@
 //@ pragma UseQApplication
 
-import Quickshell
+import "./Singletons" as Singletons
+import "./barModules" as Modules
+import "./dockpanel"
+import "./launcher"
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Wayland
-
-import "./Singletons" as Singletons
-import "./barModules" as Modules 
-import "./launcher"
-
 
 ShellRoot {
     id: root
 
     PanelWindow {
         id: rootPanel
+
+        implicitHeight: 20
+        color: 'transparent'
+        WlrLayershell.namespace: "qs-blur"
+        WlrLayershell.layer: WlrLayer.Top
+
         anchors {
             top: true
             left: true
             right: true
-        } 
+        }
+
         margins {
             left: 25
             right: 25
             top: 3
             bottom: 3
         }
-        implicitHeight: 20
-        color: 'transparent'
-        WlrLayershell.namespace: "qs-blur"
-        WlrLayershell.layer: WlrLayer.Top
-
 
         Rectangle {
             anchors.fill: parent
@@ -40,45 +41,72 @@ ShellRoot {
 
             RowLayout {
                 id: layoutContent
+
                 anchors.fill: parent
                 spacing: 12
-            
-                //LEFT 
-                Rectangle { 
+
+                //LEFT
+                Rectangle {
                     color: 'transparent'
                     height: 20
                     Layout.fillWidth: true
 
-                    Modules.WorkspacesModule { }
+                    Modules.WorkspacesModule {
+                    }
+
                 }
-                //CENTER                   
-                Modules.CenterModule { }
+
+                //CENTER
+                Modules.CenterModule {
+                }
 
                 //RIGHT
                 Rectangle {
                     color: 'transparent'
-                    height: 20     
+                    height: 20
                     Layout.fillWidth: true
-    
+
                     RowLayout {
                         anchors.fill: parent
                         anchors.left: parent.left
                         spacing: 10
-                        
+
                         Item {
                             Layout.fillWidth: true
                         }
-                        Modules.WifiModule { }
-                        Modules.BluetoothModule { }
-                        Modules.VolumesModule { }  
-                        Modules.BatteryModule { }
-                        Modules.TrayModule { }
-                        Modules.NotificationModule { }
+
+                        Modules.WifiModule {
+                        }
+
+                        Modules.BluetoothModule {
+                        }
+
+                        Modules.VolumesModule {
+                        }
+
+                        Modules.BatteryModule {
+                        }
+
+                        Modules.TrayModule {
+                        }
+
+                        Modules.NotificationModule {
+                        }
+
                     }
+
                 }
+
             }
+
         }
+
     }
 
-    Launcher { } 
+    Launcher {
+    }
+
+    DockPanel {
+    }
+
 }
