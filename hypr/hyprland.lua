@@ -353,6 +353,13 @@ hl.window_rule({
     size = {1000, 800}
 })
 hl.window_rule({
+    name = "floatImageViewTest",
+    match = { class = "my_app" },
+
+    float = true,
+    size = {1000, 800}
+})
+hl.window_rule({
     name = "floatKitty",
     match = { class = "kitty" },
 
