@@ -300,7 +300,6 @@ PanelWindow {
                                 asynchronous: true
                                 fillMode: Image.PreserveAspectFit
                                 source: {
-                                    console.log(modelData.title);
                                     const ipc = windowItem.modelData.lastIpcObject;
                                     if (!ipc)
                                         return Qt.resolvedUrl("icon-placeholder.png");
