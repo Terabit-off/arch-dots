@@ -271,6 +271,13 @@ PanelWindow {
 
                         required property var modelData
                         property bool hovered: false
+                        readonly property bool isCurrentWorkspace: {
+                            if (!root.currentWorkspace || !modelData)
+                                return false;
+
+                            var wsId = modelData.workspace ? modelData.workspace.id : (modelData.lastIpcObject && modelData.lastIpcObject.workspace ? modelData.lastIpcObject.workspace.id : undefined);
+                            return wsId === root.currentWorkspace.id;
+                        }
 
                         implicitWidth: 56
                         implicitHeight: 56
@@ -286,9 +293,11 @@ PanelWindow {
                             width: 44
                             height: 44
                             radius: 13
-                            color: windowItem.hovered ? "#35ffffff" : "#18ffffff"
+                            // Более яркий фон для текущего стола
+                            color: windowItem.hovered ? "#35ffffff" : (windowItem.isCurrentWorkspace ? "#25ffffff" : "#12ffffff")
+                            // Более заметная граница
                             border.width: 1
-                            border.color: windowItem.hovered ? "#55ffffff" : "#20ffffff"
+                            border.color: windowItem.hovered ? "#55ffffff" : (windowItem.isCurrentWorkspace ? "#40ffffff" : "#18ffffff")
                             scale: windowItem.hovered ? 1.05 : 1
 
                             Image {
@@ -515,6 +524,12 @@ PanelWindow {
 
                     }
 
+                }
+
+                Rectangle {
+                    height: 56
+                    width: 1
+                    color: "#18ffffff"
                 }
 
                 MouseArea {
