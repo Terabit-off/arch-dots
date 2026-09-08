@@ -357,6 +357,7 @@ PanelWindow {
 
                         }
 
+                        // Active window indicator
                         Rectangle {
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.bottom: parent.bottom
@@ -394,6 +395,98 @@ PanelWindow {
                             onClicked: {
                                 root.focusWindow(windowItem.modelData);
                             }
+                        }
+
+                        ToolTip {
+                            visible: hovered
+                            delay: 700
+
+                            enter: Transition {
+                                NumberAnimation {
+                                    property: "opacity"
+                                    from: 0
+                                    to: 1
+                                    duration: 180
+                                    easing.type: Easing.OutCubic
+                                }
+
+                                NumberAnimation {
+                                    property: "scale"
+                                    from: 0.85
+                                    to: 1
+                                    duration: 200
+                                    easing.type: Easing.OutBack // Лёгкий "пружинящий" эффект
+                                }
+
+                            }
+
+                            exit: Transition {
+                                NumberAnimation {
+                                    property: "opacity"
+                                    from: 1
+                                    to: 0
+                                    duration: 120
+                                    easing.type: Easing.InCubic
+                                }
+
+                                NumberAnimation {
+                                    property: "scale"
+                                    from: 1
+                                    to: 0.9
+                                    duration: 120
+                                    easing.type: Easing.InCubic
+                                }
+
+                            }
+
+                            contentItem: Row {
+                                spacing: 5
+
+                                Text {
+                                    text: {
+                                        var ipc = windowItem.modelData.lastIpcObject;
+                                        var wayland = windowItem.modelData.wayland;
+                                        var title = (wayland && wayland.title) || (ipc && ipc.title) || (ipc && ipc.class) || "Window";
+                                        return title.length > 35 ? title.substring(0, 32) + "..." : title;
+                                    }
+                                    color: "#ffffff"
+                                    font.pixelSize: 12
+                                    font.weight: Font.Medium
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+                                // Separator
+                                Rectangle {
+                                    width: 1
+                                    height: 12
+                                    color: "#44ffffff"
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+                                // WS number
+                                Text {
+                                    text: {
+                                        var ws = windowItem.modelData.workspace ? windowItem.modelData.workspace.id : undefined;
+                                        if (ws === undefined && windowItem.modelData.lastIpcObject && windowItem.modelData.lastIpcObject.workspace)
+                                            ws = windowItem.modelData.lastIpcObject.workspace.id;
+
+                                        return "WS " + (ws !== undefined ? ws : "?");
+                                    }
+                                    color: "#b0ffffff"
+                                    font.pixelSize: 11
+                                    font.bold: true
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+                            }
+
+                            background: Rectangle {
+                                color: '#d1101010'
+                                border.width: 1
+                                border.color: "#35ffffff"
+                                radius: 8
+                            }
+
                         }
 
                         Behavior on opacity {
