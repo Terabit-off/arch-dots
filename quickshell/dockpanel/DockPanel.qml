@@ -51,19 +51,19 @@ PanelWindow {
     function updatePopup(overrideFloating) {
         if (hasFullscreen) {
             closeTimer.stop();
-            popup.visible = false;
+            popup.popupShown = false;
             return ;
         }
         const currentFloatingState = (overrideFloating !== undefined) ? overrideFloating : isFloating;
         if (currentFloatingState) {
             closeTimer.stop();
-            popup.visible = true;
+            popup.popupShown = true;
         } else {
             if (panelHovered || popupHovered) {
                 closeTimer.stop();
-                popup.visible = true;
+                popup.popupShown = true;
             } else {
-                popup.visible = false;
+                popup.popupShown = false;
             }
         }
     }
@@ -190,7 +190,7 @@ PanelWindow {
             if (hovered) {
                 closeTimer.stop();
                 if (!root.hasFullscreen)
-                    popup.visible = true;
+                    popup.popupShown = true;
 
             } else {
                 if (!root.isFloating)
@@ -203,7 +203,7 @@ PanelWindow {
     PopupWindow {
         id: popup
 
-        property bool popupShown: visible
+        property bool popupShown: false
 
         anchor.window: root
         anchor.rect.x: root.width / 2 - width / 2
@@ -212,7 +212,7 @@ PanelWindow {
         implicitHeight: popupContent.implicitHeight + 32
         color: "transparent"
         grabFocus: false
-        visible: false
+        visible: popupBackground.opacity > 0
 
         HoverHandler {
             onHoveredChanged: {
@@ -235,9 +235,9 @@ PanelWindow {
             color: '#6f151515'
             border.width: 1
             border.color: "#35ffffff"
-            opacity: popup.visible ? 1 : 0
-            scale: popup.visible ? 1 : 0.82
-            y: popup.visible ? 0 : 12
+            opacity: popup.popupShown ? 1 : 0
+            scale: popup.popupShown ? 1 : 0.82
+            y: popup.popupShown ? 0 : 12
 
             Rectangle {
                 anchors.fill: parent
@@ -246,7 +246,7 @@ PanelWindow {
                 color: "transparent"
                 border.width: 1
                 border.color: "#12ffffff"
-                opacity: popup.visible ? 1 : 0
+                opacity: popup.popupShown ? 1 : 0
 
                 Behavior on opacity {
                     NumberAnimation {
@@ -274,9 +274,9 @@ PanelWindow {
 
                         implicitWidth: 56
                         implicitHeight: 56
-                        opacity: popup.visible ? 1 : 0
-                        scale: popup.visible ? (hovered ? 1.16 : 1) : 0.4
-                        y: popup.visible ? 0 : 15
+                        opacity: popup.popupShown ? 1 : 0
+                        scale: popup.popupShown ? (hovered ? 1.16 : 1) : 0.4
+                        y: popup.popupShown ? 0 : 15
 
                         Rectangle {
                             id: iconBackground
@@ -520,8 +520,8 @@ PanelWindow {
                 MouseArea {
                     width: 56
                     height: 56
-                    opacity: popup.visible ? 1 : 0
-                    scale: popup.visible ? (containsMouse ? 1.16 : 1) : 0.4
+                    opacity: popup.popupShown ? 1 : 0
+                    scale: popup.popupShown ? (containsMouse ? 1.16 : 1) : 0.4
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     y: 15
@@ -620,7 +620,7 @@ PanelWindow {
         repeat: false
         onTriggered: {
             if (!root.panelHovered && !root.popupHovered && !root.isFloating && !root.hasFullscreen)
-                popup.visible = false;
+                popup.popupShown = false;
 
         }
     }
