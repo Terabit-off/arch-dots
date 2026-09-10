@@ -5,6 +5,18 @@ import Quickshell.Io
 Item {
     id: root
 
+    property int debounceMs: 180
+    property int minHomeQueryLength: 2
+    property int maxResults: 40
+    property string homePath: Quickshell.env("HOME") || "."
+    property var searchExcludes: [
+        ".git",
+        ".cache",
+        "node_modules",
+        ".npm",
+        ".local/share/Trash"
+    ]
+
     signal resultsReady(var items)
 
     Process {
@@ -12,36 +24,27 @@ Item {
 
         stdout: StdioCollector {
             onStreamFinished: {
-                var text = this.text
-
+                var text = this.text || ""
                 var lines = text.split("\n")
-
                 var items = []
 
-                for (var i = 0; i < lines.length; i++) {
+                for (var i = 0; i < lines.length && items.length < root.maxResults; i++) {
                     var path = lines[i].trim()
 
                     if (path.length === 0)
                         continue
 
                     var title = path
-
                     var slash = path.lastIndexOf("/")
 
-                    if (slash >= 0)
+                    if (slash >= 0 && slash + 1 < path.length)
                         title = path.substring(slash + 1)
 
                     items.push({
                         title: title,
-
                         description: path,
-
-                        icon: isImage(path)
-                            ? "file://" + path 
-                            : "󰈔",
-
+                        icon: root.isImage(path) ? "file://" + path : "󰈔",
                         type: "file",
-
                         path: path
                     })
                 }
@@ -52,7 +55,7 @@ Item {
 
         stderr: StdioCollector {
             onStreamFinished: {
-                // fd errors intentionally ignored
+                // fd errors are intentionally ignored; an empty result is enough for the UI.
             }
         }
     }
@@ -60,14 +63,16 @@ Item {
     Timer {
         id: debounce
 
-        interval: 180
-
+        interval: root.debounceMs
         repeat: false
-
         property string pendingQuery: ""
+        property bool pendingHomeSearch: false
 
         onTriggered: {
-            root.runSearch(pendingQuery)
+            if (pendingHomeSearch)
+                root.runHomeSearch(pendingQuery)
+            else
+                root.runSearch(pendingQuery)
         }
     }
 
@@ -77,34 +82,33 @@ Item {
     }
 
     function search(query) {
-        debounce.pendingQuery = query
+        debounce.pendingQuery = String(query || "")
+        debounce.pendingHomeSearch = false
         debounce.restart()
     }
 
-    function runSearch(query) {
-        process.running = false
+    function searchHome(query) {
+        query = String(query || "").trim()
 
-        var home =
-            Quickshell.env("HOME") || ""
-
-        var path = query
-
-        if (path.startsWith("~")) {
-            path =
-                home +
-                path.substring(1)
+        if (query.length < root.minHomeQueryLength) {
+            stop()
+            root.resultsReady([])
+            return
         }
 
-        /*
-         * Absolute path:
-         *
-         * /home/user/Documents/report
-         *
-         * becomes:
-         *
-         * directory = /home/user/Documents
-         * pattern   = report
-         */
+        debounce.pendingQuery = query
+        debounce.pendingHomeSearch = true
+        debounce.restart()
+    }
+
+    function runSearch(request) {
+        process.running = false
+        request = String(request || "")
+
+        var path = request
+
+        if (path.startsWith("~"))
+            path = root.homePath + path.substring(1)
 
         var directory = "."
         var pattern = path
@@ -113,76 +117,57 @@ Item {
             var slash = path.lastIndexOf("/")
 
             if (slash > 0) {
-                directory =
-                    path.substring(0, slash)
-
-                pattern =
-                    path.substring(slash + 1)
+                directory = path.substring(0, slash)
+                pattern = path.substring(slash + 1)
             } else {
                 directory = "/"
                 pattern = ""
             }
         }
 
-        /*
-         * Search "~/foo" as:
-         *
-         * fd foo "$HOME"
-         */
-
-        if (path === home) {
-            directory = home
+        if (path === root.homePath) {
+            directory = root.homePath
             pattern = ""
         }
 
+        process.command = root.buildCommand(pattern, directory)
+        process.running = true
+    }
+
+    function runHomeSearch(query) {
+        if (!query || query.length < root.minHomeQueryLength) {
+            root.resultsReady([])
+            return
+        }
+
+        process.command = root.buildCommand(query, root.homePath)
+        process.running = true
+    }
+
+    function buildCommand(pattern, directory) {
         var command = [
             "fd",
             "--hidden",
-            "--exclude", ".git",
-            "--type", "f",
-            "--type", "l",
-            "--max-results", "40"
-        ]
-
-        if (pattern.length > 0) {
-            command.push(
-                "--ignore-case"
-            )
-
-            command.push(pattern)
-        } else {
-            command.push(".")
-        }
-
-        command.push(directory)
-
-        process.command = command
-
-        process.running = true
-    }
-
-    function searchHome(query) {
-        process.running = false
-
-        var home = Quickshell.env("HOME") || "."
-
-        process.command = [
-            "fd",
-            "--hidden",
-            "--exclude", ".git",
             "--type", "f",
             "--type", "l",
             "--ignore-case",
-            "--max-results", "40",
-            query,
-            home
+            "--max-results", String(root.maxResults)
         ]
 
-        process.running = true
+        for (var i = 0; i < root.searchExcludes.length; i++)
+            command.push("--exclude", root.searchExcludes[i])
+
+        if (pattern.length > 0)
+            command.push(pattern)
+        else
+            command.push(".")
+
+        command.push(directory)
+        return command
     }
 
     function isImage(path) {
-        var lower = path.toLowerCase()
+        var lower = String(path || "").toLowerCase()
 
         return lower.endsWith(".jpg") ||
             lower.endsWith(".jpeg") ||

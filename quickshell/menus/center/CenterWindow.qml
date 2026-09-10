@@ -45,11 +45,11 @@ PopupWindow {
 
         Rectangle {
             anchors.fill: parent
-            radius: 8
+            radius: Singletons.Colors.controlRadius
             color: btn.isActive
-                ? Singletons.Colors.activeButtonBackgroundColor
+                ? Singletons.Colors.controlActive
                 : (mouseArea.containsMouse 
-                    ? Singletons.Colors.buttonBackgroundColorHover
+                    ? Singletons.Colors.controlHover
                     : Singletons.Colors.buttonBackgroundColor)
 
             Text {
@@ -108,14 +108,14 @@ PopupWindow {
 
             // left navigation panel
             Rectangle {
-                Layout.preferredWidth: 60
+                Layout.preferredWidth: 64
                 Layout.fillHeight: true
                 color: "transparent"
                 radius: popupContent.radius
 
                 ColumnLayout {
                     anchors.centerIn: parent
-                    spacing: 16
+                    spacing: 10
 
                     NavButton {
                         iconText: ""

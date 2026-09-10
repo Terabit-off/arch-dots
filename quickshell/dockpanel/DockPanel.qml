@@ -6,6 +6,7 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Wayland
+import "../Singletons" as Singletons
 
 PanelWindow {
     id: root
@@ -13,6 +14,8 @@ PanelWindow {
     property real hoverTimeout: 800
     property bool panelHovered: false
     property bool popupHovered: false
+    property var iconPathCache: ({})
+    property int iconRevision: 0
     readonly property var currentWorkspace: Hyprland.focusedWorkspace
     readonly property bool hasFullscreen: currentWorkspace ? currentWorkspace.hasFullscreen : false
     readonly property bool isFloating: {
@@ -48,6 +51,53 @@ PanelWindow {
         return false;
     }
 
+    function windowWorkspaceId(window) {
+        if (!window)
+            return undefined
+
+        if (window.workspace)
+            return window.workspace.id
+
+        var ipc = window.lastIpcObject
+        return ipc && ipc.workspace ? ipc.workspace.id : undefined
+    }
+
+    function iconForWindow(window) {
+        // Read the revision so this binding can be retriggered after
+        // DesktopEntries has finished loading/resolving icons.
+        void iconRevision
+
+        var ipc = window ? window.lastIpcObject : null
+        var className = ipc && ipc.class ? String(ipc.class) : "__unknown__"
+        var fallback = Qt.resolvedUrl("icon-placeholder.png")
+
+        if (!ipc)
+            return fallback
+
+        // Cache only successful resolutions. A temporary lookup failure must
+        // not permanently turn an application icon into the placeholder.
+        if (iconPathCache[className])
+            return iconPathCache[className]
+
+        var entry = DesktopEntries.heuristicLookup(className)
+        if (!entry || !entry.icon)
+            return fallback
+
+        if (!Quickshell.hasThemeIcon(entry.icon))
+            return fallback
+
+        var path = Quickshell.iconPath(entry.icon)
+        if (!path)
+            return fallback
+
+        iconPathCache[className] = path
+        return path
+    }
+
+    function scheduleRefresh() {
+        refreshTimer.restart()
+    }
+
     function updatePopup(overrideFloating) {
         if (hasFullscreen) {
             closeTimer.stop();
@@ -80,17 +130,12 @@ PanelWindow {
                 if (args.length < 2)
                     return ;
 
-                const address = String(args[0]);
                 const isWindowFloating = Number(args[1]) === 1;
                 root.updatePopup(isWindowFloating);
                 break;
             };
         default:
-            Hyprland.refreshToplevels();
-            Hyprland.refreshWorkspaces();
-            Qt.callLater(function() {
-                root.updatePopup(undefined);
-            });
+            scheduleRefresh();
             break;
         }
     }
@@ -112,9 +157,7 @@ PanelWindow {
         Hyprland.refreshToplevels();
         Hyprland.refreshWorkspaces();
         Hyprland.rawEvent.connect(onRawEvent);
-        Qt.callLater(function() {
-            root.updatePopup();
-        });
+        scheduleRefresh();
     }
 
     Process {
@@ -131,7 +174,7 @@ PanelWindow {
         width: panelHovered ? 150 : 90
         height: panelHovered ? 4 : 3
         radius: height / 2
-        color: panelHovered ? "#ffffff" : '#68ffffff'
+        color: panelHovered ? Singletons.Colors.dockAccent : Singletons.Colors.dockAccentDim
 
         Rectangle {
             anchors.centerIn: parent
@@ -207,7 +250,7 @@ PanelWindow {
 
         anchor.window: root
         anchor.rect.x: root.width / 2 - width / 2
-        anchor.rect.y: -height - 12
+        anchor.rect.y: -height - 20
         implicitWidth: popupContent.implicitWidth + 32
         implicitHeight: popupContent.implicitHeight + 32
         color: "transparent"
@@ -232,30 +275,12 @@ PanelWindow {
 
             anchors.fill: parent
             radius: 18
-            color: '#6f151515'
+            color: Singletons.Colors.dockPopupBackground
             border.width: 1
-            border.color: "#35ffffff"
+            border.color: Singletons.Colors.borderSubtle
             opacity: popup.popupShown ? 1 : 0
             scale: popup.popupShown ? 1 : 0.82
             y: popup.popupShown ? 0 : 12
-
-            Rectangle {
-                anchors.fill: parent
-                anchors.margins: 1
-                radius: parent.radius - 1
-                color: "transparent"
-                border.width: 1
-                border.color: "#12ffffff"
-                opacity: popup.popupShown ? 1 : 0
-
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: 300
-                    }
-
-                }
-
-            }
 
             RowLayout {
                 id: popupContent
@@ -263,6 +288,7 @@ PanelWindow {
                 anchors.centerIn: parent
                 spacing: 10
 
+                // windows
                 Repeater {
                     model: Hyprland.toplevels
 
@@ -275,8 +301,7 @@ PanelWindow {
                             if (!root.currentWorkspace || !modelData)
                                 return false;
 
-                            var wsId = modelData.workspace ? modelData.workspace.id : (modelData.lastIpcObject && modelData.lastIpcObject.workspace ? modelData.lastIpcObject.workspace.id : undefined);
-                            return wsId === root.currentWorkspace.id;
+                            return root.windowWorkspaceId(modelData) === root.currentWorkspace.id;
                         }
 
                         implicitWidth: 56
@@ -294,10 +319,10 @@ PanelWindow {
                             height: 44
                             radius: 13
                             // Более яркий фон для текущего стола
-                            color: windowItem.hovered ? "#35ffffff" : (windowItem.isCurrentWorkspace ? "#25ffffff" : "#12ffffff")
+                            color: windowItem.hovered ? Singletons.Colors.dockWindowHoverBackground : (windowItem.isCurrentWorkspace ? Singletons.Colors.dockWindowCurrentBackground : Singletons.Colors.dockWindowBackground)
                             // Более заметная граница
                             border.width: 1
-                            border.color: windowItem.hovered ? "#55ffffff" : (windowItem.isCurrentWorkspace ? "#40ffffff" : "#18ffffff")
+                            border.color: windowItem.hovered ? Singletons.Colors.dockWindowHoverBorder : (windowItem.isCurrentWorkspace ? Singletons.Colors.dockWindowCurrentBorder : Singletons.Colors.dockWindowBorder)
                             scale: windowItem.hovered ? 1.05 : 1
 
                             Image {
@@ -308,20 +333,7 @@ PanelWindow {
                                 height: 27
                                 asynchronous: true
                                 fillMode: Image.PreserveAspectFit
-                                source: {
-                                    const ipc = windowItem.modelData.lastIpcObject;
-                                    if (!ipc)
-                                        return Qt.resolvedUrl("icon-placeholder.png");
-
-                                    const entry = DesktopEntries.heuristicLookup(ipc.class);
-                                    if (!entry)
-                                        return Qt.resolvedUrl("icon-placeholder.png");
-
-                                    if (Quickshell.hasThemeIcon(entry.icon))
-                                        return Quickshell.iconPath(entry.icon);
-
-                                    return Qt.resolvedUrl("icon-placeholder.png");
-                                }
+                                source: root.iconForWindow(windowItem.modelData)
                                 opacity: status === Image.Ready ? 1 : 0
                                 scale: status === Image.Ready ? 1 : 0.65
 
@@ -373,7 +385,7 @@ PanelWindow {
                             width: windowItem.modelData.activated ? 22 : 6
                             height: 3
                             radius: 2
-                            color: "#ffffff"
+                            color: Singletons.Colors.foreground
                             opacity: windowItem.modelData.activated ? 0.9 : 0.25
 
                             Behavior on width {
@@ -458,7 +470,7 @@ PanelWindow {
                                         var title = (wayland && wayland.title) || (ipc && ipc.title) || (ipc && ipc.class) || "Window";
                                         return title.length > 35 ? title.substring(0, 32) + "..." : title;
                                     }
-                                    color: "#ffffff"
+                                    color: Singletons.Colors.foreground
                                     font.pixelSize: 12
                                     font.weight: Font.Medium
                                     anchors.verticalCenter: parent.verticalCenter
@@ -475,10 +487,7 @@ PanelWindow {
                                 // WS number
                                 Text {
                                     text: {
-                                        var ws = windowItem.modelData.workspace ? windowItem.modelData.workspace.id : undefined;
-                                        if (ws === undefined && windowItem.modelData.lastIpcObject && windowItem.modelData.lastIpcObject.workspace)
-                                            ws = windowItem.modelData.lastIpcObject.workspace.id;
-
+                                        var ws = root.windowWorkspaceId(windowItem.modelData);
                                         return "WS " + (ws !== undefined ? ws : "?");
                                     }
                                     color: "#b0ffffff"
@@ -492,7 +501,7 @@ PanelWindow {
                             background: Rectangle {
                                 color: '#d1101010'
                                 border.width: 1
-                                border.color: "#35ffffff"
+                                border.color: Singletons.Colors.borderSubtle
                                 radius: 8
                             }
 
@@ -526,12 +535,14 @@ PanelWindow {
 
                 }
 
+                // separator
                 Rectangle {
                     height: 56
                     width: 1
-                    color: "#18ffffff"
+                    color: Singletons.Colors.dockSeparator
                 }
 
+                // launcher button
                 MouseArea {
                     width: 56
                     height: 56
@@ -550,16 +561,16 @@ PanelWindow {
                         width: 44
                         height: 44
                         radius: 13
-                        color: parent.containsMouse ? "#35ffffff" : "#18ffffff"
+                        color: parent.containsMouse ? Singletons.Colors.dockWindowHoverBackground : Singletons.Colors.dockWindowBackground
                         border.width: 1
-                        border.color: parent.containsMouse ? "#55ffffff" : "#20ffffff"
+                        border.color: parent.containsMouse ? Singletons.Colors.dockWindowHoverBorder : Singletons.Colors.dockWindowBorder
                         scale: parent.containsMouse ? 1.05 : 1
 
                         Text {
                             anchors.centerIn: parent
                             text: "󰀻"
                             font.pixelSize: 24
-                            color: "white"
+                            color: Singletons.Colors.foreground
                         }
 
                         Behavior on color {
@@ -584,7 +595,7 @@ PanelWindow {
                         width: 6
                         height: 3
                         radius: 2
-                        color: "#ffffff"
+                        color: Singletons.Colors.foreground
                         opacity: 0.25
                     }
 
@@ -626,6 +637,33 @@ PanelWindow {
 
         }
 
+    }
+
+    Timer {
+        id: refreshTimer
+
+        interval: 0
+        repeat: false
+
+        onTriggered: {
+            Hyprland.refreshToplevels();
+            Hyprland.refreshWorkspaces();
+            root.updatePopup(undefined);
+        }
+    }
+
+    Timer {
+        id: iconRetryTimer
+
+        interval: 350
+        repeat: true
+        running: popup.popupShown
+
+        onTriggered: {
+            // Re-evaluate icon bindings while the popup is visible. This is
+            // only needed briefly after startup or when a new app appears.
+            root.iconRevision++
+        }
     }
 
     Timer {

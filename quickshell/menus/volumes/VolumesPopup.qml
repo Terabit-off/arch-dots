@@ -65,9 +65,9 @@ PopupWindow {
             id: mainColumn
 
             anchors.fill: parent
-            anchors.margins: 10
+            anchors.margins: 12
 
-            spacing: 8
+            spacing: 10
 
             RowLayout {
                 Layout.fillWidth: true

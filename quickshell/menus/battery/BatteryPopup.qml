@@ -64,7 +64,7 @@ PopupWindow {
 
         anchors.fill: parent
         implicitWidth: 340
-        implicitHeight: 150
+        implicitHeight: 162
 
 
         color: Singletons.Colors.menuBackground
@@ -96,7 +96,7 @@ PopupWindow {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 10
-            spacing: 5
+            spacing: Singletons.Colors.menuSectionSpacing
 
             RowLayout {
                 Layout.fillWidth: true
@@ -188,7 +188,7 @@ PopupWindow {
         Layout.fillWidth: true
         Layout.preferredHeight: 58
 
-        radius: 5
+        radius: Singletons.Colors.cardRadius
         color: "transparent"
 
         property string title
@@ -221,23 +221,23 @@ PopupWindow {
 
         Layout.preferredHeight: 62
 
-        radius: 5
+        radius: Singletons.Colors.cardRadius
 
         color: {
             if (!enabled)
                 return Singletons.Colors.buttonBackgroundColor;
 
             if (active)
-                return Singletons.Colors.activeButtonBackgroundColor;
+                return Singletons.Colors.controlActive;
 
             if (mouse.containsMouse)
-                return Singletons.Colors.buttonBackgroundColorHover;
+                return Singletons.Colors.controlHover;
 
             return Singletons.Colors.buttonBackgroundColor;
         }
 
         border.width: 1
-        border.color:Singletons.Colors.activeButtonBackgroundColor
+        border.color:Singletons.Colors.controlActive
 
         property string title
         property string icon

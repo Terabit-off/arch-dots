@@ -84,8 +84,8 @@ PopupWindow {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 16
-            spacing: 12
+            anchors.margins: Singletons.Colors.menuPadding
+            spacing: Singletons.Colors.menuSectionSpacing
 
             RowLayout {
                 Layout.fillWidth: true
@@ -139,7 +139,7 @@ PopupWindow {
                     Layout.preferredHeight: 36
                     radius: 10
                     color: scanMouse.containsMouse
-                           ? Singletons.Colors.buttonBackgroundColorHover 
+                           ? Singletons.Colors.controlHover 
                            : Singletons.Colors.buttonBackgroundColor
 
                     Text {
@@ -234,7 +234,7 @@ PopupWindow {
                             20
                             : 56
 
-                        radius: 5
+                        radius: Singletons.Colors.cardRadius
 
                         color: modelData.connected
                             ? '#e0282828'
@@ -400,7 +400,7 @@ PopupWindow {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 34
 
-                                radius: 9
+                                radius: Singletons.Colors.controlRadius
 
                                 color: connectMouse.containsMouse
                                     ? '#6dadadad'
@@ -472,7 +472,7 @@ PopupWindow {
                                     font.pixelSize: 11
 
                                     background: Rectangle {
-                                        radius: 9
+                                        radius: Singletons.Colors.controlRadius
 
                                         color: "#141419"
 
@@ -494,7 +494,7 @@ PopupWindow {
                                     Layout.preferredWidth: 34
                                     Layout.preferredHeight: 34
 
-                                    radius: 9
+                                    radius: Singletons.Colors.controlRadius
 
                                     color: eyeMouse.containsMouse
                                         ? "#20ffffff"
@@ -535,7 +535,7 @@ PopupWindow {
                                     Layout.preferredWidth: 90
                                     Layout.preferredHeight: 34
 
-                                    radius: 9
+                                    radius: Singletons.Colors.controlRadius
 
                                     color: passwordMouse.containsMouse
                                         ? '#6dadadad'
@@ -584,7 +584,7 @@ PopupWindow {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 34
 
-                                radius: 9
+                                radius: Singletons.Colors.controlRadius
 
                                 color: disconnectMouse.containsMouse
                                     ? "#30272a"
@@ -627,7 +627,7 @@ PopupWindow {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 30
 
-                                radius: 8
+                                radius: Singletons.Colors.controlRadius
 
                                 color: forgetMouse.containsMouse
                                     ? "#30272a"

@@ -95,8 +95,8 @@ PopupWindow {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 16
-            spacing: 12
+            anchors.margins: Singletons.Colors.menuPadding
+            spacing: Singletons.Colors.menuSectionSpacing
 
             // Header
             RowLayout {
@@ -144,12 +144,12 @@ PopupWindow {
                     Layout.preferredWidth: 42
                     Layout.preferredHeight: 24
                     radius: 12
-                    color: root.enabled ? Singletons.Colors.buttonBackgroundColorHover : Singletons.Colors.buttonBackgroundColor
+                    color: root.enabled ? Singletons.Colors.controlHover : Singletons.Colors.buttonBackgroundColor
 
                     Rectangle {
                         width: 18
                         height: 18
-                        radius: 9
+                        radius: Singletons.Colors.controlRadius
                         anchors.verticalCenter: parent.verticalCenter
                         x: root.enabled ? parent.width - width - 3 : 3
                         color: root.enabled ? Singletons.Colors.foreground : Singletons.Colors.foregroundDim
@@ -170,7 +170,7 @@ PopupWindow {
                     Layout.preferredHeight: 36
                     radius: 10
                     visible: root.enabled
-                    color: scanMouse.containsMouse ? Singletons.Colors.buttonBackgroundColorHover : Singletons.Colors.buttonBackgroundColor
+                    color: scanMouse.containsMouse ? Singletons.Colors.controlHover : Singletons.Colors.buttonBackgroundColor
 
                     Text {
                         anchors.centerIn: parent
@@ -246,7 +246,7 @@ PopupWindow {
                         height: expanded 
                             ? networkRow.height + expandedContent.implicitHeight + 20 
                             : 56
-                        radius: 5
+                        radius: Singletons.Colors.cardRadius
                         color: modelData.connected 
                             ? '#e0282828' 
                             : '#d2242424'
@@ -361,7 +361,7 @@ PopupWindow {
                                 visible: !modelData.connected
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 34
-                                radius: 9
+                                radius: Singletons.Colors.controlRadius
                                 color: connectMouse.containsMouse ? '#6dadadad' : '#6d707070'
 
                                 Text {
@@ -395,7 +395,7 @@ PopupWindow {
                                 visible: modelData.connected
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 34
-                                radius: 9
+                                radius: Singletons.Colors.controlRadius
                                 color: disconnectMouse.containsMouse ? "#30272a" : "#201f21"
                                 border.width: 1
                                 border.color: "#20ffffff"
@@ -424,7 +424,7 @@ PopupWindow {
                                 visible: modelData.paired && !modelData.connected
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 30
-                                radius: 8
+                                radius: Singletons.Colors.controlRadius
                                 color: forgetMouse.containsMouse ? "#30272a" : "transparent"
 
                                 Text {

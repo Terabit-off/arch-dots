@@ -1,70 +1,86 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 
 import "../../Singletons" as Singletons
 
 Item {
     id: dateTimeRoot
 
-    property date currentDate: new Date()
+    readonly property var monthNames: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ]
 
+    readonly property var dayNames: [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+    ]
+
+    readonly property var weekDayNames: [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun"
+    ]
+
+    property date currentDate: new Date()
     property int displayedYear: currentDate.getFullYear()
     property int displayedMonth: currentDate.getMonth()
+
+    // These values are shared by all 42 calendar cells instead of being
+    // recalculated independently in every delegate.
+    property int calendarFirstDay: firstDayOfMonth(displayedYear, displayedMonth)
+    property int calendarDays: daysInMonth(displayedYear, displayedMonth)
 
     function updateTime() {
         currentDate = new Date()
     }
 
-    function monthName(month) {
-        const months = [
-            "January",
-            "Fedruary",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-        ]
+    function refreshCalendarMetrics() {
+        calendarFirstDay = firstDayOfMonth(displayedYear, displayedMonth)
+        calendarDays = daysInMonth(displayedYear, displayedMonth)
+    }
 
-        return months[month]
+    function monthName(month) {
+        return monthNames[month] || ""
     }
 
     function formatTime(date) {
-        const hours = date.getHours().toString().padStart(2, "0")
-        const minutes = date.getMinutes().toString().padStart(2, "0")
-        const seconds = date.getSeconds().toString().padStart(2, "0")
-
-        return `${hours}:${minutes}:${seconds}`
+        var hours = date.getHours().toString().padStart(2, "0")
+        var minutes = date.getMinutes().toString().padStart(2, "0")
+        var seconds = date.getSeconds().toString().padStart(2, "0")
+        return hours + ":" + minutes + ":" + seconds
     }
 
     function formatDate(date) {
-        const days = [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-        ]
-
-        const day = date.getDate().toString().padStart(2, "0")
-        const month = (date.getMonth() + 1).toString().padStart(2, "0")
-        const year = date.getFullYear()
-
-        return `${days[date.getDay()]}, ${day}.${month}.${year}`
+        var day = date.getDate().toString().padStart(2, "0")
+        var month = (date.getMonth() + 1).toString().padStart(2, "0")
+        var year = date.getFullYear()
+        return dayNames[date.getDay()] + ", " + day + "." + month + "." + year
     }
 
     function isToday(day) {
-        return day === currentDate.getDate()
-            && displayedMonth === currentDate.getMonth()
-            && displayedYear === currentDate.getFullYear()
+        return day === currentDate.getDate() &&
+            displayedMonth === currentDate.getMonth() &&
+            displayedYear === currentDate.getFullYear()
     }
 
     function daysInMonth(year, month) {
@@ -72,45 +88,46 @@ Item {
     }
 
     function firstDayOfMonth(year, month) {
-        // Понедельник = 0, воскресенье = 6
-        const day = new Date(year, month, 1).getDay()
-
+        // Monday = 0, Sunday = 6.
+        var day = new Date(year, month, 1).getDay()
         return (day + 6) % 7
     }
 
+    function setDisplayedMonth(year, month) {
+        var normalized = new Date(year, month, 1)
+        displayedYear = normalized.getFullYear()
+        displayedMonth = normalized.getMonth()
+        refreshCalendarMetrics()
+    }
+
     function previousMonth() {
-        if (displayedMonth === 0) {
-            displayedMonth = 11
-            displayedYear--
-        } else {
-            displayedMonth--
-        }
+        setDisplayedMonth(displayedYear, displayedMonth - 1)
     }
 
     function nextMonth() {
-        if (displayedMonth === 11) {
-            displayedMonth = 0
-            displayedYear++
-        } else {
-            displayedMonth++
-        }
+        setDisplayedMonth(displayedYear, displayedMonth + 1)
     }
 
     function today() {
-        const now = new Date()
-
-        displayedYear = now.getFullYear()
-        displayedMonth = now.getMonth()
+        var now = new Date()
         currentDate = now
+        setDisplayedMonth(now.getFullYear(), now.getMonth())
     }
 
+    Component.onCompleted: refreshCalendarMetrics()
+
     Timer {
-        interval: 1000
+        id: clockTimer
+
+        // Keep the visible seconds accurate without depending on when the
+        // timer happened to start.
+        interval: Math.max(50, 1000 - (new Date()).getMilliseconds())
         running: true
         repeat: true
 
         onTriggered: {
             dateTimeRoot.updateTime()
+            interval = Math.max(50, 1000 - (new Date()).getMilliseconds())
         }
     }
 
@@ -129,66 +146,54 @@ Item {
         ColumnLayout {
             Layout.fillHeight: true
             Layout.fillWidth: true
-
             Layout.alignment: Qt.AlignVCenter
-
             spacing: 8
 
             Text {
                 Layout.fillWidth: true
                 Layout.minimumWidth: 190
 
-                text: dateTimeRoot.formatTime(
-                    dateTimeRoot.currentDate
-                )
+                text: dateTimeRoot.formatTime(dateTimeRoot.currentDate)
 
                 color: Singletons.Colors.foreground
                 verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
 
-                font.family: "JetBrainsMono Nerd Font"
+                font.family: Singletons.Colors.uiFont
                 font.pixelSize: 36
                 font.bold: true
-
-                horizontalAlignment: Text.AlignHCenter
             }
 
             Text {
                 Layout.fillWidth: true
 
-                text: dateTimeRoot.formatDate(
-                    dateTimeRoot.currentDate
-                )
+                text: dateTimeRoot.formatDate(dateTimeRoot.currentDate)
 
-                color: todayMouse.containsMouse ? Singletons.Colors.foreground : Singletons.Colors.foregroundDim
+                color: todayMouse.containsMouse
+                    ? Singletons.Colors.foreground
+                    : Singletons.Colors.foregroundDim
+
                 verticalAlignment: Text.AlignVCenter
-
-                font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 13
-
+                horizontalAlignment: Text.AlignHCenter
                 opacity: 0.75
 
-                horizontalAlignment: Text.AlignHCenter
+                font.family: Singletons.Colors.uiFont
+                font.pixelSize: 13
 
                 MouseArea {
                     id: todayMouse
                     anchors.fill: parent
                     hoverEnabled: true
-
                     cursorShape: Qt.PointingHandCursor
-
-                    onClicked: {
-                        dateTimeRoot.today()
-                    }
+                    onClicked: dateTimeRoot.today()
                 }
             }
         }
 
-        // Separator
         Rectangle {
             width: 1
             height: 150
             Layout.alignment: Qt.AlignVCenter
-
             color: Singletons.Colors.separatorColor
         }
 
@@ -196,104 +201,66 @@ Item {
         ColumnLayout {
             Layout.fillHeight: true
             Layout.preferredWidth: 280
-
             spacing: 5
 
-            // MONTH HEADER
             RowLayout {
                 Layout.fillWidth: true
-
                 spacing: 8
 
                 Text {
                     text: ""
-
                     color: previousMonthMouse.containsMouse
                         ? Singletons.Colors.foreground
                         : Singletons.Colors.foregroundDim
-
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: Singletons.Colors.iconFont
                     font.pixelSize: 14
 
                     MouseArea {
                         id: previousMonthMouse
-
                         anchors.fill: parent
-
                         hoverEnabled: true
-
                         cursorShape: Qt.PointingHandCursor
-
-                        onClicked: {
-                            dateTimeRoot.previousMonth()
-                        }
+                        onClicked: dateTimeRoot.previousMonth()
                     }
                 }
 
                 Text {
                     Layout.fillWidth: true
-
-                    text:
-                        dateTimeRoot.monthName(
-                            dateTimeRoot.displayedMonth
-                        )
-                        + " "
-                        + dateTimeRoot.displayedYear
-
+                    text: dateTimeRoot.monthName(dateTimeRoot.displayedMonth)
+                        + " " + dateTimeRoot.displayedYear
                     color: Singletons.Colors.foreground
-
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: Singletons.Colors.uiFont
                     font.pixelSize: 14
                     font.bold: true
-
                     horizontalAlignment: Text.AlignHCenter
                 }
 
                 Text {
                     text: ""
-
                     color: nextMonthMouse.containsMouse
                         ? Singletons.Colors.foreground
                         : Singletons.Colors.foregroundDim
-
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: Singletons.Colors.iconFont
                     font.pixelSize: 14
 
                     MouseArea {
                         id: nextMonthMouse
-
                         anchors.fill: parent
-
                         hoverEnabled: true
-
                         cursorShape: Qt.PointingHandCursor
-
-                        onClicked: {
-                            dateTimeRoot.nextMonth()
-                        }
+                        onClicked: dateTimeRoot.nextMonth()
                     }
                 }
             }
 
-            // WEEK DAYS
             GridLayout {
                 Layout.fillWidth: true
-
                 columns: 7
-
                 rowSpacing: 4
                 columnSpacing: 2
 
                 Repeater {
-                    model: [
-                        "Mon",
-                        "Tue",
-                        "Wed",
-                        "Thu",
-                        "Fri",
-                        "Sat",
-                        "Sun"
-                    ]
+                    model: dateTimeRoot.weekDayNames
 
                     Text {
                         Layout.fillWidth: true
@@ -302,28 +269,24 @@ Item {
                         required property string modelData
 
                         text: modelData
+                        color: modelData === "Sat" || modelData === "Sun"
+                            ? Singletons.Colors.weekendColor
+                            : Singletons.Colors.foregroundDim
 
-                        color: modelData == "Sat" || modelData == "Sun" ? '#ffd6d6' : Singletons.Colors.foregroundDim
-
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: Singletons.Colors.uiFont
                         font.pixelSize: 10
                         font.bold: true
-
-                        horizontalAlignment:
-                            Text.AlignHCenter
+                        horizontalAlignment: Text.AlignHCenter
                     }
                 }
             }
 
-            // DAYS
             GridLayout {
                 id: calendarGrid
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-
                 columns: 7
-
                 rowSpacing: 3
                 columnSpacing: 3
 
@@ -335,30 +298,16 @@ Item {
 
                         Layout.fillWidth: true
                         Layout.preferredHeight: 20
-
                         radius: 7
 
-                        readonly property int firstDay:
-                            dateTimeRoot.firstDayOfMonth(
-                                dateTimeRoot.displayedYear,
-                                dateTimeRoot.displayedMonth
-                            )
-
-                        readonly property int days:
-                            dateTimeRoot.daysInMonth(
-                                dateTimeRoot.displayedYear,
-                                dateTimeRoot.displayedMonth
-                            )
-
                         readonly property int day:
-                            index - firstDay + 1
+                            index - dateTimeRoot.calendarFirstDay + 1
 
                         readonly property bool validDay:
-                            day >= 1 && day <= days
+                            day >= 1 && day <= dateTimeRoot.calendarDays
 
                         readonly property bool today:
-                            validDay &&
-                            dateTimeRoot.isToday(day)
+                            validDay && dateTimeRoot.isToday(day)
 
                         color: today
                             ? Singletons.Colors.foregroundDim
@@ -366,25 +315,14 @@ Item {
 
                         Text {
                             anchors.centerIn: parent
-
-                            text: parent.validDay
-                                ? parent.day
-                                : ""
-
+                            text: parent.validDay ? parent.day : ""
                             color: parent.today
                                 ? Singletons.Colors.menuBackground
                                 : Singletons.Colors.foreground
-
-                            font.family:
-                                "JetBrainsMono Nerd Font"
-
+                            font.family: Singletons.Colors.uiFont
                             font.pixelSize: 11
-
-                            font.bold:
-                                parent.today
-
-                            opacity:
-                                parent.validDay ? 1 : 0
+                            font.bold: parent.today
+                            opacity: parent.validDay ? 1 : 0
                         }
                     }
                 }
