@@ -330,11 +330,15 @@ PanelWindow {
                                     height: 32
 
                                     source: {
-                                        return modelData.type === "app" && Quickshell.hasThemeIcon(modelData.icon)
-                                                ? Quickshell.iconPath(modelData.icon)
-                                                : ""
+                                        var iconName = String(modelData.icon || "")
+                                        var usable = modelData.type === "app" || modelData.type === "folder"
+
+                                        return usable && Quickshell.hasThemeIcon(iconName)
+                                            ? Quickshell.iconPath(iconName)
+                                            : ""
                                     }
                                 }
+
                                 Image {
                                     id: fileImage
                                     anchors.centerIn: parent
@@ -342,25 +346,30 @@ PanelWindow {
 
                                     width: 32
                                     height: 32
+                                    fillMode: Image.PreserveAspectFit
 
                                     source: {
-                                        var lower = modelData.icon.toLowerCase()
-                                        return modelData.type === "file" && lower.startsWith("file://")
-                                                ? modelData.icon
-                                                : ""
+                                        var iconValue = String(modelData.icon || "")
+
+                                        return modelData.type === "file" && iconValue.startsWith("file://")
+                                            ? iconValue
+                                            : ""
                                     }
                                 }
 
                                 Text {
                                     anchors.centerIn: parent
 
-                                    visible: (modelData.type !== "app" || iconImage.source == "") && !fileImage.visible
+                                    visible: !iconImage.visible && !fileImage.visible
 
                                     text: {
                                         if (modelData.type === "calculator")
                                             return "="
 
-                                        if (modelData.type === "file") 
+                                        if (modelData.type === "folder")
+                                            return "󰉋"
+
+                                        if (modelData.type === "file")
                                             return "󰈔"
 
                                         if (modelData.type === "clipboard")
@@ -406,7 +415,9 @@ PanelWindow {
                             }
 
                             Text {
-                                text: modelData.type || ""
+                                text: modelData.type === "folder" ? "folder"
+                                    : modelData.type === "file" ? "file"
+                                    : (modelData.type || "")
 
                                 color: Singletons.Colors.foregroundDim
 
