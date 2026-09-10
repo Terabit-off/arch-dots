@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Io
 
 Item {
     id: root
@@ -167,11 +168,11 @@ Item {
         var value = calculate(expression);
         if (value === null)
             return [{
-                "title": "Invalid expression",
-                "description": "Allowed: numbers + - * / ( ) %",
-                "icon": "=",
-                "type": "calculator-error"
-            }];
+            "title": "Invalid expression",
+            "description": "Allowed: numbers + - * / ( ) %",
+            "icon": "=",
+            "type": "calculator-error"
+        }];
 
         return [{
             "title": String(value),
@@ -247,6 +248,10 @@ Item {
             Quickshell.execDetached(["xdg-open", item.path]);
             return ;
         }
+        if (item.type === "folder") {
+            openFolder.command = ["nemo", item.path];
+            openFolder.running = true;
+        }
     }
 
     function isCalculation(text) {
@@ -317,6 +322,10 @@ Item {
         currentMode = "apps";
         modeText = "Applications";
         results = applicationResults("");
+    }
+
+    Process {
+        id: openFolder
     }
 
     Timer {
