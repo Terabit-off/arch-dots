@@ -44,3 +44,4 @@ gopls
 configstore
 systemd
 test.sh
+exports

@@ -1,21 +1,29 @@
+import "." as Modules
+import "../../Singletons" as Singletons
+import Qt5Compat.GraphicalEffects
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
-import Qt5Compat.GraphicalEffects
-import QtQuick.Controls
-
-import "../../Singletons" as Singletons
-import "." as Modules
 
 PopupWindow {
     id: centerWindowRoot
+
+    property var active: musicView.active
+    property Item anchorItem
+    property int currentSegmentIndex: 0
+
     grabFocus: true
     visible: false
     implicitWidth: 550
     implicitHeight: 220
     color: "transparent"
-
-    property var active: musicView.active
+    onVisibleChanged: {
+        if (visible) {
+            openAnimation.restart();
+            timeDateView.today();
+        }
+    }
 
     anchor {
         item: anchorItem
@@ -24,54 +32,9 @@ PopupWindow {
         margins.top: 25
     }
 
-    onVisibleChanged: {
-        if (visible) {
-            openAnimation.restart()
-            timeDateView.today()
-        }
-    }
-
-    property Item anchorItem
-    property int currentSegmentIndex: 0
-
-    component NavButton: Item {
-        id: btn
-        property string iconText
-        property bool isActive
-        signal clicked()
-
-        width: 40
-        height: 40
-
-        Rectangle {
-            anchors.fill: parent
-            radius: Singletons.Colors.controlRadius
-            color: btn.isActive
-                ? Singletons.Colors.controlActive
-                : (mouseArea.containsMouse 
-                    ? Singletons.Colors.controlHover
-                    : Singletons.Colors.buttonBackgroundColor)
-
-            Text {
-                anchors.centerIn: parent
-                text: btn.iconText
-                font.family: "JetBrainsMono Nerd Font"
-                color: btn.isActive || mouseArea.containsMouse ? Singletons.Colors.foreground 
-                    : Singletons.Colors.foregroundDim
-                font.pixelSize: 20
-            }
-        }
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            cursorShape: Qt.PointingHandCursor
-            onClicked: btn.clicked()
-        }
-    }
-
     Rectangle {
         id: popupContent
+
         width: centerWindowRoot.implicitWidth
         height: centerWindowRoot.implicitHeight
         color: Singletons.Colors.menuBackground
@@ -100,6 +63,7 @@ PopupWindow {
                 duration: 180
                 easing.type: Easing.OutQuint
             }
+
         }
 
         RowLayout {
@@ -122,17 +86,15 @@ PopupWindow {
                         isActive: centerWindowRoot.currentSegmentIndex === 0
                         onClicked: centerWindowRoot.currentSegmentIndex = 0
                     }
+
                     NavButton {
                         iconText: "󰝚"
                         isActive: centerWindowRoot.currentSegmentIndex === 1
                         onClicked: centerWindowRoot.currentSegmentIndex = 1
                     }
-                    NavButton {
-                        iconText: "󰄄"
-                        isActive: centerWindowRoot.currentSegmentIndex === 2
-                        onClicked: centerWindowRoot.currentSegmentIndex = 2
-                    }
+
                 }
+
             }
 
             // separator
@@ -146,30 +108,31 @@ PopupWindow {
             // Main area with segment switching
             StackLayout {
                 id: contentStack
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                currentIndex: centerWindowRoot.currentSegmentIndex
 
                 function updatePages() {
                     for (let i = 0; i < count; ++i) {
-                        let page = itemAt(i)
+                        let page = itemAt(i);
                         if (!page)
-                            continue
+                            continue;
 
-                        page.opacity = (i === currentIndex) ? 1 : 0
-                        page.x = (i === currentIndex) ? 0 : 20
+                        page.opacity = (i === currentIndex) ? 1 : 0;
+                        page.x = (i === currentIndex) ? 0 : 20;
                     }
                 }
 
-                onCurrentIndexChanged:{
-                    updatePages()
-                } 
-                Component.onCompleted: {
-                    updatePages()
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                currentIndex: centerWindowRoot.currentSegmentIndex
+                onCurrentIndexChanged: {
+                    updatePages();
                 }
+                Component.onCompleted: {
+                    updatePages();
+                }
+
                 Modules.DateTimeView {
                     id: timeDateView
+
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
@@ -178,6 +141,7 @@ PopupWindow {
                             duration: 180
                             easing.type: Easing.OutCubic
                         }
+
                     }
 
                     Behavior on x {
@@ -185,10 +149,14 @@ PopupWindow {
                             duration: 180
                             easing.type: Easing.OutCubic
                         }
+
                     }
+
                 }
+
                 Modules.MusicView {
                     id: musicView
+
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     popup: centerWindowRoot
@@ -198,6 +166,7 @@ PopupWindow {
                             duration: 180
                             easing.type: Easing.OutCubic
                         }
+
                     }
 
                     Behavior on x {
@@ -205,28 +174,52 @@ PopupWindow {
                             duration: 180
                             easing.type: Easing.OutCubic
                         }
+
                     }
+
                 }
 
-                Modules.ScreenshotsView {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 180
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-
-                    Behavior on x {
-                        NumberAnimation {
-                            duration: 180
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-                }
             }
+
         }
+
     }
+
+    component NavButton: Item {
+        id: btn
+
+        property string iconText
+        property bool isActive
+
+        signal clicked()
+
+        width: 40
+        height: 40
+
+        Rectangle {
+            anchors.fill: parent
+            radius: Singletons.Colors.controlRadius
+            color: btn.isActive ? Singletons.Colors.controlActive : (mouseArea.containsMouse ? Singletons.Colors.controlHover : Singletons.Colors.buttonBackgroundColor)
+
+            Text {
+                anchors.centerIn: parent
+                text: btn.iconText
+                font.family: "JetBrainsMono Nerd Font"
+                color: btn.isActive || mouseArea.containsMouse ? Singletons.Colors.foreground : Singletons.Colors.foregroundDim
+                font.pixelSize: 20
+            }
+
+        }
+
+        MouseArea {
+            id: mouseArea
+
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: btn.clicked()
+        }
+
+    }
+
 }

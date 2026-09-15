@@ -106,7 +106,4 @@ ShellRoot {
     Launcher {
     }
 
-    DockPanel {
-    }
-
 }
