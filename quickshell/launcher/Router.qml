@@ -1,3 +1,4 @@
+import "../Singletons" as Singletons
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -60,8 +61,6 @@ Item {
             if (!isEmptyQuery && score < 0)
                 continue;
 
-            // 0 — самое последнее запущенное приложение.
-            // Большое значение означает, что приложения нет в истории.
             var usageIndex = Number.MAX_SAFE_INTEGER;
             if (usageStats && item.type === "app") {
                 var index = usageStats.indexOf(item.id);
@@ -76,21 +75,15 @@ Item {
             });
         }
         scored.sort(function(a, b) {
-            // Когда строка поиска пустая, порядок полностью берётся
-            // из usage.json: первый ID в массиве будет первым в лаунчере.
             if (isEmptyQuery) {
                 if (a.usageIndex !== b.usageIndex)
                     return a.usageIndex - b.usageIndex;
 
-                // Приложения, которых ещё не запускали, сортируем по имени.
                 return String(a.item.title || "").localeCompare(String(b.item.title || ""));
             }
-            // При поиске сначала важнее совпадение с запросом.
             if (b.score !== a.score)
                 return b.score - a.score;
 
-            // При одинаковом fuzzy-score выше будет то,
-            // что запускалось более недавно.
             if (a.usageIndex !== b.usageIndex)
                 return a.usageIndex - b.usageIndex;
 
@@ -324,24 +317,24 @@ Item {
         results = applicationResults("");
     }
 
+    Component.onCompleted: {
+        if (Singletons.AppRuntime.applicationsReady)
+            root.refreshApplications();
+
+    }
+
     Process {
         id: openFolder
     }
 
-    Timer {
-        id: applicationsLoader
+    Connections {
+        function onApplicationsIndexedChanged() {
+            if (Singletons.AppRuntime.applicationsIndexed)
+                root.refreshApplications();
 
-        interval: 100
-        repeat: true
-        running: true
-        onTriggered: {
-            var entries = DesktopEntries.applications.values;
-            if (entries.length === 0)
-                return ;
-
-            stop();
-            root.refreshApplications();
         }
+
+        target: Singletons.AppRuntime
     }
 
 }

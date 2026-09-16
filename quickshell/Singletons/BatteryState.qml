@@ -1,22 +1,53 @@
+import QtQuick
+import Quickshell.Services.UPower
 pragma Singleton
 
-import Quickshell.Services.UPower
-import QtQuick
-
-QtObject {
+Item {
     readonly property var battery: UPower.displayDevice
-    property var modIcon: ""
-
+    property string modIcon: ""
 
     function setModIcon(state) {
-        // p = power, s = save
-        if (state === "p") {
-            modIcon = "󱐋 "
-            return
-        } else if (state === "s") {
-            modIcon = "󰌪 "
-            return
+        switch (state) {
+        case "p":
+            modIcon = "󱐋 ";
+            break;
+        case "s":
+            modIcon = "󰌪 ";
+            break;
+        case "b":
+            modIcon = "";
+            break;
+        default:
+            modIcon = "";
+            break;
         }
-        modIcon = ""
     }
+
+    function syncPowerProfile() {
+        switch (PowerProfiles.profile) {
+        case PowerProfile.PowerSaver:
+            setModIcon("s");
+            break;
+        case PowerProfile.Performance:
+            setModIcon("p");
+            break;
+        case PowerProfile.Balanced:
+            setModIcon("b");
+            break;
+        default:
+            setModIcon("");
+            break;
+        }
+    }
+
+    Component.onCompleted: syncPowerProfile()
+
+    Connections {
+        function onProfileChanged() {
+            BatteryState.syncPowerProfile();
+        }
+
+        target: PowerProfiles
+    }
+
 }

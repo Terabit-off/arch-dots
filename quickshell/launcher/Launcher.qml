@@ -95,8 +95,6 @@ PanelWindow {
         search.selectAll()
         search.text = ""
 
-        usageStats.load()
-
         router.search(search.text)
         showAnim.start();
     }

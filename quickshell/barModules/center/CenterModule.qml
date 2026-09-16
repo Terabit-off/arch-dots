@@ -1,22 +1,23 @@
+import "." as Bar
+import "../../Singletons" as Singletons
+import "../../menus" as Menus
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
 
-import "../../Singletons" as Singletons
-import "." as Bar
-import "../../menus" as Menus
-
-
 Rectangle {
     id: root
+
     height: 20
     width: 260
     color: "transparent"
 
     Menus.CenterMenu {
         id: centerWindow
+
         anchorItem: root
     }
+
     Rectangle {
         color: "transparent"
         radius: 5
@@ -24,11 +25,9 @@ Rectangle {
         height: parent.height
         anchors.centerIn: parent
 
-
-        
-
         RowLayout {
             id: content
+
             spacing: 5
             anchors.centerIn: parent
             anchors.fill: parent
@@ -44,24 +43,20 @@ Rectangle {
                     cursorShape: Qt.PointingHandCursor
                     anchors.fill: parent
                     onClicked: {
-                        centerWindow.currentSegmentIndex = 0
-                        centerWindow.visible = true
-                    }
-                }
-
-                Behavior on x {
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.InOutCubic
+                        centerWindow.currentSegmentIndex = 0;
+                        centerWindow.visible = true;
                     }
                 }
 
                 Text {
                     id: timeText
+
                     width: 50
                     anchors.margins: {
-                        left: 5
-                        right: 5
+                        left:
+                        5;
+                        right:
+                        5;
                     }
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
@@ -70,6 +65,15 @@ Rectangle {
                     font.family: "JetBrainsMono Nerd Font"
                     font.pixelSize: 14
                 }
+
+                Behavior on x {
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutCubic
+                    }
+
+                }
+
             }
 
             Rectangle {
@@ -84,30 +88,27 @@ Rectangle {
                     cursorShape: Qt.PointingHandCursor
                     anchors.fill: parent
                     onClicked: {
-                        centerWindow.currentSegmentIndex = 1
-                        centerWindow.visible = true
-                    }
-                }
-
-                Behavior on implicitWidth {
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.InOutCubic
+                        centerWindow.currentSegmentIndex = 1;
+                        centerWindow.visible = true;
                     }
                 }
 
                 RowLayout {
                     id: musicText
+
                     spacing: 5
                     anchors.centerIn: parent
                     anchors.margins: {
-                        left: 5
-                        right: 5
+                        left:
+                        5;
+                        right:
+                        5;
                     }
 
                     Item {
                         Layout.fillHeight: true
                         width: 10
+
                         Text {
                             anchors.fill: parent
                             anchors.centerIn: parent
@@ -119,54 +120,56 @@ Rectangle {
                                 running: centerWindow.active && centerWindow.active.isPlaying
                                 from: rotation
                                 to: 360
-                                duration: 10200 
+                                duration: 10200
                                 loops: Animation.Infinite
                             }
+
                         }
+
                     }
-
-
 
                     Text {
                         id: titleText
+
                         Layout.fillHeight: true
                         Layout.maximumWidth: 230
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        //anchors.centerIn: parent
                         elide: Text.ElideRight
-                        text: centerWindow.active
-                                ? centerWindow.active.metadata["xesam:title"]
-                                : ""
+                        text: centerWindow.active ? centerWindow.active.metadata["xesam:title"] : ""
                         color: Singletons.Colors.foreground
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: 14
                     }
+
+                }
+
+                Behavior on implicitWidth {
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.InOutCubic
+                    }
+
                 }
 
             }
 
         }
+
     }
 
     Timer {
         id: timeTimer
+
         running: true
         repeat: true
         triggeredOnStart: true
         onTriggered: {
             timeText.text = Qt.formatDateTime(new Date(), "HH:mm");
             var now = new Date();
-            var nextMinute = new Date(
-                now.getFullYear(),
-                now.getMonth(),
-                now.getDate(),
-                now.getHours(),
-                now.getMinutes() + 1,
-                0, 0
-            );
-
+            var nextMinute = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes() + 1, 0, 0);
             interval = nextMinute.getTime() - now.getTime() + 500;
         }
     }
+
 }

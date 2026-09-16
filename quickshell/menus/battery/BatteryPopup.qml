@@ -31,19 +31,6 @@ PopupWindow {
             openAnimation.restart()
     }
 
-    Timer {
-        running: true
-        repeat: false
-        interval: 1000
-        onTriggered: {
-            setIcons();
-        }
-    }
-    function setIcons() {
-        if (PowerProfiles.profile === PowerProfile.PowerSaver) Singletons.BatteryState.setModIcon("s")
-        else if (PowerProfiles.profile === PowerProfile.Performance) Singletons.BatteryState.setModIcon("p")
-        else if (PowerProfiles.profile === PowerProfile.Balanced) Singletons.BatteryState.setModIcon("b")
-    }
 
     function formatTime(seconds) {
         if (!seconds || seconds <= 0)

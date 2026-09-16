@@ -2,7 +2,6 @@
 
 import "./Singletons" as Singletons
 import "./barModules" as Modules
-import "./dockpanel"
 import "./launcher"
 import QtQuick
 import QtQuick.Layouts
@@ -11,6 +10,8 @@ import Quickshell.Wayland
 
 ShellRoot {
     id: root
+
+    property var runtime: Singletons.AppRuntime
 
     PanelWindow {
         id: rootPanel

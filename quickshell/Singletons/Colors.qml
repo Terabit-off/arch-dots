@@ -68,22 +68,4 @@ QtObject {
     readonly property color notifiCardCriticalBackground: "#422529"
     readonly property color notifiCardBorderBackground: "#db6e6e6e"
     readonly property color notifiCardHoverBorderBackground: "#ffffff"
-    // Overview / Cards
-    readonly property color overviewBackground: "#be1c1c1c"
-    readonly property color overviewCardBackground: "#262626"
-    readonly property color overviewCardHoverBackground: "#494949"
-    readonly property color overviewCardBorder: "#3d3d3d"
-    readonly property color overviewCardHoverBorder: "#db6e6e6e"
-    readonly property real overviewBorderRadius: 10
-    // Dock
-    readonly property color dockAccent: foreground
-    readonly property color dockAccentDim: "#68ffffff"
-    readonly property color dockPopupBackground: surfaceElevated
-    readonly property color dockWindowBackground: "#12ffffff"
-    readonly property color dockWindowHoverBackground: "#35ffffff"
-    readonly property color dockWindowCurrentBackground: "#25ffffff"
-    readonly property color dockWindowBorder: "#18ffffff"
-    readonly property color dockWindowHoverBorder: "#55ffffff"
-    readonly property color dockWindowCurrentBorder: "#40ffffff"
-    readonly property color dockSeparator: "#18ffffff"
 }
