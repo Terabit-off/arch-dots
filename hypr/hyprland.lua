@@ -3,7 +3,7 @@
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 hl.monitor({
     output   = "",
-    mode     = "preferred",
+    mode     = "2560x1600@120",
     --mode = "highres",
     position = "auto",
     scale    = "auto",
@@ -31,6 +31,7 @@ hl.on("hyprland.start", function ()
   hl.exec_cmd("hyprpaper & qs")
   hl.exec_cmd("firefox")
   hl.exec_cmd("wl-paste --watch cliphist store")
+  hl.exec_cmd("hypridle")
 end)
 
 
@@ -178,6 +179,7 @@ hl.config({
 
 hl.config({
     misc = {
+        vrr = 0,
         force_default_wallpaper = 0,    -- Set to 0 or 1 to disable the anime mascot wallpapers
         disable_hyprland_logo   = true, -- If true disables the random hyprland logo / anime girl background. :(
     },
