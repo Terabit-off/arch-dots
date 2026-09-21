@@ -2,6 +2,7 @@ import "../../Singletons" as Singletons
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.Notifications
@@ -9,6 +10,8 @@ import Quickshell.Wayland
 
 Rectangle {
     id: notificationsRoot
+
+    property bool doNotDisturb: false
 
     function activateOrDismiss(notification) {
         if (!notification)
@@ -71,25 +74,25 @@ Rectangle {
         anchors.fill: parent
         spacing: 0
 
-        Text {
-            Layout.fillWidth: true
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            text: "󰂚"
-            color: historyModel.count > 0 ? Singletons.Colors.criticalColor : Singletons.Colors.foreground
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 15
-        }
+        Item {
+            Layout.preferredWidth: 25
+            Layout.preferredHeight: 20
 
-        Text {
-            visible: historyModel.count > 0
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            Layout.fillWidth: true
-            text: historyModel.count
-            color: Singletons.Colors.criticalColor
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 13
+            Image {
+                width: 16
+                height: 16
+                anchors.centerIn: parent
+                source: doNotDisturb ? "icons/notifi_off.svg" : historyModel.count > 0 ? "icons/notifi_active.svg" : "icons/notifi.svg"
+                fillMode: Image.PreserveAspectFit
+                layer.enabled: true
+
+                layer.effect: MultiEffect {
+                    colorization: 1
+                    colorizationColor: historyModel.count > 0 ? '#ffafaf' : '#ffffff'
+                }
+
+            }
+
         }
 
     }
@@ -115,22 +118,23 @@ Rectangle {
         onNotification: (n) => {
             if (n.urgency != NotificationUrgency.Low)
                 historyModel.insert(0, {
-                    "notification": n,
-                    "notificationId": n.id,
-                    "showInPanel": true,
-                    "summary": n.summary,
-                    "body": n.body,
-                    "appName": n.appName,
-                    "urgency": n.urgency,
-                    "time": Qt.formatDateTime(new Date(), "HH:mm"),
-                    "image": n.image || "",
-                    "appIcon": n.appIcon || ""
-                });
+                "notification": n,
+                "notificationId": n.id,
+                "showInPanel": true,
+                "summary": n.summary,
+                "body": n.body,
+                "appName": n.appName,
+                "urgency": n.urgency,
+                "time": Qt.formatDateTime(new Date(), "HH:mm"),
+                "image": n.image || "",
+                "appIcon": n.appIcon || ""
+            });
 
             n.tracked = true;
         }
     }
 
+    // live notifications
     PanelWindow {
         implicitHeight: Math.max(0, column.implicitHeight)
         implicitWidth: 380
@@ -162,7 +166,7 @@ Rectangle {
 
                     required property var modelData
 
-                    visible: true
+                    visible: !doNotDisturb || modelData.urgency == NotificationUrgency.Critical
                     Layout.fillWidth: true
                     Layout.preferredHeight: layout.implicitHeight + 30
                     radius: 5
@@ -310,6 +314,7 @@ Rectangle {
 
     }
 
+    // Notifications panel
     PopupWindow {
         id: centerPopup
 
@@ -373,6 +378,7 @@ Rectangle {
                         Layout.fillWidth: true
                     }
 
+                    // CLEAR
                     Rectangle {
                         Layout.preferredWidth: 60
                         Layout.preferredHeight: 30
@@ -398,6 +404,41 @@ Rectangle {
                             enabled: historyModel.count > 0
                             onClicked: {
                                 clearHistory();
+                            }
+                        }
+
+                    }
+
+                    // DO TO DISTRUB
+                    Rectangle {
+                        Layout.preferredWidth: 30
+                        Layout.preferredHeight: 30
+                        radius: 8
+                        color: "transparent"
+
+                        Image {
+                            width: 24
+                            height: 24
+                            anchors.centerIn: parent
+                            source: "icons/notifi_off.svg"
+                            fillMode: Image.PreserveAspectFit
+                            layer.enabled: true
+
+                            layer.effect: MultiEffect {
+                                colorization: 1
+                                colorizationColor: doNotDisturb ? '#ffffff' : '#777777'
+                            }
+
+                        }
+
+                        MouseArea {
+                            id: doNotDisturbMouse
+
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                doNotDisturb = !doNotDisturb;
                             }
                         }
 
