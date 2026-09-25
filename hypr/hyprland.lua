@@ -29,7 +29,6 @@ local menu        = "qs ipc call launcher toggle"--"wofi"
 
 hl.on("hyprland.start", function () 
   hl.exec_cmd("hyprpaper & qs")
-  hl.exec_cmd("firefox")
   hl.exec_cmd("wl-paste --watch cliphist store")
   hl.exec_cmd("hypridle")
 end)
@@ -248,12 +247,6 @@ hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "down" }))
 
--- Swap master window 
--- hl.bind(mainMod .. " + D", hl.dsp.layout("swapwithmaster", "master"))
--- Swap windows
--- hl.bind(mainMod .. " + SHIFT + up", hl.dsp.layout("swapprev"))
--- hl.bind(mainMod .. " + SHIFT + down", hl.dsp.layout("swapnext"))
-
 -- Switch workspaces with mainMod + [0-9]
 for i = 1, 10 do
     local key = i % 10 -- 10 maps to key 0
@@ -273,13 +266,13 @@ hl.gesture({ fingers = 3, direction = "swipe", mods = "SUPER", action = "resize"
 -- hl.bind(mainMod .. " + TAB", function ()
 --    Toggle_qs_overview() 
 -- end)
--- hl.gesture({ fingers = 3, direction = "up", action = function ()
---     Toggle_qs_overview()
--- end })
+hl.gesture({ fingers = 3, direction = "up", action = function ()
+    Toggle_qs_menu();
+end })
 
--- hl.gesture({ fingers = 3, direction = "down", action = function ()
---     hl.exec_cmd("qs ipc call overview close");
--- end })
+hl.gesture({ fingers = 3, direction = "down", action = function ()
+    Close_qs_menu();
+end })
 
 -- Laptop multimedia keys for volume and LCD brightness
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
@@ -371,8 +364,13 @@ hl.window_rule({
 
 
 -- TEMP DISABLED 
-function Toggle_qs_overview()
+function Toggle_qs_menu()
     hl.exec_cmd([[
-        sh -lc 'qs ipc call overview toggle "$(hyprctl activewindow -j | jq -r ".address")"'
+        sh -lc 'qs ipc call launcher toggle'
+    ]])
+end
+function Close_qs_menu()
+    hl.exec_cmd([[
+        sh -lc 'qs ipc call launcher close'
     ]])
 end

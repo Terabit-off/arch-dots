@@ -1,6 +1,7 @@
 import "." as Bar
 import "../../Singletons" as Singletons
 import "../../menus" as Menus
+import Qt.labs.lottieqt 1.0
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -8,9 +9,17 @@ import Quickshell
 Rectangle {
     id: root
 
+    property bool isPlayingActive: centerWindow.active && centerWindow.active.isPlaying
+
     height: 20
     width: 260
     color: "transparent"
+    onIsPlayingActiveChanged: {
+        if (isPlayingActive)
+            lottiePlayer.play();
+        else
+            lottiePlayer.pause();
+    }
 
     Menus.CenterMenu {
         id: centerWindow
@@ -107,23 +116,18 @@ Rectangle {
 
                     Item {
                         Layout.fillHeight: true
-                        width: 10
+                        width: 24
 
-                        Text {
-                            anchors.fill: parent
+                        LottieAnimation {
+                            id: lottiePlayer
+
+                            autoPlay: false
+                            loops: LottieAnimation.Infinite
+                            quality: LottieAnimation.MediumQuality
+                            source: "test.json"
                             anchors.centerIn: parent
-                            text: "󰎆"
-                            font.pixelSize: 14
-                            color: Singletons.Colors.foreground
-
-                            RotationAnimation on rotation {
-                                running: centerWindow.active && centerWindow.active.isPlaying
-                                from: rotation
-                                to: 360
-                                duration: 10200
-                                loops: Animation.Infinite
-                            }
-
+                            width: parent.width
+                            height: parent.height
                         }
 
                     }

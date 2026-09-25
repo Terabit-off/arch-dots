@@ -1,4 +1,5 @@
 import "../../Singletons" as Singletons
+import Qt.labs.lottieqt 1.0
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -8,6 +9,7 @@ Item {
     id: musicViewRoot
 
     property var popup
+    property bool isPlayingActive: active && active.isPlaying
     property int currentPlayerIndex: 0
     readonly property var active: {
         const players = Singletons.MusicSingleton.list;
@@ -28,6 +30,13 @@ Item {
         const identity = player.identity || player.desktopEntry || "Browser";
         const title = player.trackTitle || "No track";
         return `${identity}·${title}`;
+    }
+
+    onIsPlayingActiveChanged: {
+        if (isPlayingActive)
+            lottiePlayer.play();
+        else
+            lottiePlayer.pause();
     }
 
     RowLayout {
@@ -83,32 +92,17 @@ Item {
                 visible: coverImage.status === Image.Ready
             }
 
-            Text {
+            LottieAnimation {
+                id: lottiePlayer
+
+                autoPlay: false
+                visible: !roundedCover.visible
+                loops: LottieAnimation.Infinite
+                quality: LottieAnimation.MediumQuality
+                source: "placeholder.json"
                 anchors.centerIn: parent
-                visible: !roundedCover.visible
-                text: "󰝚"
-                color: Singletons.Colors.foreground
-                font.pixelSize: 48
-                opacity: 0.55
-            }
-
-            AnimatedImage {
-                id: coverEmpty
-
-                anchors.fill: parent
-                source: Qt.resolvedUrl("sleepy_cat.gif")
-                fillMode: Image.PreserveAspectFit
-                playing: true
-                visible: false
-            }
-
-            OpacityMask {
-                id: roundedCoverEmpty
-
-                anchors.fill: coverFrame
-                source: coverEmpty
-                maskSource: coverMask
-                visible: !roundedCover.visible
+                width: parent.width
+                height: parent.height
             }
 
         }
@@ -281,7 +275,7 @@ Item {
                     id: playButton
 
                     font.family: "JetBrainsMono Nerd Font"
-                    text: musicViewRoot.active && musicViewRoot.active.isPlaying ? "󰏤" : "󰐊"
+                    text: isPlayingActive ? "󰏤" : "󰐊"
                     color: playMouse.containsMouse ? Singletons.Colors.foreground : Singletons.Colors.foregroundDim
                     font.pixelSize: 31
 
