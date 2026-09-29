@@ -7,6 +7,47 @@ Item {
 
     signal resultsReady(var items)
 
+    function search() {
+        listProcess.running = true;
+    }
+
+    function parseResults(text) {
+        var items = [];
+        var lines = String(text || "").split("\n");
+        for (var i = 0; i < lines.length && items.length < 40; i++) {
+            var line = lines[i].trim();
+            let parts = line.split("\t");
+            if (line.length === 0)
+                continue;
+
+            items.push({
+                "title": preview(parts[1]),
+                "description": parts[0],
+                "icon": "",
+                "type": "clipboard",
+                "value": line
+            });
+        }
+        root.resultsReady(items);
+    }
+
+    function preview(value) {
+        var text = String(value).replace(/^[0-9]+\\s+/, "").replace(/\t/g, " ").replace(/\n/g, " ");
+        if (text.length > 100)
+            text = text.substring(0, 100) + "…";
+
+        return text;
+    }
+
+    function copy(item) {
+        if (!item || item.type !== "clipboard")
+            return ;
+
+        copyProcess.selectedId = item.description;
+        copyProcess.selectedValue = item.title;
+        copyProcess.running = true;
+    }
+
     Process {
         id: listProcess
 
@@ -16,68 +57,19 @@ Item {
             id: output
 
             onStreamFinished: {
-                root.parseResults(text)
+                root.parseResults(text);
             }
         }
+
     }
 
     Process {
         id: copyProcess
 
         property string selectedId: ""
-        property string selectedValue: "" 
+        property string selectedValue: ""
 
-        command: [
-            Quickshell.env("HOME") + "/.config/quickshell/launcher/copy.sh",
-            selectedId, selectedValue
-        ]
+        command: ["/home/terabit/.config/quickshell/launcher/copy.sh", selectedId, selectedValue]
     }
 
-    function search() {
-        listProcess.running = true 
-    }
-
-    function parseResults(text) {
-        var items = []
-        var lines = String(text || "").split("\n")
-
-        for (var i = 0; i < lines.length && items.length < 40; i++) {
-            var line = lines[i].trim()
-            let parts = line.split("\t");
-
-            if (line.length === 0)
-                continue
-
-            items.push({
-                title: preview(parts[1]),
-                description: parts[0],
-                icon: "",
-                type: "clipboard",
-                value: line
-            })
-        }
-
-        root.resultsReady(items)
-    }
-
-    function preview(value) {
-        var text = String(value)
-            .replace(/^[0-9]+\\s+/, "")
-            .replace(/\t/g, " ")
-            .replace(/\n/g, " ")
-
-        if (text.length > 100)
-            text = text.substring(0, 100) + "…"
-
-        return text
-    }
-
-    function copy(item) {
-        if (!item || item.type !== "clipboard")
-            return
-
-        copyProcess.selectedId = item.description
-        copyProcess.selectedValue = item.title
-        copyProcess.running = true
-    }
 }

@@ -247,7 +247,21 @@ Rectangle {
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectCrop
                                 visible: false
-                                source: card.modelData.image || card.modelData.appIcon || ""
+                                source: {
+                                    let img = card.modelData.image || card.modelData.appIcon || "";
+                                    if (img === "")
+                                        return "";
+
+                                    // 1. Если скрипт уже передал полный путь
+                                    if (img.startsWith("/"))
+                                        return "file://" + img;
+
+                                    if (img.startsWith("image://icon/")) {
+                                        img = img.replace("image://icon/", "");
+                                        return "file:///usr/share/icons/breeze-dark/devices/64/" + img + ".svg";
+                                    }
+                                    return Quickshell.iconPath(img);
+                                }
                             }
 
                             Rectangle {
@@ -321,7 +335,7 @@ Rectangle {
         grabFocus: true
         visible: false
         implicitWidth: 420
-        implicitHeight: Math.min(550, Math.max(200, historyList.contentHeight + 95))
+        implicitHeight: Math.min(550, Math.max(250, historyList.contentHeight + 105))
         color: "transparent"
 
         anchor {
@@ -508,7 +522,7 @@ Rectangle {
                         required property string appIcon
 
                         width: historyList.width
-                        height: Math.max(70, notificationContent.implicitHeight + 20)
+                        height: Math.max(80, notificationContent.implicitHeight + 30)
                         radius: 8
                         color: urgency === NotificationUrgency.Critical ? Singletons.Colors.notifiCardCriticalBackground : Singletons.Colors.notifiCardBackground
                         border.width: 1
@@ -534,7 +548,21 @@ Rectangle {
                                     anchors.fill: parent
                                     visible: false
                                     fillMode: Image.PreserveAspectCrop
-                                    source: image || appIcon || ""
+                                    source: {
+                                        let img = image || appIcon || "";
+                                        if (img === "")
+                                            return "";
+
+                                        // 1. Если скрипт уже передал полный путь
+                                        if (img.startsWith("/"))
+                                            return "file://" + img;
+
+                                        if (img.startsWith("image://icon/")) {
+                                            img = img.replace("image://icon/", "");
+                                            return "file:///usr/share/icons/breeze-dark/devices/64/" + img + ".svg";
+                                        }
+                                        return Quickshell.iconPath(img);
+                                    }
                                 }
 
                                 Rectangle {
