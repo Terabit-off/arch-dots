@@ -93,6 +93,25 @@ Rectangle {
 
             }
 
+            Rectangle {
+                width: 10
+                height: 10
+                anchors.top: parent.top
+                anchors.right: parent.right
+                visible: historyModel.count > 0
+                color: '#b45c5c5c'
+                radius: 3
+
+                Text {
+                    anchors.centerIn: parent
+                    text: historyModel.count
+                    font.pixelSize: 8
+                    font.bold: true
+                    color: "#fff"
+                }
+
+            }
+
         }
 
     }
@@ -252,15 +271,14 @@ Rectangle {
                                     if (img === "")
                                         return "";
 
-                                    // 1. Если скрипт уже передал полный путь
-                                    if (img.startsWith("/"))
-                                        return "file://" + img;
+                                    if (!img.startsWith("image://icon/"))
+                                        return Quickshell.iconPath(img);
 
-                                    if (img.startsWith("image://icon/")) {
-                                        img = img.replace("image://icon/", "");
+                                    img = img.replace("image://icon/", "");
+                                    if (img.startsWith("/") || img.startsWith("/home/"))
+                                        return img;
+                                    else
                                         return "file:///usr/share/icons/breeze-dark/devices/64/" + img + ".svg";
-                                    }
-                                    return Quickshell.iconPath(img);
                                 }
                             }
 
@@ -553,15 +571,14 @@ Rectangle {
                                         if (img === "")
                                             return "";
 
-                                        // 1. Если скрипт уже передал полный путь
-                                        if (img.startsWith("/"))
-                                            return "file://" + img;
+                                        if (!img.startsWith("image://icon/"))
+                                            return Quickshell.iconPath(img);
 
-                                        if (img.startsWith("image://icon/")) {
-                                            img = img.replace("image://icon/", "");
+                                        img = img.replace("image://icon/", "");
+                                        if (img.startsWith("/") || img.startsWith("/home/"))
+                                            return img;
+                                        else
                                             return "file:///usr/share/icons/breeze-dark/devices/64/" + img + ".svg";
-                                        }
-                                        return Quickshell.iconPath(img);
                                     }
                                 }
 
