@@ -1,74 +1,184 @@
 import "../../Singletons" as Singletons
-import Qt5Compat.GraphicalEffects
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts
+
 import Quickshell
 import Quickshell.Services.Notifications
 import Quickshell.Wayland
 
 Rectangle {
-    id: notificationsRoot
+    id: root
 
     property bool doNotDisturb: false
-
-    function activateOrDismiss(notification) {
-        if (!notification)
-            return ;
-
-        const actions = notification.actions || [];
-        if (actions.length > 0) {
-            let action = actions[0];
-            for (const candidate of actions) {
-                if (candidate.identifier === "default") {
-                    action = candidate;
-                    break;
-                }
-            }
-            if (action && action.invoke)
-                action.invoke();
-
-        } else {
-            notification.dismiss();
-        }
-        removeFromHistory(notification.id);
-        centerPopup.visible = false;
-    }
-
-    function removeFromHistory(notificationId) {
-        for (let i = 0; i < historyModel.count; ++i) {
-            if (historyModel.get(i).notificationId === notificationId) {
-                historyModel.remove(i, 1);
-                return ;
-            }
-        }
-    }
-
-    function clearHistory() {
-        for (let i = 0; i < historyModel.count; ++i) {
-            const item = historyModel.get(i);
-            if (item.notification)
-                item.notification.dismiss();
-
-        }
-        historyModel.clear();
-    }
-
-    function hideFromPanel(notificationId) {
-        for (let i = 0; i < historyModel.count; ++i) {
-            const item = historyModel.get(i);
-            if (item.notificationId === notificationId) {
-                historyModel.setProperty(i, "showInPanel", false);
-                return ;
-            }
-        }
-    }
+    property int toastTimeout: 5000
+    property int maxHistory: 100
+    property var hiddenToastIds: []
 
     color: Singletons.Colors.barModuleColor
     radius: 5
-    Layout.fillHeight: true
     implicitWidth: 25
+    Layout.fillHeight: true
+
+    function iconSource(icon) {
+        if (!icon)
+            return ""
+
+        if (icon.startsWith("image://") || icon.startsWith("/")
+                || icon.startsWith("file://"))
+            return icon
+
+        return Quickshell.iconPath(icon)
+    }
+
+    function historyIndex(id) {
+        for (let i = 0; i < historyModel.count; ++i) {
+            if (historyModel.get(i).notificationId === id)
+                return i
+        }
+        return -1
+    }
+
+    function addToHistory(notification) {
+        if (!notification)
+            return
+
+        const item = {
+            notificationId: notification.id,
+            summary: notification.summary || notification.appName || "Notification",
+            body: notification.body || "",
+            appIcon: notification.appIcon || "",
+            image: notification.image || "",
+            urgency: notification.urgency,
+            time: Qt.formatTime(new Date(), "HH:mm")
+        }
+
+        const index = historyIndex(notification.id)
+
+        if (index >= 0)
+            historyModel.set(index, item)
+        else
+            historyModel.insert(0, item)
+
+        while (historyModel.count > maxHistory)
+            historyModel.remove(historyModel.count - 1)
+    }
+
+    function removeFromHistory(id) {
+        const index = historyIndex(id)
+        if (index >= 0)
+            historyModel.remove(index)
+    }
+
+    function notificationForId(id) {
+        const values = notificationServer.trackedNotifications.values
+        for (let i = 0; i < values.length; ++i) {
+            const n = values[i]
+            if (n && n.id === id)
+                return n
+        }
+        return null
+    }
+
+    function isToastHidden(id) {
+        return hiddenToastIds.indexOf(id) !== -1
+    }
+
+    function hideToast(id) {
+        if (!isToastHidden(id))
+            hiddenToastIds = hiddenToastIds.concat([id])
+    }
+
+    function resetToastVisibility(id) {
+        hiddenToastIds = hiddenToastIds.filter(item => item !== id)
+    }
+
+    function suppressAllCurrentToasts() {
+        const values = notificationServer.trackedNotifications.values
+        const ids = hiddenToastIds.slice()
+
+        for (let i = 0; i < values.length; ++i) {
+            const notification = values[i]
+            if (!notification)
+                continue
+
+            if (notification.urgency !== NotificationUrgency.Critical
+                    && ids.indexOf(notification.id) === -1) {
+                ids.push(notification.id)
+            }
+        }
+
+        hiddenToastIds = ids
+    }
+
+    onDoNotDisturbChanged: {
+        if (doNotDisturb)
+            suppressAllCurrentToasts()
+    }
+
+    function pruneHiddenToastIds() {
+        const values = notificationServer.trackedNotifications.values
+        const activeIds = values.map(notification => notification ? notification.id : -1)
+        hiddenToastIds = hiddenToastIds.filter(id => activeIds.indexOf(id) !== -1)
+    }
+
+    function dismissNotification(id) {
+        const notification = notificationForId(id)
+        hideToast(id)
+        removeFromHistory(id)
+
+        if (notification && typeof notification.dismiss === "function")
+            notification.dismiss()
+    }
+
+    function expireNotification(id) {
+        hideToast(id)
+    }
+
+    function invokeAction(id, actionId) {
+        const notification = notificationForId(id)
+        if (!notification || !actionId)
+            return
+
+        const action = (notification.actions || [])
+            .find(item => item.identifier === actionId)
+
+        if (!action)
+            return
+
+        hideToast(id)
+        action.invoke()
+        removeFromHistory(id)
+    }
+
+    ListModel {
+        id: historyModel
+    }
+
+    NotificationServer {
+        id: notificationServer
+
+        actionsSupported: true
+        bodySupported: true
+        imageSupported: true
+
+        onNotification: notification => {
+            if (notification.urgency !== NotificationUrgency.Low)
+                addToHistory(notification)
+
+            notification.tracked = true
+
+            if (root.doNotDisturb && notification.urgency !== NotificationUrgency.Critical)
+                hideToast(notification.id)
+            else
+                resetToastVisibility(notification.id)
+
+            pruneHiddenToastIds()
+        }
+
+    }
 
     RowLayout {
         anchors.fill: parent
@@ -79,310 +189,185 @@ Rectangle {
             Layout.preferredHeight: 20
 
             Image {
+                anchors.centerIn: parent
                 width: 16
                 height: 16
-                anchors.centerIn: parent
-                source: doNotDisturb ? "icons/notifi_off.svg" : historyModel.count > 0 ? "icons/notifi_active.svg" : "icons/notifi.svg"
                 fillMode: Image.PreserveAspectFit
-                layer.enabled: true
 
+                source: root.doNotDisturb
+                    ? "icons/notifi_off.svg"
+                    : historyModel.count
+                        ? "icons/notifi_active.svg"
+                        : "icons/notifi.svg"
+
+                layer.enabled: true
                 layer.effect: MultiEffect {
                     colorization: 1
-                    colorizationColor: historyModel.count > 0 ? '#ffafaf' : '#ffffff'
+                    colorizationColor: historyModel.count
+                        ? "#ffafaf"
+                        : "#ffffff"
                 }
-
             }
 
             Rectangle {
-                width: 10
-                height: 10
                 anchors.top: parent.top
                 anchors.right: parent.right
-                visible: historyModel.count > 0
-                color: '#b45c5c5c'
-                radius: 3
+                width: 10
+                height: 10
+                radius: 5
+                visible: historyModel.count
+                color: "#b45c5c"
 
                 Text {
                     anchors.centerIn: parent
-                    text: historyModel.count
-                    font.pixelSize: 8
+                    text: historyModel.count > 99 ? "99" : historyModel.count
+                    color: "white"
+                    font.pixelSize: 7
                     font.bold: true
-                    color: "#fff"
                 }
-
             }
 
-        }
-
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
-        onClicked: {
-            centerPopup.visible = true;
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: notificationCenter.visible = !notificationCenter.visible
+            }
         }
     }
 
-    ListModel {
-        id: historyModel
-    }
-
-    NotificationServer {
-        id: server
-
-        actionsSupported: true
-        bodySupported: true
-        imageSupported: true
-        onNotification: (n) => {
-            if (n.urgency != NotificationUrgency.Low)
-                historyModel.insert(0, {
-                "notification": n,
-                "notificationId": n.id,
-                "showInPanel": true,
-                "summary": n.summary,
-                "body": n.body,
-                "appName": n.appName,
-                "urgency": n.urgency,
-                "time": Qt.formatDateTime(new Date(), "HH:mm"),
-                "image": n.image || "",
-                "appIcon": n.appIcon || ""
-            });
-
-            n.tracked = true;
-        }
-    }
-
-    // live notifications
     PanelWindow {
-        implicitHeight: Math.max(0, column.implicitHeight)
+        id: toastWindow
+
         implicitWidth: 380
+        implicitHeight: toastColumn.implicitHeight
         color: "transparent"
         exclusionMode: ExclusionMode.Ignore
+
         WlrLayershell.layer: WlrLayer.Overlay
 
         anchors {
             top: true
             right: true
         }
-
         margins {
             top: 28
             right: 12
         }
 
         ColumnLayout {
-            id: column
-
+            id: toastColumn
             width: parent.width
             spacing: 10
 
             Repeater {
-                model: server.trackedNotifications
+                model: notificationServer.trackedNotifications
 
-                delegate: Rectangle {
-                    id: card
+                delegate: Item {
+                    id: toastDelegate
 
                     required property var modelData
+                    property var notification: modelData
+                    property int remainingMs: root.toastTimeout
 
-                    visible: !doNotDisturb || modelData.urgency == NotificationUrgency.Critical
+                    visible: notification !== null && notification !== undefined
+                             && !root.isToastHidden(notification.id)
+                             && (!root.doNotDisturb
+                                 || notification.urgency === NotificationUrgency.Critical)
+
                     Layout.fillWidth: true
-                    Layout.preferredHeight: layout.implicitHeight + 30
-                    radius: 5
-                    color: modelData.urgency === NotificationUrgency.Critical ? Singletons.Colors.notifiCardCriticalBackground : Singletons.Colors.notifiCardBackground
-                    border.width: 1
-                    border.color: transientMouse.containsMouse ? Singletons.Colors.notifiCardHoverBorderBackground : Singletons.Colors.notifiCardBorderBackground
+                    implicitHeight: visible ? card.implicitHeight : 0
 
                     Timer {
-                        running: modelData.urgency !== NotificationUrgency.Critical
-                        interval: 5000
-                        repeat: false
+                        id: toastTimer
+
+                        running: notification !== null
+                                && !root.isToastHidden(notification.id)
+                                && !root.doNotDisturb
+                                && notification.urgency !== NotificationUrgency.Critical
+
+                        interval: 50
+                        repeat: true
+
                         onTriggered: {
-                            visible = false;
+                            toastDelegate.remainingMs = Math.max(
+                                0,
+                                toastDelegate.remainingMs - interval
+                            )
+
+                            if (toastDelegate.remainingMs <= 0) {
+                                stop()
+                                root.expireNotification(toastDelegate.notification.id)
+                            }
                         }
                     }
 
-                    MouseArea {
-                        id: transientMouse
+                    NotificationCard {
+                        id: card
 
                         anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            notificationsRoot.activateOrDismiss(card.modelData);
+                        compact: true
+                        notification: toastDelegate.notification
+
+                        progress: toastDelegate.remainingMs / root.toastTimeout
+
+                        onClicked: root.dismissNotification(toastDelegate.notification.id)
+                        onActionInvoked: actionId =>
+                            root.invokeAction(toastDelegate.notification.id, actionId)
+                    }
+                    NumberAnimation on progress {
+                        id: progressAnimation
+
+                        from: 1.0
+                        to: 0.0
+                        duration: root.toastTimeout
+                        easing.type: Easing.Linear
+
+                        running: toastDelegate.notification !== null
+                                && !root.isToastHidden(toastDelegate.notification.id)
+                                && !root.doNotDisturb
+                                && toastDelegate.notification.urgency !== NotificationUrgency.Critical
+
+                        onFinished: {
+                            if (toastDelegate.notification)
+                                root.expireNotification(toastDelegate.notification.id)
                         }
                     }
-
-                    Text {
-                        width: 25
-                        height: 25
-                        text: ""
-                        font.family: "JetBrainsMono Nerd Font"
-                        font.pixelSize: 14
-                        font.bold: true
-                        color: closeMouse.containsMouse ? Singletons.Colors.foreground : Singletons.Colors.foregroundDim
-
-                        anchors {
-                            right: parent.right
-                            top: parent.top
-                            margins: {
-                                top:
-                                10;
-                                right:
-                                10;
-                            }
-                        }
-
-                        MouseArea {
-                            id: closeMouse
-
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                card.modelData.dismiss();
-                            }
-                        }
-
-                    }
-
-                    RowLayout {
-                        id: layout
-
-                        anchors.fill: parent
-                        anchors.margins: 10
-                        spacing: 12
-
-                        // App icon or image
-                        Rectangle {
-                            Layout.preferredHeight: 36
-                            Layout.preferredWidth: 36
-                            color: "transparent"
-                            visible: card.modelData.image || card.modelData.appIcon
-
-                            Image {
-                                id: transientIcon
-
-                                anchors.fill: parent
-                                fillMode: Image.PreserveAspectCrop
-                                visible: false
-                                source: {
-                                    let img = card.modelData.image || card.modelData.appIcon || "";
-                                    if (img === "")
-                                        return "";
-
-                                    if (!img.startsWith("image://icon/"))
-                                        return Quickshell.iconPath(img);
-
-                                    img = img.replace("image://icon/", "");
-                                    if (img.startsWith("/") || img.startsWith("/home/"))
-                                        return img;
-                                    else
-                                        return "file:///usr/share/icons/breeze-dark/devices/64/" + img + ".svg";
-                                }
-                            }
-
-                            Rectangle {
-                                id: transientMask
-
-                                anchors.fill: parent
-                                radius: 6
-                                color: "white"
-                                visible: false
-                            }
-
-                            OpacityMask {
-                                anchors.fill: parent
-                                source: transientIcon
-                                maskSource: transientMask
-                                visible: transientIcon.status === Image.Ready
-                            }
-
-                        }
-
-                        ColumnLayout {
-                            Layout.fillWidth: true
-                            spacing: 4
-
-                            Text {
-                                Layout.fillWidth: true
-                                text: card.modelData.summary
-                                color: Singletons.Colors.foreground
-                                font.family: "JetBrainsMono Nerd Font"
-                                font.pixelSize: 14
-                                font.bold: true
-                                elide: Text.ElideRight
-                            }
-
-                            Text {
-                                Layout.fillWidth: true
-                                visible: text !== ""
-                                text: card.modelData.body
-                                color: Singletons.Colors.foreground
-                                opacity: 0.8
-                                font.family: "JetBrainsMono Nerd Font"
-                                font.pixelSize: 11
-                                wrapMode: Text.WordWrap
-                                elide: Text.ElideRight
-                            }
-
-                        }
-
-                    }
-
-                    Behavior on border.color {
-                        ColorAnimation {
-                            duration: 250
-                            easing.type: Easing.OutCubic
-                        }
-
-                    }
-
                 }
-
             }
-
         }
-
     }
 
-    // Notifications panel
     PopupWindow {
-        id: centerPopup
+        id: notificationCenter
 
-        grabFocus: true
         visible: false
+        grabFocus: true
         implicitWidth: 420
-        implicitHeight: Math.min(550, Math.max(250, historyList.contentHeight + 105))
+        implicitHeight: Math.min(550, Math.max(250, historyList.contentHeight + 110))
         color: "transparent"
 
         anchor {
-            item: notificationsRoot
+            item: root
             edges: Edges.Bottom
             gravity: Edges.Bottom
             margins.top: 25
         }
 
         Rectangle {
-            id: popupBackground
-
             anchors.fill: parent
-            radius: 5
+            radius: 8
             color: Singletons.Colors.menuBackground
             border.width: 1
             border.color: Singletons.Colors.menuBorderColor
-            opacity: centerPopup.visible ? 1 : 0
-            scale: centerPopup.visible ? 1 : 0.96
 
             ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 18
                 spacing: 12
 
-                // HEADER
                 RowLayout {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 40
+                    Layout.preferredHeight: 34
 
                     ColumnLayout {
                         Layout.fillWidth: true
@@ -397,85 +382,29 @@ Rectangle {
                         }
 
                         Text {
-                            text: historyModel.count === 0 ? "Nothing new" : `${historyModel.count} notifications`
+                            text: historyModel.count
+                                ? `${historyModel.count} notifications`
+                                : "No notifications"
                             color: Singletons.Colors.foreground
                             opacity: 0.5
                             font.family: "JetBrainsMono Nerd Font"
                             font.pixelSize: 11
                         }
-
                     }
 
-                    Item {
-                        Layout.fillWidth: true
+                    NotificationButton {
+                        Layout.preferredWidth: 54
+                        text: "Clear"
+                        enabled: historyModel.count > 0
+                        onClicked: historyModel.clear()
                     }
 
-                    // CLEAR
-                    Rectangle {
-                        Layout.preferredWidth: 60
-                        Layout.preferredHeight: 30
-                        radius: 8
-                        color: "transparent"
-                        opacity: historyModel.count > 0 ? 1 : 0.4
-
-                        Text {
-                            anchors.centerIn: parent
-                            text: "Clear"
-                            color: clearMouse.containsMouse ? Singletons.Colors.foregroundDim : Singletons.Colors.foreground
-                            opacity: clearMouse.containsMouse ? 1 : 0.6
-                            font.family: "JetBrainsMono Nerd Font"
-                            font.pixelSize: 11
-                        }
-
-                        MouseArea {
-                            id: clearMouse
-
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            enabled: historyModel.count > 0
-                            onClicked: {
-                                clearHistory();
-                            }
-                        }
-
+                    NotificationButton {
+                        Layout.preferredWidth: 54
+                        text: root.doNotDisturb ? "󰂛" : "󰂚"
+                        fontFamily: "JetBrainsMono Nerd Font"
+                        onClicked: root.doNotDisturb = !root.doNotDisturb
                     }
-
-                    // DO TO DISTRUB
-                    Rectangle {
-                        Layout.preferredWidth: 30
-                        Layout.preferredHeight: 30
-                        radius: 8
-                        color: "transparent"
-
-                        Image {
-                            width: 24
-                            height: 24
-                            anchors.centerIn: parent
-                            source: "icons/notifi_off.svg"
-                            fillMode: Image.PreserveAspectFit
-                            layer.enabled: true
-
-                            layer.effect: MultiEffect {
-                                colorization: 1
-                                colorizationColor: doNotDisturb ? '#ffffff' : '#777777'
-                            }
-
-                        }
-
-                        MouseArea {
-                            id: doNotDisturbMouse
-
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                doNotDisturb = !doNotDisturb;
-                            }
-                        }
-
-                    }
-
                 }
 
                 Rectangle {
@@ -484,22 +413,58 @@ Rectangle {
                     color: Singletons.Colors.separatorColor
                 }
 
-                // NOTIFICATIONS
                 ListView {
                     id: historyList
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     clip: true
-                    spacing: 12
-                    boundsBehavior: Flickable.StopAtBounds
+                    spacing: 10
                     model: historyModel
+                    boundsBehavior: Flickable.StopAtBounds
 
-                    // EMPTY STATE
+                    ScrollBar.vertical: ScrollBar {
+                        active: true
+                    }
+
+                    delegate: Item {
+                        id: historyDelegate
+
+                        required property var notificationId
+                        required property string summary
+                        required property string body
+                        required property string appIcon
+                        required property string image
+                        required property int urgency
+                        required property string time
+
+                        property var liveNotification: root.notificationForId(notificationId)
+
+                        width: historyList.width
+                        implicitHeight: card.implicitHeight
+
+                        NotificationCard {
+                            id: card
+
+                            anchors.fill: parent
+                            notification: historyDelegate.liveNotification
+                            summaryFallback: historyDelegate.summary
+                            bodyFallback: historyDelegate.body
+                            appIconFallback: historyDelegate.appIcon
+                            imageFallback: historyDelegate.image
+                            urgencyFallback: historyDelegate.urgency
+                            time: historyDelegate.time
+
+                            onClicked: root.dismissNotification(historyDelegate.notificationId)
+                            onActionInvoked: actionId =>
+                                root.invokeAction(historyDelegate.notificationId, actionId)
+                        }
+                    }
+
                     Column {
                         anchors.centerIn: parent
-                        spacing: 8
                         visible: historyModel.count === 0
+                        spacing: 8
 
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -513,189 +478,269 @@ Rectangle {
                         Text {
                             width: 200
                             text: "No notifications"
+                            horizontalAlignment: Text.AlignHCenter
                             color: Singletons.Colors.foreground
                             opacity: 0.5
                             font.family: "JetBrainsMono Nerd Font"
                             font.pixelSize: 11
-                            horizontalAlignment: Text.AlignHCenter
                         }
-
                     }
+                }
+            }
+        }
+    }
 
-                    ScrollBar.vertical: ScrollBar {
-                        active: true
-                    }
+    component NotificationIcon: Item {
+        property string source: ""
 
-                    delegate: Rectangle {
-                        id: notificationCard
+        Image {
+            id: image
 
-                        required property var notification
-                        required property int index
-                        required property string summary
-                        required property string body
-                        required property string appName
-                        required property int urgency
-                        required property string time
-                        required property string image
-                        required property string appIcon
+            anchors.fill: parent
+            source: parent.source
+            visible: false
+            fillMode: Image.PreserveAspectFit
+        }
 
-                        width: historyList.width
-                        height: Math.max(80, notificationContent.implicitHeight + 30)
-                        radius: 8
-                        color: urgency === NotificationUrgency.Critical ? Singletons.Colors.notifiCardCriticalBackground : Singletons.Colors.notifiCardBackground
-                        border.width: 1
-                        border.color: notificationMouse.containsMouse ? Singletons.Colors.foreground : Singletons.Colors.notifiCardHoverBorderBackground
+        Rectangle {
+            id: mask
+            anchors.fill: parent
+            radius: 7
+            visible: false
+        }
 
-                        RowLayout {
-                            id: notificationContent
+        MultiEffect {
+            anchors.fill: parent
+            source: image
+            maskEnabled: true
+            maskSource: mask
+            visible: image.status === Image.Ready
+        }
 
-                            anchors.fill: parent
-                            anchors.margins: 12
-                            spacing: 12
+        Text {
+            anchors.centerIn: parent
+            visible: image.status !== Image.Ready
+            text: "󰂚"
+            color: Singletons.Colors.foreground
+            opacity: 0.5
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 18
+        }
+    }
 
-                            // ICON
-                            Rectangle {
-                                Layout.preferredWidth: 40
-                                Layout.preferredHeight: 40
-                                radius: 8
-                                color: "transparent"
+    component NotificationButton: Rectangle {
+        property string text: ""
+        property string fontFamily: "JetBrainsMono Nerd Font"
+        property color normalColor: "transparent"
+        property color hoverColor: '#9f818181'
+        property color borderColor: "transparent"
+        property color hoverBorderColor: "transparent"
+        signal clicked()
 
-                                Image {
-                                    id: centerIcon
+        Layout.preferredHeight: 30
+        radius: 6
+        color: mouse.containsMouse ? hoverColor : normalColor
+        border.width: hoverBorderColor === "transparent" && borderColor === "transparent"
+            ? 0
+            : 1
+        border.color: mouse.containsMouse ? hoverBorderColor : borderColor
+        opacity: enabled ? 1 : 0.4
 
-                                    anchors.fill: parent
-                                    visible: false
-                                    fillMode: Image.PreserveAspectCrop
-                                    source: {
-                                        let img = image || appIcon || "";
-                                        if (img === "")
-                                            return "";
+        Text {
+            anchors.centerIn: parent
+            width: parent.width - 14
+            text: parent.text
+            color: Singletons.Colors.foreground
+            font.family: parent.fontFamily
+            font.pixelSize: 11
+            font.weight: Font.Medium
+            horizontalAlignment: Text.AlignHCenter
+            elide: Text.ElideRight
+        }
 
-                                        if (!img.startsWith("image://icon/"))
-                                            return Quickshell.iconPath(img);
+        MouseArea {
+            id: mouse
+            anchors.fill: parent
+            enabled: parent.enabled
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: parent.clicked()
+        }
+    }
 
-                                        img = img.replace("image://icon/", "");
-                                        if (img.startsWith("/") || img.startsWith("/home/"))
-                                            return img;
-                                        else
-                                            return "file:///usr/share/icons/breeze-dark/devices/64/" + img + ".svg";
-                                    }
-                                }
+    component NotificationCard: Rectangle {
+        id: cardRoot
 
-                                Rectangle {
-                                    id: centerIconMask
+        property var notification: null
+        property string summaryFallback: ""
+        property string bodyFallback: ""
+        property string appIconFallback: ""
+        property string imageFallback: ""
+        property int urgencyFallback: NotificationUrgency.Normal
+        property bool compact: false
+        property string time: ""
 
-                                    anchors.fill: parent
-                                    radius: 8
-                                    color: "white"
-                                    visible: false
-                                }
+        property real progress: 0
 
-                                OpacityMask {
-                                    anchors.fill: parent
-                                    source: centerIcon
-                                    maskSource: centerIconMask
-                                    visible: centerIcon.status === Image.Ready
-                                }
+        property string displaySummary: notification
+            ? (notification.summary || notification.appName || summaryFallback || "Notification")
+            : (summaryFallback || "Notification")
+        property string displayBody: notification
+            ? (notification.body || bodyFallback)
+            : bodyFallback
+        property string displayAppIcon: notification
+            ? (notification.appIcon || appIconFallback)
+            : appIconFallback
+        property string displayImage: notification
+            ? (notification.image || imageFallback)
+            : imageFallback
+        property int displayUrgency: notification
+            ? notification.urgency
+            : urgencyFallback
+        property var displayActions: notification
+            ? (notification.actions || [])
+            : []
 
-                                Text {
-                                    anchors.centerIn: parent
-                                    visible: image === "" && appIcon === ""
-                                    text: "󰂚"
-                                    color: Singletons.Colors.foreground
-                                    opacity: 0.5
-                                    font.family: "JetBrainsMono Nerd Font"
-                                    font.pixelSize: 18
-                                }
+        signal clicked()
+        signal closed()
+        signal actionInvoked(string actionId)
 
-                            }
+        implicitHeight: content.implicitHeight
+        radius: 8
+        clip: true
 
-                            ColumnLayout {
-                                Layout.fillWidth: true
-                                spacing: 4
+        color: displayUrgency === NotificationUrgency.Critical
+            ? Singletons.Colors.notifiCardCriticalBackground
+            : Singletons.Colors.notifiCardBackground
 
-                                RowLayout {
-                                    Layout.fillWidth: true
+        border.width: 1
+        border.color: hoverHandler.hovered
+            ? Singletons.Colors.notifiCardHoverBorderBackground
+            : Singletons.Colors.notifiCardBorderBackground
 
-                                    Text {
-                                        Layout.fillWidth: true
-                                        text: summary || appName || "Notification"
-                                        color: Singletons.Colors.foreground
-                                        font.family: "JetBrainsMono Nerd Font"
-                                        font.pixelSize: 13
-                                        font.weight: Font.DemiBold
-                                        elide: Text.ElideRight
-                                    }
+        HoverHandler {
+            id: hoverHandler
+        }
 
-                                    Text {
-                                        text: time
-                                        color: Singletons.Colors.foreground
-                                        opacity: 0.5
-                                        font.family: "JetBrainsMono Nerd Font"
-                                        font.pixelSize: 10
-                                    }
+        MouseArea {
+            anchors.fill: parent
+            enabled: true
+            cursorShape: Qt.PointingHandCursor
+            z: 0
+            onClicked: cardRoot.clicked()
+        }
 
-                                }
+        ColumnLayout {
+            id: content
+            z: 1
 
-                                Text {
-                                    Layout.fillWidth: true
-                                    visible: text !== ""
-                                    text: body
-                                    color: Singletons.Colors.foreground
-                                    opacity: 0.8
-                                    font.family: "JetBrainsMono Nerd Font"
-                                    font.pixelSize: 11
-                                    lineHeight: 1.15
-                                    wrapMode: Text.WordWrap
-                                }
+            width: parent.width
+            spacing: 8
 
-                            }
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.margins: 12
+                Layout.rightMargin: 12
+                spacing: 12
 
-                        }
-
-                        MouseArea {
-                            id: notificationMouse
-
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                notificationsRoot.activateOrDismiss(notificationCard.notification);
-                            }
-                        }
-
-                        Behavior on border.color {
-                            ColorAnimation {
-                                duration: 250
-                                easing.type: Easing.OutCubic
-                            }
-
-                        }
-
-                    }
-
+                NotificationIcon {
+                    Layout.preferredWidth: compact ? 38 : 40
+                    Layout.preferredHeight: compact ? 38 : 40
+                    source: root.iconSource(displayImage || displayAppIcon)
                 }
 
-            }
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 4
 
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 150
-                    easing.type: Easing.OutCubic
+                    RowLayout {
+                        Layout.fillWidth: true
+
+                        Text {
+                            Layout.fillWidth: true
+                            text: displaySummary || "Notification"
+                            textFormat: Text.PlainText
+                            color: Singletons.Colors.foreground
+                            font.family: "JetBrainsMono Nerd Font"
+                            font.pixelSize: compact ? 14 : 13
+                            font.weight: compact ? Font.Bold : Font.DemiBold
+                            elide: Text.ElideRight
+                        }
+
+                        Text {
+                            visible: !compact && time.length > 0
+                            text: time
+                            color: Singletons.Colors.foreground
+                            opacity: 0.5
+                            font.family: "JetBrainsMono Nerd Font"
+                            font.pixelSize: 10
+                        }
+                    }
+
+                    Text {
+                        Layout.fillWidth: true
+                        text: displayBody
+                        visible: text.length > 0
+                        textFormat: Text.PlainText
+                        color: Singletons.Colors.foreground
+                        opacity: 0.8
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 11
+                        wrapMode: Text.WordWrap
+                        maximumLineCount: compact ? 3 : 6
+                        elide: Text.ElideRight
+                    }
                 }
-
             }
 
-            Behavior on scale {
-                NumberAnimation {
-                    duration: 180
-                    easing.type: Easing.OutBack
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.leftMargin: 12
+                Layout.rightMargin: 12
+                Layout.bottomMargin: 12
+                spacing: 8
+                visible: displayActions.length > 0
+
+                Repeater {
+                    model: displayActions
+
+                    delegate: NotificationButton {
+                        Layout.fillWidth: true
+                        normalColor: "#303030"
+                        hoverColor: "#454545"
+                        borderColor: "#414141"
+                        hoverBorderColor: "#666666"
+                        text: modelData.text || modelData.identifier
+                        onClicked: cardRoot.actionInvoked(modelData.identifier)
+                    }
                 }
-
             }
+        }
 
+        Item {
+            id: progressContainer
+
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            height: 3
+            z: 2
+            clip: true
+
+            Rectangle {
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+
+                width: parent.width * Math.max(0, Math.min(1, cardRoot.progress))
+                height: parent.height
+
+                radius: parent.height / 2
+
+                color: Singletons.Colors.foreground
+                opacity: 0.6
+            }
         }
 
     }
-
 }
