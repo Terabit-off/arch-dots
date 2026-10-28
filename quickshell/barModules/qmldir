@@ -1,0 +1,11 @@
+module BarModules
+
+CenterModule 1.0 center/CenterModule.qml
+TrayModule 1.0 tray/TrayModule.qml
+WorkspacesModule 1.0 workspaces/WorkspacesModule.qml
+VolumesModule 1.0 volumes/VolumesModule.qml
+BluetoothModule 1.0 bluetooth/Bluetooth.qml
+WifiModule 1.0 wifi/WifiModule.qml
+NotificationModule 1.0 notifications/Notifications.qml
+BatteryModule battery/BatteryModule.qml
+ControlCenter controlCenter/ControlCenter.qml
