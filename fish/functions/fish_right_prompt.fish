@@ -1,5 +1,5 @@
 function fish_right_prompt
-    set -l color_time 6b7280
+    set -l color_time 71717a
     set -l color_git ffd6d6
 
     set -l git_part ''

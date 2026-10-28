@@ -1,7 +1,9 @@
 [
+    "org.telegram.desktop",
     "codium",
     "firefox",
-    "org.telegram.desktop",
-    "Happ",
+    "karing",
+    "com.obsproject.Studio",
+    "btop",
     "localsend"
 ]

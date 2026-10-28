@@ -1,0 +1,16 @@
+<svg xmlns="http://w3.org" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Левый ползунок -->
+  <line x1="4" y1="3" x2="4" y2="11" />
+  <line x1="4" y1="15" x2="4" y2="17" />
+  <circle cx="4" cy="13" r="2" />
+
+  <!-- Средний ползунок -->
+  <line x1="10" y1="3" x2="10" y2="5" />
+  <line x1="10" y1="9" x2="10" y2="17" />
+  <circle cx="10" cy="7" r="2" />
+
+  <!-- Правый ползунок -->
+  <line x1="16" y1="3" x2="16" y2="11" />
+  <line x1="16" y1="15" x2="16" y2="17" />
+  <circle cx="16" cy="13" r="2" />
+</svg>

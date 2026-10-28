@@ -14,8 +14,8 @@ PopupWindow {
 
     property Item anchorItem
 
-    implicitWidth: popupContent.width
-    implicitHeight: popupContent.height
+    implicitWidth: 340
+    implicitHeight: 142
     color: "transparent"
     grabFocus: true
 
@@ -49,9 +49,8 @@ PopupWindow {
     Rectangle {
         id: popupContent
 
-        anchors.fill: parent
-        implicitWidth: 340
-        implicitHeight: 162
+        width: root.implicitWidth
+        height: root.implicitHeight
 
 
         color: Singletons.Colors.menuBackground
@@ -66,18 +65,27 @@ PopupWindow {
                 property: "opacity"
                 from: 0
                 to: 1
-                duration: 160
+                duration: 260
                 easing.type: Easing.OutCubic
+            }
+            PropertyAnimation {
+                target: popupContent
+                property: "y"
+                from: -100
+                to: 0
+                duration: 260
+                easing.type: Easing.OutBack
             }
 
             PropertyAnimation {
                 target: popupContent
                 property: "scale"
-                from: 0.92
+                from: 0.85
                 to: 1
-                duration: 180
-                easing.type: Easing.OutQuint
+                duration: 280
+                easing.type: Easing.OutSine
             }
+
         }
 
         ColumnLayout {
@@ -117,13 +125,13 @@ PopupWindow {
 
             RowLayout {
                 Layout.fillWidth: true
+                height: 10
                 spacing: 8
 
                 ProfileButton {
                     Layout.fillWidth: true
 
                     title: "Power saver"
-                    icon: "󰌪"
 
                     active: PowerProfiles.profile === PowerProfile.PowerSaver
 
@@ -137,7 +145,6 @@ PopupWindow {
                     Layout.fillWidth: true
 
                     title: "Balance"
-                    icon: "󰗑"
 
                     active: PowerProfiles.profile === PowerProfile.Balanced
 
@@ -151,7 +158,6 @@ PopupWindow {
                     Layout.fillWidth: true
 
                     title: "Performance"
-                    icon: "󱐋"
 
                     enabled: PowerProfiles.hasPerformanceProfile
 
@@ -173,7 +179,7 @@ PopupWindow {
         id: stat
 
         Layout.fillWidth: true
-        Layout.preferredHeight: 58
+        Layout.preferredHeight: 48
 
         radius: Singletons.Colors.cardRadius
         color: "transparent"
@@ -206,7 +212,7 @@ PopupWindow {
     component ProfileButton: Rectangle {
         id: button
 
-        Layout.preferredHeight: 62
+        Layout.preferredHeight: 32
 
         radius: Singletons.Colors.cardRadius
 
@@ -227,7 +233,6 @@ PopupWindow {
         border.color:Singletons.Colors.controlActive
 
         property string title
-        property string icon
         property bool active: false
 
         signal clicked()
@@ -240,15 +245,12 @@ PopupWindow {
             spacing: 4
 
             Text {
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter 
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 text: button.title
                 color: Singletons.Colors.foreground
                 font.pixelSize: 12
-                font.bold: true
-            }
-            Text {
-                text: button.icon
-                color: Singletons.Colors.foreground
-                font.pixelSize: 18
                 font.bold: true
             }
         }

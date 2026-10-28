@@ -14,7 +14,7 @@ Rectangle {
     radius: 5
     Layout.fillHeight: true
     implicitWidth: root.implicitWidth + 10
-    property int currentBrightness: 0
+    property var currentBrightness: 0
 
     Behavior on x {
         NumberAnimation {
@@ -57,7 +57,7 @@ Rectangle {
         Text {
             Layout.fillHeight: true
             horizontalAlignment: Text.AlignHCenter
-            text: "󰃠 " + Math.round(currentBrightness/ 64507 * 100)
+            text: "󰃠 " + currentBrightness + "%"
             color: Singletons.Colors.foreground
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: 14
@@ -126,7 +126,7 @@ Rectangle {
     Process {
         id: brightnessProcess
         running: true
-        command: ["brightnessctl", "g"]
+        command: ["sh", "-c", "brightnessctl | grep -oP '\\(\\K[^)]+'"]
         
         stdout: StdioCollector {
             onStreamFinished: currentBrightness = parseInt(this.text.trim())

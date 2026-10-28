@@ -51,17 +51,25 @@ PopupWindow {
                 property: "opacity"
                 from: 0
                 to: 1
-                duration: 160
+                duration: 260
                 easing.type: Easing.OutCubic
+            }
+            PropertyAnimation {
+                target: popupContent
+                property: "y"
+                from: -100
+                to: 0
+                duration: 260
+                easing.type: Easing.OutBack
             }
 
             PropertyAnimation {
                 target: popupContent
                 property: "scale"
-                from: 0.92
+                from: 0.85
                 to: 1
-                duration: 180
-                easing.type: Easing.OutQuint
+                duration: 280
+                easing.type: Easing.OutSine
             }
 
         }

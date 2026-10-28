@@ -80,13 +80,15 @@ PanelWindow {
         clipboardHistory: clipboardHistory
 
         onResultsChanged: {
+
             launcher.selectedIndex = 0
 
-            if (resultList.count > 0) {
+            if (router.results.length > 0)
                 resultList.positionViewAtBeginning()
-            }
         }
     }
+
+
 
     function open() {
         launcher.visible = true
@@ -96,7 +98,7 @@ PanelWindow {
         search.text = ""
 
         router.search(search.text)
-        showAnim.start();
+        showAnim.restart();
     }
 
     function close() {
@@ -130,23 +132,69 @@ PanelWindow {
 
         var item = router.results[launcher.selectedIndex]
 
-        if (!item)
+        if (!item || !router.isSelectable(item))
             return
+        
 
         router.execute(item)
     }
 
     ParallelAnimation {
         id: showAnim
-        NumberAnimation { target: window; property: "opacity"; to: 1; duration: 150; easing.type: Easing.OutCubic }
-        NumberAnimation { target: slideTransform; property: "y"; to: 0; duration: 250; easing.type: Easing.OutCubic }
+        PropertyAnimation {
+            target: window
+            property: "opacity"
+            from: 0
+            to: 1
+            duration: 260
+            easing.type: Easing.OutCubic
+        }
+        PropertyAnimation {
+            target: window
+            property: "y"
+            from: -100
+            to: 0
+            duration: 260
+            easing.type: Easing.OutBack
+        }
+
+        PropertyAnimation {
+            target: window
+            property: "scale"
+            from: 0.85
+            to: 1
+            duration: 280
+            easing.type: Easing.OutSine
+        }
     }
 
     ParallelAnimation {
         id: hideAnim
-        NumberAnimation { target: window; property: "opacity"; to: 0; duration: 150; easing.type: Easing.InCubic }
-        NumberAnimation { target: slideTransform; property: "y"; to: 120; duration: 200; easing.type: Easing.InCubic }
+        PropertyAnimation {
+            target: window
+            property: "opacity"
+            from: 1
+            to: 0
+            duration: 260
+            easing.type: Easing.InCubic
+        }
+        PropertyAnimation {
+            target: window
+            property: "y"
+            from: 0
+            to: -100
+            duration: 260
+            easing.type: Easing.InBack
+        }
 
+        PropertyAnimation {
+            target: window
+            property: "scale"
+            from: 1
+            to: 0.85
+            duration: 280
+            easing.type: Easing.InSine
+        }
         onFinished: {
             launcher.visible = false;
         }
@@ -160,15 +208,11 @@ PanelWindow {
     Rectangle {
         id: window
 
-        transform: Translate {
-            id: slideTransform
-            y: 120
-        }
-
         width: 460
         height: Math.min(parent.height - 100, 600)
 
-        anchors.centerIn: parent
+        //anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
 
         radius: Singletons.Colors.menuBorderRadius + 5
 
@@ -296,17 +340,16 @@ PanelWindow {
                         required property int index
 
                         width: resultList.width
-                        height: 64
+                        height: modelData.type != "separator" ? 64 : 1
 
                         radius: 9
 
-                        color: index === launcher.selectedIndex
+                        color: modelData.type != "separator" ? index === launcher.selectedIndex
                             ? "#3f3f46"
-                            : "transparent"
-
-                        
+                            : "transparent" : '#5b5b62'
 
                         RowLayout {
+                            visible: modelData.type != "separator"
                             anchors.fill: parent
                             anchors.margins: 10
 
@@ -328,9 +371,9 @@ PanelWindow {
                                     height: 32
 
                                     source: {
-                                        var iconName = String(modelData.icon || "")
-                                        var usable = modelData.type === "app" || modelData.type === "folder"
 
+                                        var iconName = String(modelData.icon || "")
+                                        var usable = modelData.type === "app" || modelData.type === "folder" || modelData.type === "window"
                                         return usable && Quickshell.hasThemeIcon(iconName)
                                             ? Quickshell.iconPath(iconName)
                                             : ""
@@ -423,6 +466,7 @@ PanelWindow {
                             }
                         }
                         MouseArea {
+                            visible: modelData.type != "separator"
                             anchors.fill: parent
 
                             hoverEnabled: true

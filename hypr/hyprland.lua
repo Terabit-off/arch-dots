@@ -233,6 +233,7 @@ hl.device({
 
 
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd('~/.config/hypr/screenshot.sh'))
+hl.bind(mainMod .. " + S", hl.dsp.exec_cmd('~/.config/hypr/screenshot.sh full'))
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
@@ -260,18 +261,15 @@ for i = 1, 10 do
     hl.bind(mainMod .. " + SHIFT + " .. key,     hl.dsp.window.move({ workspace = i }))
 end
 
+hl.bind( mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1"}))
+hl.bind( mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1"}))
+
+
 -- Move/resize windows with mainMod + LMB/RMB/swipe and dragging
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 hl.gesture({ fingers = 3, direction = "swipe", mods = "SUPER", action = "resize" }) -- super + swipe 3 fingers
 
-
-
--- OVERVIEW CONTROLS
-
--- hl.bind(mainMod .. " + TAB", function ()
---    Toggle_qs_overview() 
--- end)
 hl.gesture({ fingers = 3, direction = "up", action = function ()
     Toggle_qs_menu();
 end })

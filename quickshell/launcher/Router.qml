@@ -2,6 +2,7 @@ import "../Singletons" as Singletons
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 
 Item {
     id: root
@@ -104,6 +105,13 @@ Item {
             clipboardHistory.search();
             return ;
         }
+        if (query.startsWith("!") && query == "!clear") {
+            currentMode = "clipboard";
+            modeText = "Clipboard";
+            results = [];
+            clipboardHistory.clear();
+            return;
+        }
         if (query.startsWith("!") && query.length > 1) {
             currentMode = "clipboard";
             modeText = "Clipboard";
@@ -111,10 +119,16 @@ Item {
             results = clipboardResultsCache;
             return ;
         }
+        if (query.startsWith("@")) {
+            currentMode = "windows";
+            modeText = "Windows";
+            results = windowResults();
+            return ;
+        }
         if (query.length === 0) {
             currentMode = "apps";
             modeText = "Applications";
-            results = applicationResults("");
+            results = applicationResults(query);
             return ;
         }
         if (isCalculation(query)) {
@@ -152,6 +166,91 @@ Item {
             });
         }
         return sortResults(output, query);
+    }
+    function startupResults() {
+        var running = windowResults();
+        var apps = applicationResults("");
+        var output = [];
+
+        if (running.length > 0) {
+            for (var i = 0; i < running.length; i++)
+                output.push(running[i]);
+        }
+        output.push({
+                "type": "separator",
+            });
+        for (var j = 0; j < apps.length; j++)
+            output.push(apps[j]);
+
+        modeText = running.length > 0 ? "Running windows + Applications" : "Applications";
+        return output;
+    }
+    function windowResults() {
+        var output = [];
+        var windowModel = Hyprland.toplevels;
+        var windows = windowModel ? windowModel.values : [];
+        if (!windows)
+            windows = [];
+
+        for (var i = 0; i < windows.length; i++) {
+            var win = windows[i];
+            if (!win || !String(win.address || ""))
+                continue;
+
+            var details = win.lastIpcObject || {};
+            var windowClass = String(details.class || details.initialClass || details.initialclass || "");
+            var title = String(win.title || details.title || details.initialTitle || windowClass || "Untitled window");
+            var workspaceName = win.workspace
+                ? String(win.workspace.name || win.workspace.id || "")
+                : "";
+            var descriptionParts = [];
+
+
+            if (windowClass)
+                descriptionParts.push(windowClass);
+            if (workspaceName)
+                descriptionParts.push("Workspace " + workspaceName);
+
+            var iconName = String(win.appId || windowClass || "").toLowerCase();
+
+            output.push({
+                "title": title,
+                "description": descriptionParts.join(" - ") || "Running window",
+                "icon": iconName,
+                "type": "window",
+                "address": String(win.address),
+                "activated": Boolean(win.activated),
+                "keywords": windowClass + " " + String(details.initialTitle || "")
+            });
+        }
+
+        // Put the focused window first; keep the rest predictable by title.
+        output.sort(function(a, b) {
+            if (a.activated !== b.activated)
+                return a.activated ? -1 : 1;
+            return String(a.title || "").localeCompare(String(b.title || ""));
+        });
+        return output;
+    }
+    function isSelectable(item) {
+        return item !== null && item !== undefined && item.type !== "section";
+    }
+
+    function firstSelectableIndex() {
+        for (var i = 0; i < results.length; i++) {
+            if (isSelectable(results[i]))
+                return i;
+        }
+        return 0;
+    }
+
+    function selectableCount() {
+        var count = 0;
+        for (var i = 0; i < results.length; i++) {
+            if (isSelectable(results[i]))
+                count++;
+        }
+        return count;
     }
 
     function calculatorResults(expression) {
@@ -222,6 +321,19 @@ Item {
 
         if (item.type === "clipboard") {
             clipboardHistory.copy(item);
+            return ;
+        }
+        if (item.type === "window") {
+            if (!item.address)
+                return ;
+
+            var address = String(item.address);
+            if (!address.startsWith("0x"))
+                address = "0x" + address;
+
+            Hyprland.dispatch(
+                'hl.dsp.focus({ window = "address:' + address + '" })'
+            );
             return ;
         }
         if (item.type === "app") {

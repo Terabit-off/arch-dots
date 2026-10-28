@@ -43,3 +43,7 @@ systemd
 test.sh
 exports
 nemo
+btop
+uv
+usage.json
+notification-history.json

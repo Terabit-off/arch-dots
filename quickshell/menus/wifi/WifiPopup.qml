@@ -37,8 +37,12 @@ PopupWindow {
     }
 
     onVisibleChanged: {
-        if (visible && wifiDevice)
+        if (visible) {
+            openAnimation.restart();
+        }
+        if (visible && wifiDevice){
             wifiDevice.scannerEnabled = true
+        }
 
         if (!visible) {
             selectedNetwork = null
@@ -59,27 +63,43 @@ PopupWindow {
     Rectangle {
         id: card
 
-        anchors.fill: parent
+        width: root.implicitWidth
+        height: root.implicitHeight
         radius: Singletons.Colors.menuBorderRadius
         color: Singletons.Colors.menuBackground
         border.width: 1
         border.color: Singletons.Colors.menuBorderColor
+        transformOrigin: Item.Center
 
-        opacity: root.visible ? 1 : 0
-        scale: root.visible ? 1 : 0.96
+        ParallelAnimation {
+            id: openAnimation
 
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 140
+            PropertyAnimation {
+                target: card
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 260
                 easing.type: Easing.OutCubic
             }
-        }
-
-        Behavior on scale {
-            NumberAnimation {
-                duration: 180
-                easing.type: Easing.OutCubic
+            PropertyAnimation {
+                target: card
+                property: "y"
+                from: -100
+                to: 0
+                duration: 260
+                easing.type: Easing.OutBack
             }
+
+            PropertyAnimation {
+                target: card
+                property: "scale"
+                from: 0.85
+                to: 1
+                duration: 280
+                easing.type: Easing.OutSine
+            }
+
         }
 
         ColumnLayout {

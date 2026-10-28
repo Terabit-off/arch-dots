@@ -48,6 +48,10 @@ Item {
         copyProcess.running = true;
     }
 
+    function clear() {
+        clearProcess.running = true
+    }
+
     Process {
         id: listProcess
 
@@ -70,6 +74,11 @@ Item {
         property string selectedValue: ""
 
         command: ["/home/terabit/.config/quickshell/launcher/copy.sh", selectedId, selectedValue]
+    }
+
+    Process {
+        id: clearProcess
+        command: ["cliphist", "wipe"]
     }
 
 }

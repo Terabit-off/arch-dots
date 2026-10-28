@@ -93,9 +93,6 @@ ShellRoot {
 
                         Modules.NotificationModule {
                         }
-                        Modules.ControlCenter {
-                        }
-
                     }
 
                 }

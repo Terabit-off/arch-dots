@@ -230,7 +230,16 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
-                onClicked: notificationCenter.visible = !notificationCenter.visible
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+
+                onClicked: (mouse) => {
+                    if (mouse.button === Qt.RightButton) {
+                        historyModel.clear()
+                    } else if (mouse.button === Qt.LeftButton) {
+                       notificationCenter.visible = !notificationCenter.visible
+                    }
+                }
             }
         }
     }
@@ -329,6 +338,12 @@ Rectangle {
         implicitHeight: Math.min(550, Math.max(250, historyList.contentHeight + 110))
         color: "transparent"
 
+        onVisibleChanged: {
+            if (visible) {
+                openAnimation.restart()
+            }
+        }
+
         anchor {
             item: root
             edges: Edges.Bottom
@@ -337,11 +352,45 @@ Rectangle {
         }
 
         Rectangle {
-            anchors.fill: parent
-            radius: 8
+            id: popupCard
+            width: notificationCenter.implicitWidth
+            height: notificationCenter.implicitHeight
+            radius: Singletons.Colors.menuBorderRadius
             color: Singletons.Colors.menuBackground
             border.width: 1
             border.color: Singletons.Colors.menuBorderColor
+            transformOrigin: Item.Center
+
+            ParallelAnimation {
+                id: openAnimation
+
+                PropertyAnimation {
+                    target: popupCard
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: 260
+                    easing.type: Easing.OutCubic
+                }
+                PropertyAnimation {
+                    target: popupCard
+                    property: "y"
+                    from: -100
+                    to: 0
+                    duration: 260
+                    easing.type: Easing.OutBack
+                }
+
+                PropertyAnimation {
+                    target: popupCard
+                    property: "scale"
+                    from: 0.85
+                    to: 1
+                    duration: 280
+                    easing.type: Easing.OutSine
+                }
+
+            }
 
             ColumnLayout {
                 anchors.fill: parent

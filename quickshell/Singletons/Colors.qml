@@ -39,12 +39,12 @@ QtObject {
     readonly property color wsNotFocusBackground: "transparent"
     readonly property color separatorColor: "#bd939393"
     // Menus
-    readonly property color menuBackground: "#e61c1c1c"
+    readonly property color menuBackground: '#b41c1c1c'
     readonly property color menuBackgroundElevated: "#ef232326"
     readonly property color menuBorderColor: border
     readonly property real menuBorderRadius: 10
     readonly property real menuPadding: 14
-    readonly property real menuSectionSpacing: 10
+    readonly property real menuSectionSpacing: 10 
     readonly property real controlRadius: 9
     readonly property real cardRadius: 10
     readonly property color menuHeaderBackground: "#12ffffff"
